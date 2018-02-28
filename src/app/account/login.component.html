@@ -1,0 +1,136 @@
+﻿                <!--Form used to provide the ACCOUNT LOGIN feature-->
+
+<div class="app-central-container app-fade-in" 
+     [class.app-open]="formOpen">
+
+  <!-- Form Header -->
+
+  <app-form-header  headerType        = "center" 
+                    headerIcon        = "person_outline"
+                    headerTitle       = "Account Sign In" 
+                    headerTheme       = "app-account-header-theme"
+                    [headerClose]     = "closeForm">
+  </app-form-header>
+
+  <!-- Start of Form -->
+
+  <div class=" app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
+    <div class="container app-form-theme px-0 pt-3">
+      <form #loginForm = "ngForm" role="form" novalidate
+            (ngSubmit)="sendLoginRequest(loginForm)">
+        <div class="d-flex flex-column px-2">
+
+          <!-- Email field -->
+          <app-icon-input
+            [fForm]       = "loginForm" 
+            [fCheckAll]   = "checkAll"
+            fRef          = "uE" 
+            fName         = "uEmail" 
+            [fRequired]   = "true" 
+            fType         = "email" 
+            fLabel        = "Email Address"  
+            fIcon         = "mail_outline"
+            fColor        = "app-accounts-color" 
+            [(fValue)]    = "userEmail" 
+            fErrors       = "required|email"
+            fErrorMsgs    = "An email address is required.|Invalid email address character/format."
+            [fFocusFn]    = "clearRequestStatus">
+          </app-icon-input>
+
+          <!-- Password field -->
+          <app-icon-input
+            [fForm]       ="loginForm" 
+            [fCheckAll]   = "checkAll"
+            fRef          ="uP" 
+            fName         ="uPassword" 
+            [fRequired]   ="true" 
+            fType         ="password" 
+            fLabel        ="Password" 
+            fIcon         ="lock_open"
+            fColor        ="app-accounts-color" 
+            [(fValue)]    ="userPassword" 
+            fErrors       ="required|pattern|minlength"
+            fErrorMsgs    ="A password is required.|Invalid password character/format.|Password must be at least 6 characters."
+            fMinlength    ="6" 
+            fMaxlength    ="16" 
+            fPattern      ="^[a-zA-Z]+[!#$%\^\-+*\w]*$" 
+            fExtraCSS     ="mt-2"
+            [fFocusFn]    ="clearRequestStatus">
+          </app-icon-input>
+
+          <!-- Hidden fields for creating a new account -->
+          <div class=" d-flex flex-column app-vertical-expand app-form-theme-text"
+                [class.app-open]="showNewAccountFields()">
+
+            <!-- Password confirmation field -->
+            <app-icon-input
+              [fForm]     ="loginForm" 
+              [fCheckAll] = "checkAll"
+              fRef        ="cP" 
+              fName       ="cPassword" 
+              [fRequired] ="showNewAccountFields()" 
+              fType       ="password" 
+              fLabel      ="Confirm Password" 
+              fColor      ="app-accounts-color" 
+              [(fValue)]  ="passwordConfirm" 
+              fErrors     ="required|pattern|minlength" 
+              fIcon       ="lock_outline"
+              fErrorMsgs  ="Password confirmation is required.|This value must match the Password.|Password must be at least 6 characters."
+              fErrorsMulti="true" 
+              fMinlength  ="6" 
+              fMaxlength  ="16" 
+              fPattern    ="{{userPassword}}" 
+              fExtraCSS   ="mt-1 mb-2"
+              [fFocusFn]  ="clearRequestStatus">
+            </app-icon-input>
+
+          </div>
+
+          <div *ngIf="!newAccount" class="mt-1">
+            <label>
+              <input type="checkbox" class="app-input-icon-area" name="createAcc" [(ngModel)]="createAccount" 
+                    (change)="clearNewAccountFields()">
+              Create new account
+            </label>
+          </div>
+
+          <!-- Remember Me field -->
+          <div *ngIf="!requestStatus.incorrectPassword">
+            <label>
+              <input type="checkbox" class="app-input-icon-area" name="memberMe" [(ngModel)]="rememberLogin">
+              Remember me
+            </label>
+          </div>
+
+          <!-- Status Message Area -->
+          <app-form-messages 
+            [fWorkingOpen]    = "!haveStatusMessages() && working"
+            [fMessageOpen]    = "haveStatusMessages() && !working"
+            [fMessageObj]     = "requestStatus">
+          </app-form-messages>                    
+                            
+        </div>
+
+        <!-- Actions Area -->
+        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary py-1" id="actions">
+          <app-fab *ngIf="!newAccount && !requestStatus.incorrectPassword"
+                    fAria="sign in"
+                    fButtonCSS="app-fab-sm-sq app-white" fIconColor="app-white"
+                    fLabel="{{createAccount ? 'Create Account' : 'Sign In'}}"
+                    fIcon="{{createAccount ? 'add_circle_outline' : 'check_circle_outline'}}">
+          </app-fab>
+          <app-fab *ngIf="newAccount" fAria="sign in" fLabel="Continue to Sign In"
+                    fButtonCSS="app-fab-sm-sq app-white"
+                    fIcon="arrow_forward" fIconColor="app-white">
+          </app-fab>
+          <app-fab *ngIf="requestStatus.incorrectPassword"  fAria="forgot password"
+                    fLabel="Reset Password"
+                    fButtonCSS="app-fab-sm-sq app-white"
+                    fIcon="sentiment_dissatisfied" fIconColor="app-white"
+                    fType="button" [fOnClick]="requestPasswordReset">
+          </app-fab>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

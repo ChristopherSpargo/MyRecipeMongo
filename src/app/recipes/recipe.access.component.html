@@ -1,0 +1,89 @@
+<!-- Template recipe-search, recipe-create states -->
+<!-- <app-waiting-indicator awi-open="!vC.viewOpen && !vC.viewWasOpen"></app-waiting-indicator> -->
+
+<div id="app-view-top"
+		 class="d-flex flex-column app-central-container app-fade-in"
+     [class.app-open]="viewOpen">
+
+  <!-- Form Header -->
+
+  <app-form-header  headerType        = "center" 
+                    [headerIcon]      = "headerIcon"
+                    [headerTitle]     = "headerTitle" 
+                    headerTheme       = "app-recipes-header-theme"
+                    [headerClose]     = "closeView">
+                    
+  </app-form-header>
+
+  <!-- Tab set for Recipe Access -->
+  <div class="app-form-theme-transparent app-flex-1" >
+    <ngb-tabset #viewTabs="ngbTabset" (tabChange)="tabChange($event)" 
+                [destroyOnHide]="false" justify="around">
+      <ngb-tab id="searchTab">
+        <ng-template ngbTabTitle>
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <i class="material-icons app-form-text-theme app-tab-item-icon">search</i>
+            <div class="app-tab-title ml-1">SEARCH</div>
+          </div>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <!-- Component to display the recipe search form -->
+           <app-recipe-search
+            [viewShared]    = "viewShared"
+            [searchTabOpen] = "searchTabOpen">
+          </app-recipe-search> 
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="menuTab"
+                [disabled]="!recipesReady">
+        <ng-template ngbTabTitle>
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <i class="material-icons app-form-text-theme app-tab-item-icon" 
+              (click)="toggleSortOrder()">menu</i>
+            <div class="app-tab-title ml-1">{{menuMessage}}</div>
+          </div>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <!-- Component to display the menu of recipes from search -->
+           <app-recipe-menu
+            [viewShared]             = "viewShared"
+            [manageShared]           = "manageShared"
+            [menuOpen]               = "menuTabOpen"
+            [constructMenuMessage]   = "constructMenuMessage">
+          </app-recipe-menu> 
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="viewTab"
+                [disabled]="!recipeSelected()">
+        <ng-template ngbTabTitle>
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <i class="material-icons app-form-text-theme app-tab-item-icon" 
+              (click)="toggleEventInfo()">local_library</i>
+            <div class="app-tab-title mx-1">VIEW</div>
+          </div>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <!-- Component to display the selected recipe -->
+           <app-recipe-view
+            [viewTabOpen]             = "viewTabOpen">
+          </app-recipe-view> 
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab *ngIf="!viewShared" id="editTab">
+        <ng-template ngbTabTitle>
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <i class="material-icons app-form-text-theme app-tab-item-icon" 
+              (click)="toggleEventInfo()">edit</i>
+            <div class="app-tab-title mx-1">{{recipeSelected() ? 'EDIT' : 'NEW'}}</div>
+          </div>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <!-- Component to edit the selected recipe -->
+           <app-recipe-edit
+            [editTabOpen]             = "editTabOpen">
+          </app-recipe-edit> 
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+</div>

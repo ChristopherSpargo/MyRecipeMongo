@@ -1,0 +1,75 @@
+﻿                <!--Form used to provide the CHANGE PASSWORD feature-->
+
+<div class=" app-central-container app-fade-in  " 
+     [ngClass]="{'app-open': formOpen}">
+
+  <!-- Form Header -->
+
+  <app-form-header  headerType        = "center" 
+                    headerIcon        = "delete_forever"
+                    headerTitle       = "Delete Account" 
+                    headerTheme       = "app-account-header-theme"
+                    [headerClose]     = "closeForm">
+  </app-form-header>
+
+  <!-- Start of Form -->
+
+  <div class=" app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
+    <div class="container app-form-theme px-0 pt-3">
+      <form #deleteForm = "ngForm" role="form" novalidate
+            (ngSubmit)="submitRequest(deleteForm)">
+        <div class="d-flex flex-column px-2">
+
+          <!-- Email field -->
+          <app-icon-input
+            [fForm]       = "deleteForm" 
+            fRef          = "cE" 
+            fName         = "cEmail" 
+            [fDisabled]   = "true"
+            fType         = "email" 
+            fLabel        = "Email Address"  
+            fIcon         = "mail_outline"
+            fColor        = "app-accounts-color" 
+            [fValue]      = "userEmail">
+          </app-icon-input>
+
+          <!-- Password field -->
+          <app-icon-input
+            [fForm]       ="deleteForm" 
+            [fCheckAll]   = "checkAll"
+            fRef          ="cP" 
+            fName         ="cPassword" 
+            [fRequired]   ="true" 
+            fType         ="password" 
+            fLabel        ="Password" 
+            fIcon         ="lock_open"
+            fColor        ="app-accounts-color" 
+            [(fValue)]    ="password" 
+            fErrors       ="required|pattern|minlength"
+            fErrorMsgs    ="A password is required.|Invalid password character/format.|Password must be at least 6 characters."
+            fMinlength    ="6" 
+            fMaxlength    ="16" 
+            fPattern      ="^[a-zA-Z]+[!#$%\^\-+*\w]*$" 
+            fExtraCSS     ="mb-2"
+            [fFocusFn]    ="clearRequestStatus">
+          </app-icon-input>
+
+          <!-- Status Message Area -->
+          <app-form-messages 
+            [fWorkingOpen]    = "!haveStatusMessages() && working"
+            [fMessageOpen]    = "haveStatusMessages() && !working"
+            [fMessageObj]     = "requestStatus">
+          </app-form-messages>                    
+        </div>
+
+        <!-- Actions Area -->
+          <app-update-actions 
+            [fDeleteCheck]  ="true"
+            [fLabels]       ="true"
+            fRLabel         ="Delete"
+            >
+        </app-update-actions>
+      </form>
+    </div>
+  </div>
+</div>

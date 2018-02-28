@@ -1,0 +1,39 @@
+    <!-- Template used to display a fab 
+         Used with <app-fab> COMPONENT -->
+      
+      <!-- fab without label -->
+      <button  *ngIf="fLabel === '' && fLink === ''" 
+              type="{{fType}}"  
+              class="btn app-fab-button {{fButtonCSS}}" 
+              [class.app-fab-click]="clicked" [attr.aria-label]="fAria"
+              [class.app-open]="fOpen"
+              [disabled]="fDisabled"
+              (click)="fabClicked()">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <i class="material-icons app-fab-icon {{fIconCSS}} {{fIconColor}}">{{fIcon}}</i> 
+        </div>       
+      </button>
+
+      <!-- fab with label -->
+      <button *ngIf="fLabel !== '' && fLink === ''" type="{{fType}}"  
+              class="btn btn-sm app-link-btn app-action-btn app-link-active {{fButtonCSS}}" 
+              [class.app-fab-click]="clicked" [attr.aria-label]="fAria"
+              [class.app-open]="fOpen"
+              [disabled]="fDisabled"
+              (click)="fabClicked()">
+        <div class="d-flex flex-row justify-content-center {{fAlignment}}">
+          <div *ngIf="fReverse" class="mx-1 {{fLabelCSS}}">{{fLabel}}</div>
+          <i class="material-icons app-fab-icon-sm {{fIconCSS}} {{fIconColor}}">{{fIcon}}</i> 
+          <div *ngIf="!fReverse" class="mx-1 {{fLabelCSS}}">{{fLabel}}</div>
+        </div>       
+      </button>
+
+      <!-- link -->
+      <button *ngIf="fLink !== ''" type="{{fType}}"  
+              class="btn btn-sm app-link-btn app-action-btn {{fButtonCSS}}" 
+              [class.app-fab-click]="clicked" [attr.aria-label]="fAria"
+              [class.app-open]="fOpen"
+              [disabled]="fDisabled"
+              (click)="fabClicked()">
+          <div class="{{fLabelCSS}}">{{fLink}}</div>
+      </button>

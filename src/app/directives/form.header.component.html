@@ -1,0 +1,40 @@
+﻿    <!-- Template used for header on all input FORMS. 
+         Used with <app-form-header> COMPONENT -->
+<div class="app-noscroll-frame-center"> 
+  <div class=" {{headerTheme}} app-card-top-corners">
+    <div class=" d-flex flex-column app-form-header-padding ">
+      <div class="d-flex flex-row">
+        <div *ngIf="headerType != 'simple'" 
+              class="d-flex flex-row justify-content-start align-items-center app-width-15">
+          <button type="button" class="btn d-flex flex-row align-items-center app-form-image-button " aria-label="help"
+            data-toggle="tooltip" data-placement="top" title="Help" data-delay="200"
+                     (click)="toggleAbout()"> 
+            <i class="material-icons app-fab-icon-smm {{headerTextColor}}">{{headerIcon}}</i>
+          </button>
+        </div>
+        <div class="d-flex flex-row justify-content-between align-items-center" 
+                           [ngClass]="{'app-width-100': (headerType == 'simple'),
+                                       'app-width-75':  (headerType != 'simple')}">
+          <div class="d-flex app-form-title ">{{headerTitle}}</div>
+          <ng-container *ngIf="appBarItems"> 
+            <button *ngFor="let item of appBarItems" 
+                      type="button" class="btn app-bar-feature-button " 
+                      (click)="appBarItemSelected(item.action)">
+              <i class="material-icons app-bar-feature-icon {{headerThemeColor}}">{{item.icon}}</i>
+            </button>
+          </ng-container>
+        </div>
+         <div *ngIf="headerType != 'simple'" 
+                class="d-flex flex-row justify-content-end align-items-end app-width-10 mr-1">
+          <app-fab 
+                fType       = "button"
+                fLink       = "Exit"
+                [fOnClick]  = "headerClose"
+                fButtonCSS  = "{{closeButtonTheme}} pb-0"
+                fAria       = "exit">
+          </app-fab> 
+        </div> 
+      </div>
+    </div>
+  </div>
+</div>

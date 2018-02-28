@@ -1,0 +1,30 @@
+  <div>
+    &nbsp;&nbsp;The locations list contains the names of the locations where tournaments/matches are played, such as 'Scottsdale Ranch Park'.
+    <br/>The <b>Manage Locations</b> form allows you to add/remove/change entries in your locations list.<br/>
+    The fields and buttons are:
+    
+    <app-about-heading fIcon="place" fText="Location Name" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This is the name of a of a tournament/match location.
+    From the drop-down list, select a location to change/remove it or select <b>New Location Name</b> to add
+    a new location name to the list.
+
+    <app-about-heading fIcon="edit" fText="Existing Location Name" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This icon will display next to the input field if you choose an exitsing location from the 
+    list in the Location Name field. Edit or delete this location name.
+
+    <app-about-heading fIcon="add_circle_outline" fText="New Location Name" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This icon will display next to the input field if you choose New Location Name from 
+    the list in the Location Name field. Enter a name for the new location here.
+
+    <app-about-heading fIcon="check_circle_outline" fText="Save" [fFab]="true" fIconColor="app-primary"></app-about-heading>
+    &nbsp;&nbsp;Press this button to submit your list update request.  If successful, you will
+    receive a brief notification.
+
+    <app-about-heading fIcon="remove_circle_outline" fText="Remove" fIconColor="app-warn" 
+    [fFab]="true"></app-about-heading>
+    &nbsp;&nbsp;Press this button to remove the selected location from the list.
+
+    <app-about-heading fIcon="highlight_off" fText="Cancel" fIconColor="app-brite-orange" 
+    [fFab]="true"></app-about-heading>
+    &nbsp;&nbsp;Press this button to return to name selection without changing the current selection.
+  </div>

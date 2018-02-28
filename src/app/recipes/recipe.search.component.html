@@ -1,0 +1,187 @@
+<div id="view-top" class="container app-tab-container app-no-overflow-x px-0 pt-2 app-bg-gwhite"
+    [class.app-open]="searchTabOpen">
+
+  <!-- define a component to add recipe categoreis -->
+     <app-checkbox-menu 
+            fTitle       = "Recipe Categories"
+            fMessage     = "Select any that apply:"
+            fOpenMsg     = "openSearchCategoriesMenu"
+            [fItems]     = "categoryListItems()"
+            [(fSelected)] = "categories">
+    </app-checkbox-menu> 
+ 
+    <!-- Instructional messages -->
+    <div class="d-flex flex-row justify-content-center app-flex-1 
+                                  app-darkgrey align-items-center mb-2 app-small-font">
+      Use the fields below to define a search.
+    </div>
+
+    <div class="app-frame d-flex flex-column align-items-center pt-0">
+      <div class="app-bg-white d-flex flex-column app-width-100">
+
+        <!-- Radio group to select data set (Personal/Shared) -->
+        <div class="d-flex flex-row app-width-98 mx-auto px-2">
+          <app-radio-group
+            fTitle      = "Search In:"
+            fIcon       = "{{dataSet === 'Personal' ? 'folder' : 'folder_shared'}}"
+            fIconColor  = "app-recipe-search-color"
+            [fOnChange] = "dataSetChange()"
+            [fOnFocus]  = "clearRequestStatus"
+            [fDividerAfter] = "false"
+            [(fModel)]  = "dataSet" 
+            fExtraCSS   = "app-smaller-font pb-2"
+            fValues     = "Personal|Shared" 
+            fLabels     = "Personal Recipes|Shared Recipes" 
+            fName       = "sDatabase">
+          </app-radio-group>
+        </div>
+
+        <!-- Form for search filtering options -->
+
+        <form #searchForm = "ngForm" role="form" novalidate class
+              (ngSubmit)="submitFilter(searchForm)">
+          <div class="d-flex flex-column app-width-98 mx-auto px-2">
+
+            <!-- categories Field -->
+            <div class="d-flex flex-row justify-content-end align-items-center 
+                        app-list-item-field-container pr-1 pt-3">
+              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label">
+                Categories:
+              </label>
+            </div> 
+            <div class="app-icon-input-field-container pt-3">
+              <div class="d-flex flex-row align-items-center">
+                <i class="material-icons app-input-icon app-recipe-search-color">assessment</i>
+                <div class="d-flex flex-row flex-wrap">
+                  <!-- display a button for each currently selected category -->
+                  <div *ngFor="let c of categories" 
+                          class="btn d-flex flex-row justify-content-center align-items-center 
+                                app-recipe-category-button app-category-button-theme mb-1">
+                    {{getCategoryName(c)}}
+                    <i class="material-icons app-category-delete-icon app-warn ml-1" 
+                      (click)="removeCategory(c)">close</i>
+                  </div> 
+                  <!-- display a button at the end of the list to activate the selection menu -->
+            <app-fab
+                    fType       = "button"
+                    [fOpen]     = "true"
+                    fButtonCSS  = "ml-2 d-flex app-fab-button-sm app-bg-white app-accent1 app-fab-raised"
+                    [fDelay]    = "200"
+                    fAria       = "add"
+                    fIcon       = "add_circle"
+                    fIconCSS    = "app-fab-icon-btn-sm"
+                    [fOnClick]  = "openCatList"
+                    fIconColor  = "app-primary">
+            </app-fab>
+                </div>
+              </div>
+            </div>
+
+            <!-- Origin Field -->
+
+            <app-list-item-field 
+              [fForm]         = "searchForm"
+              fName           = "Origin"
+              fRef            = "oId"
+              [(fValue)]      = "origin"
+              fLabel          = "Origin:"
+              fIcon           = "face" 
+              fColor          = "app-recipe-search-color"
+              [fOnFocus]      = "clearRequestStatus"
+              [fList]         = "originListItems()"
+              fListValue      = "idName"
+              [fAllowAny]     = "true"
+              [fAllowNew]     = "false">
+            </app-list-item-field>
+
+            <!-- Keywords Field -->
+
+            <app-icon-input
+              [fForm]       = "searchForm" 
+              fRef          = "rK" 
+              fName         = "rKeywords" 
+              fType         = "text" 
+              fLabel        = "Keywords:"  
+              fIcon         = "vpn_key"
+              fColor        = "app-recipe-search-color" 
+              fPattern      = "^[ /\-'%$#.,()!?\w]*$"
+              fMaxlength    = "200"
+              fErrors       = "pattern"
+              fErrorMsgs    = "Invalid keyword character or list format."
+              [(fValue)]    = "keywords" 
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-input>
+
+            <!-- Origin Date Range Field -->
+            <div class="d-flex flex-row justify-content-end align-items-center pr-1 pt-4">
+              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label pl-3">
+                Origin Date Range:
+              </label>
+            </div> 
+            <div class="app-icon-input-field-container pt-2 pb-0">
+              <div class="d-flex flex-row align-items-center mt-1">
+                <i class="material-icons app-input-icon app-recipe-search-color">today</i>
+                <div class="d-flex flex-row align-items-center">
+                  <input type="number" name="startDate" autocomplete="off" 
+                          class="app-date-range-input-control"
+                          aria-label="origin dates since"
+                          pattern="^\d\d\d\d$"
+                          placeholder="yyyy"
+                          [(ngModel)]="startDate" #sDate="ngModel"
+                          (focus)="clearRequestStatus()">
+                  <i class="material-icons app-input-icon app-recipe-search-color app-cursor-pointer app-icon-xsm"
+                      (click)="clearDateRange('start')">close</i>
+                  <div class="px-2"> - </div>
+                  <input type="number" name="endDate" autocomplete="off" 
+                          class=" app-date-range-input-control"
+                          aria-label="origin dates before"
+                          pattern="^\d\d\d\d$"
+                          placeholder="yyyy"
+                          [(ngModel)]="endDate" #eDate="ngModel"
+                          (focus)="clearRequestStatus()">
+                  <i class="material-icons app-input-icon app-recipe-search-color app-cursor-pointer app-icon-xsm"
+                      (click)="clearDateRange('end')">close</i>
+                </div>
+              </div>
+              <div class="d-flex flex-row align-items-center">
+                <div class="app-field-messages app-width-35" 
+                    [ngClass]="{'app-visible': (sDate.touched || checkAll),
+                                'app-invisible': !(sDate.touched || checkAll)}">
+                  <validation-messages [vField]="sDate">
+                    <validation-message name="pattern">
+                      Format is: yyyy
+                    </validation-message>
+                  </validation-messages>
+                </div>
+                <div class="app-field-messages app-date-range-end-error-message app-width-35" 
+                    [ngClass]="{'app-visible': (eDate.touched || checkAll),
+                                'app-invisible': !(eDate.touched || checkAll)}">
+                  <validation-messages [vField]="eDate">
+                    <validation-message name="pattern">
+                      Format is: yyyy
+                    </validation-message>
+                  </validation-messages>
+                </div>
+              </div>
+            </div>
+
+            <!-- Messages Area -->
+
+            <app-form-messages 
+              [fWorkingOpen]  ="!haveStatusMessages() && working"
+              [fMessageOpen]  ="haveStatusMessages() && !working"
+              [fMessageObj]   ="requestStatus">
+            </app-form-messages>  
+
+          </div>
+
+          <!-- Actions Area -->
+          <app-update-actions
+            [fLabels]     ="true"
+            fSLabel       ="Search">
+          </app-update-actions>
+                            
+        </form>
+      </div>
+    </div>
+</div>

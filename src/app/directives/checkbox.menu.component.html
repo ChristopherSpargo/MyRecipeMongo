@@ -1,0 +1,54 @@
+  <!--define a backdrop container for click-outside-to-close functionality for the menu-->
+  <div *ngIf="menuOpen" class="app-click-to-close-about" 
+      (click)="closeMenu()"></div>
+        
+  <!-- slid-out container for menu -->
+  <div class="d-flex flex-column app-catList-container app-fade-in
+              app-whiteframe-2dp app-card-corners mb-1"
+      [ngClass]="{'app-open': menuOpen,
+                  'app-z--5': !menuOpen}">
+
+  <!-- menu header area -->
+    <div class="app-card-top-corners">
+      <div class="app-catlist-header-theme app-card-top-corners">
+          <div class="d-flex flex-row justify-content-around align-items-center">
+            {{fTitle}}
+          </div>
+      </div>
+    </div> 
+
+    <!-- list of menu items -->
+    <div class="app-catlist-body-theme app-scroll-frame-left my-2">
+      <div *ngIf="fItems" class="d-flex flex-column">
+        <div class="app-catlist-label mb-1">{{fMessage}}</div>
+        <div *ngFor="let item of selectList; index as i"
+             class="d-flex flex-row align-items-center">
+          <label class="app-flex-1 app-cursor-pointer mb-1">
+            <input type="checkbox" [(ngModel)]="selectedItems[i]">
+            {{item.name}}
+          </label>          
+        </div>
+      </div>
+    </div>
+
+    <!-- footer with action buttons -->
+    <div class="d-flex flex-row app-flex-1 justify-content-around align-items-center 
+                app-catlist-footer-theme app-card-bottom-corners">
+      <app-fab 
+            fType       = "button"
+            fLink       = "Cancel"
+            [fOnClick]  = "closeMenu"
+            fButtonCSS  = "app-white mb-1"
+            fLabelCSS   = "app-bigger-font"
+            fAria       = "cancel">
+      </app-fab> 
+      <app-fab 
+            fType       = "button"
+            fLink       = "Ok"
+            [fOnClick]  = "addSelections"
+            fButtonCSS  = "app-white mb-1"
+            fLabelCSS   = "app-bigger-font"
+            fAria       = "Save">
+      </app-fab> 
+    </div>
+  </div>  

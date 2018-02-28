@@ -1,0 +1,22 @@
+<div class="d-flex flex-column">
+  <label *ngIf="fTitle" class="app-form-icon-input-label-sm"
+           [class.ml-0]="!fIcon && !fIconSpace">{{fTitle}}</label>
+  <div class="d-flex flex-row justify-content-start align-items-center {{fExtraCSS}}">
+    <i *ngIf="fIcon || fIconSpace" class="material-icons app-input-icon {{fIconColor}}">{{fIcon}}</i>
+    <div class="d-flex {{fVertical ? 'flex-column align-items-start' : 'flex-row align-items-center'}}
+                 app-form-theme-text">
+      <ng-container *ngFor="let v of aValues; index as i; last as l">
+        <div class="d-inline-flex flex-row align-items-center">
+          <label for="{{fName+i}}" class="mb-0 {{!l ? 'mr-4' : ''}}" [class.app-disabled-text]="fDisabled">          
+            <input type="radio" id="{{fName+i}}" value="{{v}}" name="{{fName}}" 
+            class="app-inline-flex"
+            [disabled]=fDisabled
+            [(ngModel)]="fModel" (change)="valueChange()" (focus)="onFocus()">
+            {{aLabels[i]}}
+          </label>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div *ngIf="fDividerAfter" class=" app-form-input-divider-tall app-icon-offset-width "></div>

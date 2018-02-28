@@ -1,0 +1,52 @@
+﻿  <!--define a backdrop container for click-outside-to-close functionality for the about panel-->
+  <div *ngIf="aboutOpen()" class="app-click-to-close-about" 
+       (click)="closeAbout()"></div>
+       
+    <!-- About (Help) Panel -->
+    <!-- The appropriate help component based on the current helpContext-->
+
+  <div class="d-flex flex-column app-about-container app-slide-right 
+              app-whiteframe-2dp app-card-corners mb-1"
+       [class.app-open]="aboutOpen()">
+
+       <!-- Card Header -->
+
+    <div class="app-card-top-corners">
+      <div class="app-about-header-theme app-card-top-corners">
+          <div class="d-flex flex-row justify-content-between align-items-center">
+            <div class="d-flex flex-row justify-content-start align-items-center ml-2"> 
+              <app-about-text-icon fIcon="{{helpContextIcon()}}" 
+                                   fColor="app-white" fSize="L"></app-about-text-icon>
+              <div flex class="ml-2 d-flex app-about-title ">{{helpContextTitle()}}</div> 
+            </div>
+            <div class="d-flex flex-row justify-content-center align-items-center">
+              <button id="aboutCloseBtn" type="button" class="btn app-form-close-button " 
+                        (click)="closeAbout()">
+                <i class="material-icons app-form-close-icon app-white" aria-label="close">arrow_back</i>
+              </button>
+            </div>
+          </div>
+      </div>
+    </div> 
+
+    <!--Section for context specific help information-->
+    <div class="app-about-body-theme app-scroll-frame-left my-2">
+      <div *ngIf="helpContext() === 'UsingMyRecipeMongo'"   ><app-about-my-recipe-mongo></app-about-my-recipe-mongo></div>
+      <div *ngIf="helpContext() === 'ContactUs'"            ><app-about-contact-us></app-about-contact-us></div> 
+      <div *ngIf="helpContext() === 'ManageCategories'"     ><app-about-manage-categories></app-about-manage-categories></div>
+      <div *ngIf="helpContext() === 'ManageOrigins'"        ><app-about-manage-origins></app-about-manage-origins></div> 
+      <div *ngIf="helpContext() === 'RecipeSearch'"         ><app-about-recipe-search></app-about-recipe-search></div>
+      <div *ngIf="helpContext() === 'RecipesMenu'"          ><app-about-recipe-menu></app-about-recipe-menu></div>
+      <div *ngIf="helpContext() === 'EnterRecipes'"         ><app-about-enter-recipes></app-about-enter-recipes></div>
+      <div *ngIf="helpContext() === 'ViewRecipe'"           ><app-about-recipe-view></app-about-recipe-view></div>
+      <div *ngIf="helpContext() === 'ProfileUpdate'"        ><app-about-account-profile></app-about-account-profile></div> 
+      <div *ngIf="helpContext() === 'ChangeEmail'"          ><app-about-account-email></app-about-account-email></div>
+      <div *ngIf="helpContext() === 'ChangePassword'"       ><app-about-account-password></app-about-account-password></div>
+      <div *ngIf="helpContext() === 'DeleteAccount'"        ><app-about-account-delete></app-about-account-delete></div>
+      <div *ngIf="helpContext() === 'Login'"                ><app-about-login></app-about-login></div>
+      <div *ngIf="helpContext() === 'MakeRecipeShared'"     ><app-about-make-recipe-shared></app-about-make-recipe-shared></div> 
+      <div *ngIf="helpContext() === 'ManageSharedSettings'" ><app-about-manage-shared-settings></app-about-manage-shared-settings></div> 
+    </div>
+  </div>
+
+

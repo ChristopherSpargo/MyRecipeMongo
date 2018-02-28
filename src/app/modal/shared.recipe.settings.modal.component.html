@@ -1,0 +1,101 @@
+<!-- dialog template used for changes to Shared Recipe Settings -->
+<div class="app-fade-in app-dialog-container" [ngClass]="{'app-open': openModal}">
+  <div class="modal-header app-dialog-header app-shared-recipes-settings-theme">
+    <div class="modal-title d-flex flex-row justify-content-start align-items-center app-flex-1 app-all-paddings-8px">
+      <button type="button" class="btn app-form-image-button ml-0 mr-2" aria-label="help"
+        data-toggle="tooltip" data-placement="top" title="Help" data-delay="200"
+                  (click)="toggleAbout()"> 
+        <i class="material-icons app-fab-icon-smm app-white">settings</i>
+      </button>
+      <div class="app-form-title">{{heading}}</div>
+    </div>
+  </div>
+  <div class="modal-body app-form-theme app-all-paddings-8px">
+    <div class="d-flex flex-row justify-content-center align-items-center app-recipe-action-title">
+      {{recipeTitle}}</div>
+    <div class="d-flex flex-row justify-content-center align-items-end">
+      <div class="app-small-font pr-1">Origin:</div>
+      <div class="app-recipe-action-origin">{{origin}}</div>
+      <div class="app-small-font pl-4 pr-1">Circa:</div>
+      <div class="app-recipe-action-origin-date">{{originDate}}</div>
+    </div>
+    <div class="app-lightslategray app-divider-90"></div>
+    <form #listForm = "ngForm" role="form" novalidate
+          (ngSubmit)="submitRequest(listForm)">
+      <div class="d-flex flex-column">
+
+        <!-- Remove Recipe from Public Recipes field -->
+        <div *ngIf="mode === 'Edit'" class="d-flex flex-row align-items-center mt-1">
+          <i class="material-icons app-input-icon-area app-accent1">remove_circle_outline</i>
+          <label class="mb-0">
+            <input type="checkbox" name="delMat" [(ngModel)]="deleteRecipe" (change)="clearRequestStatus()">
+            Stop sharing this Recipe
+          </label>
+        </div>
+
+        <!-- Add Recipe to Public Recipes field -->
+        <div *ngIf="mode === 'Create'" class="d-flex flex-row align-items-center mt-1">
+          <i class="material-icons app-input-icon-area app-shared-recipes-color">add_circle_outline</i>
+          <label class="mb-0">
+            Sharing this Recipe
+          </label>
+        </div>
+
+        <div class="d-flex flex-row justify-content-start app-flex-1 align-items-center 
+                    app-disabled-text mt-3 app-smaller-font">
+          Optional list of authorized users by email:
+        </div>
+        <!-- User Email Field -->
+        <app-list-item-field 
+            [fForm]         = "listForm"
+            [fCheckAll]     = "checkAll"
+            fName           = "itemName"
+            fRef            = "iName"
+            [(fValue)]      = "selectedItem"
+            fLabel          = "Authorized User" 
+            fIcon           = "mail_outline" 
+            fColor          = "app-accent1"
+            [fRequired]     = "false"
+            [fDisabled]     = "deleteRecipe"
+            [fOnFocus]      = "clearRequestStatus"
+            [fOnChange]     = "copyItemName"
+            [fOnDelete]     = "deleteSelectedItem"
+            [fList]         = "itemList"
+            fListValue      = "index"
+            [fEqual]        = "false"
+            fNewTest        = ""
+            fNewName        = "newIName"
+            fNewRef         = "nIName"
+            [(fNewValue)]   = "newItemName"
+        >
+        </app-list-item-field>
+
+        <!-- Messages Area -->
+        <app-form-messages 
+          [fWorkingOpen]    = "!haveStatusMessages() && working"
+          [fMessageOpen]    = "haveStatusMessages() && !working"
+          [fMessageObj]     = "requestStatus">
+        </app-form-messages>                    
+                          
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer d-flex flex-row app-flex-1 justify-content-around align-items-center app-dialog-footer">
+    <app-fab
+          fType       = "button"
+          [fLink]     = "cancelText"
+          [fOnClick]  = "dismiss"
+          fButtonCSS  = "app-white pb-0"
+          fLabelCSS   = "app-bigger-font"
+          fAria       = "cancel">
+    </app-fab> 
+    <app-fab 
+          fType       = "button"
+          [fLink]     = "!deleteRecipe ? okText : deleteText"
+          [fOnClick]  = "close"
+          fButtonCSS  = "app-white pb-0"
+          fLabelCSS   = "app-bigger-font"
+          fAria       = "Ok">
+    </app-fab> 
+  </div>
+</div>

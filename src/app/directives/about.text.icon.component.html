@@ -1,0 +1,11 @@
+
+    <!-- Template used for icons in help text. 
+         Used with <app-about-text-icon> COMPONENT -->
+<div class="d-inline-flex flex-row justify-content-center align-items-center 
+             {{fExtraCSS}}">
+  <div *ngIf="fLabel && fReverse" class="mr-1 {{fLabelCSS}}">{{fLabel}}</div>
+  <i class="material-icons {{fColor}}"
+      [ngClass]="{'app-about-text-icon-lg' : fSize === 'L',
+                  'app-about-text-icon' : (fSize !== 'L')}">{{fIcon}}</i>
+  <div *ngIf="fLabel && !fReverse" class="ml-1 {{fLabelCSS}}">{{fLabel}}</div>
+</div>

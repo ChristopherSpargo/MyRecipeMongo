@@ -1,0 +1,120 @@
+<div class="d-flex flex-column app-central-container app-print-container app-fade-in"
+     [ngClass]="{'app-open': printActive}">
+
+  <app-form-header  headerType        = "simple" 
+                    headerIcon        = "local_dining"
+                    [headerTitle]     = "headerTitle" 
+                    headerTheme       = "app-recipes-header-theme">
+
+  </app-form-header>
+  <div class="app-tab-container px-0 pt-1 app-bg-white"
+       [ngClass]="{'app-open': printActive}">
+
+    <div class="app-frame d-flex flex-column align-items-center pt-0">
+      <div class="app-recipes-print-card mb-2">
+        <div class="d-flex flex-row">
+          <div class="d-flex flex-column flex-wrap align-items-start">
+            <div *ngIf="recipeReady">
+              <!-- Description -->
+              <div class="app-recipe-view-text px-1 py-1">
+                <img [src]="getRecipeImage()" class="app-recipe-view-main-image">
+                {{rDescription}}
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class="app-recipe-menu-item-title px-1 pt-2">
+          {{recipeReady ? rTitle : 'No Recipe to Display'}}
+        </div>
+        <!-- <div *ngIf="recipeReady"> -->
+          <div *ngIf="recipeReady" class="px-1 py-1">
+            <!-- Origin and Origin Date -->
+            <div class="d-flex flex-row align-items-center">
+              <div class="app-recipe-view-text app-recipe-view-origin pr-4">
+                Recipe From: {{rOriginName}}
+              </div>
+              <div class="app-recipe-view-text app-recipe-view-origin">
+                Circa: {{rOriginDate}}
+              </div>
+            </div>
+            <div *ngFor="let n of rOriginNotes" 
+                class="app-recipe-view-text app-recipe-view-origin-notes pl-3">
+              {{n}}
+              <br *ngIf="n === ''">
+            </div>
+            <!-- Categories -->
+            <div class="d-flex flex-row align-items-center pt-1">
+              <div class="app-recipe-view-text app-recipe-view-categories pr-2">Categories:</div>
+              <div class="d-flex flex-row flex-wrap">
+                <div *ngFor="let c of rCategories" 
+                        class="btn d-flex flex-row justify-content-center align-items-center 
+                              app-recipe-category-button app-category-button-theme mb-1">
+                  {{getCategoryName(c)}}
+                </div> 
+              </div>
+            </div>
+            <!-- Ingredients -->
+            <ng-container *ngIf="dataPresent('Ingredients')">
+              <div class="app-firebrick app-divider-50"></div>
+              <div class="app-recipe-view-text app-recipe-view-ingredients-header">
+                Ingredients:
+              </div>
+              <div *ngFor="let n of rIngredients" 
+                  class="app-recipe-view-text app-recipe-view-ingredients pl-3">
+                {{n}}
+                <br *ngIf="n === ''">
+              </div>
+            </ng-container>
+            <!-- Instructions -->
+            <ng-container *ngIf="dataPresent('Instructions')">
+              <div class="app-firebrick app-divider-50"></div>
+              <div class="app-recipe-view-text app-recipe-view-ingredients-header">
+                Instructions:
+              </div>
+              <div *ngFor="let n of rInstructions" 
+                  class="app-recipe-view-text app-recipe-view-ingredients pl-3">
+                {{n}}
+                <br *ngIf="n === ''">
+              </div>
+            </ng-container>
+            <!-- Recipe Notes -->
+            <ng-container *ngIf="dataPresent('RecipeNotes')">
+              <div class="app-recipe-view-text app-recipe-view-notes-header">
+                Notes:
+              </div>
+              <div *ngFor="let n of rNotes" 
+                  class="app-recipe-view-text app-recipe-view-recipe-notes pl-3">
+                {{n}}
+                <br *ngIf="n === ''">
+              </div>
+            </ng-container>
+          </div>
+          <!-- Additional Pictures -->
+          <!-- <ng-container *ngIf="showPics && dataPresent('AnyPics')">
+            <div class="app-firebrick app-divider-50"></div>
+            <div class="app-recipe-view-text app-recipe-view-pics-header pl-1">
+              Recipe Images:
+            </div>
+            <div class="d-flex flex-column">
+                <div>
+                  <img [src]="getRecipeImage()" class="app-recipe-menu-image" name="mainpic">
+                  <div class="app-recipe-view-text app-recipe-view-picture-note mb-2 px-1">
+                    {{getRecipeNote()}}
+                  </div>
+                </div> 
+              <ng-container *ngIf="dataPresent('MorePics')">
+                <div 
+                  *ngFor="let p of rMorePics; index as i"> 
+                  <img [src]="p.URL" class="app-recipe-menu-image" name="{{'pic'+i}}">
+                  <div class="app-recipe-view-text app-recipe-view-picture-note mb-2 px-1">
+                    {{p.note}}
+                  </div>
+                </div> 
+              </ng-container>
+            </div>
+          </ng-container> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>

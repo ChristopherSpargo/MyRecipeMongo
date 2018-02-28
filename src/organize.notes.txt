@@ -1,0 +1,49 @@
+Notes on Organizer website
+
+-- PURPOSE --
+  Practice project using MEAN stack. (MongoDB, Express, Angular, NodeJS)
+
+-- PREMISE --
+  Allow the storage, retreival and sharing of documents (eg. pictures, recipes, receipts, etc.)
+
+-- FEATURES --
+  Categories (course, cuisine, difficulty)
+  Search Tags
+  Images with annotations/Notes (compressed - JPG, PNG, PDF, GIF, MP4?)
+  Free-form text notes
+  Prep Time, Inactive Time, Cook Time, Serves/Yields
+  Main/Sub item ingredients (shopping list)
+  Main/Sub item instructions
+
+  Defaults
+  Shared Versions (public and restricted)
+  Context Sensitive Help
+
+-- ACTIONS --
+  Login/Logout
+  User Account Management
+  Enter/Update/View/Remove/Share Documents
+  Enter/Update/View/Remove Categories
+  Enter/Update/View/Remove Origins
+  ? Print/Email Documents
+
+-- MODEL --
+SubIngredients = {
+  iList: string[];
+  heading?: string;  // Sage Gravy
+}
+SubInstructions = {
+  instructions: string; // (any free-form text )
+  heading?: string;     // Sage Gravy
+}
+Recipe = {
+  _id : string       // 40-char login ID
+  category : string     // (Vacations, Desserts)
+  origin : string       // (Mom, Internet, TV)
+  originDate : string   // (1978<19780000>, May 1988 <19880500>, 21-Jul-1999 <19990721>)
+  title : string        // (Country Chicken and Potatoes)
+  keywords : [string]   // (Chicken, Potatoes, Dinners, Country, Quick)
+  ingredients: SubIngredients[];
+  instructions : SubInstructions[]; 
+  images : [{ image: blob, notes: string }]
+}

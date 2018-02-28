@@ -1,0 +1,93 @@
+﻿                <!--Form used to provide the CHANGE EMAIL feature-->
+
+<div class=" app-central-container app-fade-in  " 
+     [ngClass]="{'app-open': formOpen}">
+
+  <!-- Form Header -->
+
+  <app-form-header  headerType        = "center" 
+                    headerIcon        = "mail_outline"
+                    headerTitle       = "Change Email" 
+                    headerTheme       = "app-account-header-theme"
+                    [headerClose]     = "closeForm">
+  </app-form-header>
+
+  <!-- Start of Form -->
+
+  <div class="app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
+    <div class="container app-form-theme px-0 pt-3">
+      <form #emailForm = "ngForm" role="form" novalidate
+            (ngSubmit)="submitRequest(emailForm)">
+        <div class="d-flex flex-column px-2">
+
+          <!-- Email field -->
+          <app-icon-input
+            [fForm]       = "emailForm" 
+            fRef          = "cE" 
+            fName         = "cEmail" 
+            [fDisabled]   = "true"
+            fType         = "email" 
+            fLabel        = "Current Email Address"  
+            fIcon         = "mail_outline"
+            fColor        = "app-accounts-color" 
+            [fValue]      = "currEmail">
+          </app-icon-input>
+
+          <!-- Password field -->
+          <app-icon-input
+            [fForm]       ="emailForm" 
+            [fCheckAll]   = "checkAll"
+            fRef          ="uP" 
+            fName         ="uPassword" 
+            [fRequired]   ="true" 
+            fType         ="password" 
+            fLabel        ="Password" 
+            fIcon         ="lock_open"
+            fColor        ="app-accounts-color" 
+            [(fValue)]    ="password" 
+            fErrors       ="required|pattern|minlength"
+            fErrorMsgs    ="A password is required.|Invalid password character/format.|Password must be at least 6 characters."
+            fMinlength    ="6" 
+            fMaxlength    ="16" 
+            fPattern      ="^[a-zA-Z]+[!#$%\^\-+*\w]*$" 
+            fExtraCSS     ="mb-2"
+            [fFocusFn]    ="clearRequestStatus">
+          </app-icon-input>
+
+          <!-- New Email field -->
+          <app-icon-input
+            [fForm]       = "emailForm" 
+            [fCheckAll]   = "checkAll"
+            fRef          = "nE" 
+            fName         = "nEmail" 
+            [fRequired]   = "true" 
+            fType         = "email" 
+            fLabel        = "New Email Address"  
+            fIcon         = "mail_outline"
+            fColor        = "app-checkbox" 
+            [(fValue)]    = "newEmail" 
+            fErrors       = "required|email"
+            fErrorMsgs    = "An email address is required.|Invalid email address character/format."
+            fExtraCSS     = "mb-2"
+            [fFocusFn]    = "clearRequestStatus">
+          </app-icon-input>
+
+          <!-- Status Message Area -->
+          <app-form-messages 
+            [fWorkingOpen]    = "!haveStatusMessages() && working"
+            [fMessageOpen]    = "haveStatusMessages() && !working"
+            [fMessageObj]     = "requestStatus">
+          </app-form-messages>                    
+                            
+        </div>
+
+        <!-- Actions Area -->
+        <app-update-actions
+          [fLabels]     ="true"
+          >
+        </app-update-actions>
+        
+      </form>
+    </div>
+  </div>
+</div>

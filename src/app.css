@@ -1,0 +1,1397 @@
+﻿[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;}
+/*********************************************/
+/* STYLES MOSTLY RELATED TO: GENERAL STYLING */
+/*********************************************/
+/* z-indexes:
+    main background image ... -2
+    main background dim   ... -1
+    slide right windows   ... 3
+    slide left windows    ... 4
+    about fab             ... 5
+    slideout backdrop     ... 10
+    about container       ... 50
+    slide-down menu       ... 60
+    main toolbar          ... 75
+*/
+$lg-screen: (min-width: 960px);
+$modalActionBackground: transparent;
+$courtGreenLight: rgb(109, 149, 106);
+$helpHeaderColor: #5bc0de;
+/* $helpHeaderColor: rgba(156, 39, 176, 1); */
+$appBarIconSize: 30px !important;
+$headerDefaultBgColor: #009688;
+$headerDefaultColor: white;
+$toolbarDefaultColor: white;
+$primaryColor: #009688;
+$secondaryColor: #4DB6AC;
+$accentColor1: #AA00FF;
+$accentColor2: #4A148C;
+$accentColor3: #BA68C8;
+$warnColor: #E53935;
+$textOnPrimary: white;
+$checkboxColor: #E6B800;
+$blackTextColor: rgba(0,0,0,.87) !important;
+$disabledTextColor: rgb(166,166,166);
+$recipeEditColor: #ba68c8;
+$recipeSearchColor: #ba68c8;
+/* $infoLabelColor: rgb(0,137,123); */
+$infoLabelColor: darkslategray;
+/* $inputLabelColor: rgba(0,137,123,.54); */
+$inputLabelColor: lightslategray;
+$sharedRecipesColor: rgba(0,110,110,1);
+$sharedRecipesColorMuted: rgba(0,110,110,.7);
+$accountsColor: rgba(190,66,56,.9);
+$listsColor: rgba(204,153,102,1);
+$recipesColor: #7B1FA2;
+
+html {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+}
+body {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  overflow-x: hidden;  
+  margin: 0;
+  padding: 0;
+  font-size: 16px;}  
+  @media ($lg-screen) {
+    body {
+      font-size: 20px;}}
+.app-container {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+.app-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  background-size: auto 100%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-image: url(Assets/Images/recipeMeasuring.jpg);
+  background-position: left top;
+  width: 960px;
+  height: 700px;
+}
+  @media ($lg-screen){
+    .app-bg-container {
+      width: 1920px;
+      height: 1254px;}}
+  @media (orientation: landscape) {
+    .app-bg-container {
+      background-size: 100% auto;}}
+.app-background-shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -10;
+  background-color: rgba(0,0,0,.08);}
+  @media ($lg-screen) {
+    .app-background-shadow {
+      background-color: rgba(0,0,0,.25);}}
+.app-main-view {
+/* page content container */
+  height: 100%;
+  background-color: transparent;}
+/*****************************************/
+/* STYLES MOSTLY RELATED TO: FAB BUTTONS */
+/*****************************************/
+.app-fab-button {
+  margin: 0px;
+  padding: 0px;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  max-width: 48px;
+  min-width: 48px;
+  max-height: 48px;
+  min-height: 48px;
+  border-radius: 50%;}
+.app-fab-button-sm {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  margin-bottom: 5px;}
+.app-fab-raised {
+  opacity: .8;
+  box-shadow: 0 6px 6px 0 rgba(0,0,0,.26);}
+.app-fab-button.app-fab-raised.app-fab-click, .app-fab-button-sq.app-fab-raised.app-fab-click {
+  animation: app-click .3s;}
+@keyframes app-click {
+    0%   {box-shadow: 0 6px 6px 0 rgba(0,0,0,.26);}
+    30%  {box-shadow: 0 0px 1px 0 rgba(0,0,0,.26); transform: scale(.99);}
+    100% {box-shadow: 0 6px 6px 0 rgba(0,0,0,.26);}
+}
+.app-link-btn.app-fab-click {
+  animation: app-link-click .3s;}
+@keyframes app-link-click {
+    0%   {opacity: 1;}
+    50%  {opacity: .6;}
+    100% {opacity: 1;}
+}
+.app-fab-button:focus, .app-fab-button-sq:focus {
+  outline: none;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.26);}
+.app-fab-m {
+  max-width: 40px;
+  min-width: 40px;
+  max-height: 40px;
+  min-height: 40px;}
+.app-fab-m-sq {
+  max-height: 40px;
+  min-height: 40px;}
+.app-fab-icon {
+  font-size: 48px;}
+.app-fab-icon-m {
+  font-size: 40px;}
+.app-fab-icon-smm {
+  font-size: 30px;}
+.app-fab-sm {
+  max-width: 30px;
+  min-width: 30px;}
+.app-fab-sm,.app-fab-sm-sq {
+  font-size: 18px !important;
+  max-height: 30px;
+  min-height: 30px;}
+.app-fab-icon-sm {
+  font-size: 24px;}
+.app-fab-xsm {
+  max-width: 24px;
+  min-width: 24px;}
+.app-fab-xsm,.app-fab-xsm-sq {
+  max-height: 24px;
+  min-height: 24px;}
+.app-fab-icon-xxsm {
+  font-size: 16px;}
+.app-fab-lg {
+  max-width: 56px;
+  min-width: 56px;
+  max-height: 56px;
+  min-height: 56px;}
+.app-fab-icon-lg {
+  font-size: 35px;}
+.app-fab-icon-btn-sm {      /* this is for the categories menu trigger fab */
+  font-size: 28px;
+  position: relative;
+  left: -2px;}
+/*this needs to be applied to things with -webkit-box-shadow due to ios8 bug */      
+.app-border-radius-hack { 
+  border-radius: 1px;}
+.app-progress-indicator {
+  width: 100px;}
+.app-inherit-z {
+  z-index: inherit;}
+.app-inline-flex {
+  display: inline-flex;}
+.app-invisible {
+  visibility: hidden;}
+.app-visible {
+  visibility: visible;}
+.app-no-display {
+  display: none;}
+.app-underlined, .app-underlined:hover, .app-underlined:focus {
+  text-decoration: underline;}
+.app-lt-border-right {
+  border-right: 1px solid rgba(255,255,255, 0.19)}
+.app-menu-button {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  text-transform: none;
+  color: inherit;}
+  .app-menu-button:focus {
+  outline: none;
+  box-shadow: none;}
+.app-menu-item-icon {
+  font-size: 30px;
+  margin-right: .25em;}
+.app-menu-item-icon-sm {
+  height: 18px;
+  width: 18px;
+  font-size: 24px;
+  margin: 0 .35em .25em 0;}
+.app-card-corners {
+  border-radius: 3px 3px 3px 3px !important;}
+.app-card-bottom-corners {
+  border-radius: 0px 0px 3px 3px !important;}
+.app-card-top-corners {
+  border-radius: 3px 3px 0px 0px !important;}
+.app-width-10 {
+  flex: 1 1 10%;
+  max-width: 10%;
+  width: 10%;}
+.app-width-15 {
+  flex: 1 1 15%;
+  max-width: 15%;
+  width: 15%;}
+.app-width-35 {
+  flex: 1 1 35%;
+  max-width: 35%;
+  width: 35%;}
+.app-width-75 {
+  flex: 1 1 75%;
+  max-width: 75%;
+  width: 75%;}
+.app-width-80 {
+  flex: 1 1 80%;
+  max-width: 80%;
+  width: 80%;}
+.app-width-98 {
+  flex: 1 1 98%;
+  max-width: 98%;
+  width: 98%;}
+.app-width-100 {
+  flex: 1 1 100%;
+  max-width: 100%;
+  width: 100%;}
+.app-offset-5 {
+  margin-left: 5%;}
+.app-all-paddings-8px {
+  padding: 8px;}
+.app-mt--2 {
+  margin-top: -2px;}
+.app-bt-gray-1px {
+  border-top: 1px solid gray;}
+.app-no-overflow {
+  overflow: hidden;}
+.app-no-overflow-x {
+  overflow-x: hidden;}
+.app-slidedown-menu-button {
+  background-color: transparent;
+  border: 0;
+  position: relative;
+  padding: 0;
+  height: 36px!important;
+  width: 36px!important;
+  max-height: 36px!important;
+  max-width: 36px!important;
+  min-height: 36px!important;
+  min-width: 36px!important;}
+.app-slidedown-menu-icon {
+  font-size: 36px;
+  height: 36px!important;
+  width: 36px!important;
+  max-height: 36px!important;
+  max-width: 36px!important;
+  min-height: 36px!important;
+  min-width: 36px!important;
+  display: inline-block!important;}
+.app-bar-feature-icon {
+  font-size: $appBarIconSize;
+  height: $appBarIconSize;
+  width: $appBarIconSize;
+  max-height: $appBarIconSize;
+  max-width: $appBarIconSize;
+  min-height: $appBarIconSize;
+  min-width: $appBarIconSize;
+  color: $textOnPrimary;}
+.app-bar-feature-button {
+  z-index: inherit;
+  background-color: transparent;
+  padding: 0px !important;
+  height: $appBarIconSize;
+  width: $appBarIconSize;
+  max-height: $appBarIconSize;
+  max-width: $appBarIconSize;
+  min-height: $appBarIconSize;
+  min-width: $appBarIconSize;}
+  .app-bar-feature-button:focus {
+    outline: none;
+    box-shadow: none;}
+.app-small-font {
+  font-size: 90%;}
+.app-smaller-font {
+  font-size: 75%;}
+.app-smaller-font2 {
+  font-size: 60%;}
+.app-font-normal {
+  font-weight: normal;}
+.app-bigger-font {
+  font-size: 125%;}
+ .app-slide-right {
+  z-index: 3;
+  transition: transform .3s ease-in-out;
+  transform: translateX(-105%);}
+  .app-slide-right.app-open {
+    transform: translateX(0%);}
+.app-expand-open {
+  transition: transform .4s ease-in-out;
+  transform: scale(0);}
+  .app-expand-open.app-open {
+    transform: scale(1);}
+.app-vertical-expand {
+  overflow: hidden;
+  display: block;
+  position: relative;
+  max-height: 0px;
+  opacity: 0;
+  transition: max-height .5s, opacity .3s ease-in;}
+  .app-vertical-expand.app-open {
+    max-height: 200px;
+    opacity: 1;}
+.app-fade-in {
+  transition: opacity .4s, z-index .5s ease-in-out;
+  opacity: 0;}
+  .app-fade-in.app-open {
+    opacity: 1;}
+.app-slide-down {
+  transition: transform .5s ease-in-out;
+  transform: translateY(-250%);}
+  .app-slide-down.app-open {
+    transform: translateY(0%);}
+/***************************************/
+/* STYLES MOSTLY RELATED TO: MAIN      */
+/***************************************/
+/* Themes */
+
+  /* Darker toolbar theme */
+.app-toolbar-theme {
+  /* background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.01))!important; */
+  background-color: $headerDefaultBgColor;
+  color: $headerDefaultColor !important;} 
+  .app-toolbar-text {
+    color: $headerDefaultColor !important;}
+  .app-dropdown-text {
+    color: $headerDefaultColor !important;}
+    .app-dropdown-text:hover {
+      background-color: rgba(0,0,0,.75) !important;
+    }
+  .app-dropdown-disabled-text {
+    color: rgba(255,255,255,.75) !important;}
+    .app-dropdown-disabled-text:hover {
+      background-color: transparent !important;
+    }
+  .app-toolbar-submenu-theme {
+    padding-top: 0;
+    border: 0;
+    background-color: transparent !important;
+    color: $toolbarDefaultColor !important;} 
+.app-theme-inherit {
+  background-color: inherit;
+  color: inherit;}
+/* Main header and menus */
+.app-logo-area {
+  z-index: inherit;
+  width: 45%;
+  padding-left: 5%;}
+  @media ($lg-screen) {
+    .app-logo-area {
+      width: 15%;}}
+.app-logo-text-container {
+  font-family: 'MV Boli';
+  margin-top: -4px;
+  font-style: italic;
+  margin-bottom: 0px;}
+.app-logo-text1 {
+  font-size: 1.2em;
+  margin-top: 0px;
+  margin-bottom: 0px;}
+.app-main-short-toolbar {
+  z-index: 75;
+  min-height: 60px;}
+/*backdrop provides 'click outside' to close feature*/
+.app-click-to-close-slidenav {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  height: calc(100% - 60px);
+  width: 100%;
+  z-index: 10;
+  background-color: transparent;}
+/*slideout trigger icon animation*/
+.app-slide-open-icon {
+  transition: transform .3s ease-out, opacity .3s ease-out;
+  transform: rotate(-90deg);
+  margin-right: 0px !important;
+  opacity: 0;
+  color: inherit;}
+.app-slide-close-icon {
+  transition: transform .3s ease-out, opacity .3s ease-out;
+  transform: rotate(90deg);
+  margin-right: 0px !important;
+  opacity: 0;
+  color: inherit;}
+  .app-slide-open-icon.app-visible,
+  .app-slide-close-icon.app-visible {
+    transform: rotate(0deg);
+    opacity: 1;
+    position: absolute;
+    left: 0px;}
+/*sliding main menu for small devices*/
+.app-slide-menu {
+  position: absolute;
+  z-index: 60;
+  top: 60px;
+  left: 0px;
+  right: 0px;
+  max-height: calc(100% - 60px);}
+.app-slide-menu-ul {
+  width: 100%;
+  list-style: none;
+  padding: 0px!important;
+  margin: 0px!important;}
+.app-slide-menu-listitem {
+  display: block;
+  text-transform: none;
+  text-align: left;
+  padding: 0 0 0 16px;
+  border-radius: 0px;
+  color: inherit;
+  font-size: 1.1em !important;
+  margin: 0px!important;
+  align-items: center;
+  border-bottom: 1px solid lightgray;
+  width: 100%;
+  background-color: white;
+  line-height: 56px;}
+.app-slide-menu-listitem:hover {
+  background-color: rgb(211,211,211);}
+.app-subitem-spacing {
+  padding-left: 52px;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 46px;
+  min-height: 46px;
+  font-size: 90% !important;}
+.app-slidenav-submenu {
+  position: relative;
+  overflow: hidden;
+  max-height: 0px;
+  transition: max-height .5s ease-in-out;}
+  .app-slidenav-submenu.app-open {
+    max-height: 300px;}
+/***************************************/
+/* STYLES MOSTLY RELATED TO: HOME      */
+/***************************************/
+
+/*****************************************/
+/* STYLES MOSTLY RELATED TO: FORMS/CARDS */
+.app-form-input-divider-tall {
+  border-top: 1px solid;
+  margin-top: 4px;
+  padding-bottom: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 100%;}
+
+  /* Lighter form theme */
+.app-form-theme {
+  font-size: 1.25em!important;
+  background-color: white !important;
+  border-color: rgba(211,211,211,.2);
+  color: rgba(0,0,0,.87) !important;
+  }
+.app-form-theme-transparent {
+  font-size: 1.25em!important;
+  background-color: transparent !important;
+  border-color: rgba(211,211,211,.2);
+  color: rgba(0,0,0,.87) !important;
+  }
+  .app-form-header-theme, .app-recipes-header-theme, .app-account-header-theme, .app-lists-header-theme,
+   .app-shared-recipes-settings-theme, .app-recipe-action-modal-theme, .app-simple-modal-theme {
+    font-size: 1.25em !important;
+    background-color: $headerDefaultBgColor;
+    border-bottom: 2px solid $headerDefaultBgColor;
+    color: $headerDefaultColor;
+  }
+  .app-recipes-header-theme {
+    /* border-color: $recipesColor;
+    background-color: $recipesColor; */
+  }
+  .app-shared-recipes-settings-theme {
+    /* border-color: $sharedRecipesColor;
+    background-color: $sharedRecipesColor; */
+  }
+  .app-account-header-theme {
+    /* border-color: $accountsColor;
+    background-color: $accountsColor; */
+  }
+  .app-lists-header-theme {
+    /* border-color: $listsColor;
+    background-color: $listsColor; */
+  }
+  .app-simple-modal-theme {
+    color: $textOnPrimary;
+    background-color: $primaryColor;}    
+  .app-recipe-action-modal-theme {
+    color: $textOnPrimary;
+    background-color: $primaryColor;}    
+  .app-form-theme-text {
+    -webkit-text-fill-color: rgba(0,0,0,.87) !important; 
+    color: rgba(0,0,0,.87) !important;}
+  .app-form-theme-select-menu {
+    background-color: gray!important;
+    font-size: .6em;
+    color: white!important;}
+  .app-form-theme-select-menu-lg {
+    background-color: gray!important;
+    color: white!important;}
+  .app-form-input-divider-tall {
+    border-color: rgba(0,0,0,.12);}
+
+.app-form-icon-input-label-sm {
+  margin: 0 0 0 35px;
+  font-size: 85%!important;
+  color: $inputLabelColor !important;}
+  @media($lg-screen) {
+    .app-form-icon-input-label-sm {
+      margin: 0 0 0 42px;}}
+
+/* wrappers to achieve overlapping fields within list item field */
+.app-list-item-field-container {
+  position: relative;}
+.app-list-item-height-1 {
+  min-height: 65px;}
+.app-list-item-height-2 {
+  min-height: 115px;}
+  @media($lg-screen) {
+    .app-list-item-height-1 {
+      min-height: 78px;}
+    .app-list-item-height-2 {
+      min-height: 130px;}}
+.app-list-item-field-container-element {
+  position: absolute;
+  min-width: 100%;
+  left: 0;
+  top: 0;}
+.app-z--5 {
+  z-index: -5!important;}
+.app-z--1 {
+  z-index: -1;}
+.app-z-3 {
+  z-index: 3;}
+.app-small-list-field-cancel-fab {
+  position: relative;
+  z-index: 4;
+  font-size: 70%;
+  top: -25px;}
+/* provide a flex container unit for an input field with icon, floating label 
+   and verification messages */
+    .app-icon-textarea-container {
+      display: flex;
+      flex: 1 1 100%;
+      flex-direction: column !important;
+      color: rgba(0,0,0,.87) !important;
+      padding: 1em 0 0 0;
+      max-height: 44px;
+      transition: max-height .4s, color .4s ease-in-out;
+      position: relative;}
+      @media ($lg-screen) {
+        .app-icon-textarea-container{
+          max-height: 55px;}}
+    .app-icon-textarea-container.has-focus {
+      max-height: 500px;}
+    .app-icon-input-field-container {
+      display: flex;
+      flex: 1 1 100%;
+      flex-direction: column !important;
+      color: rgba(0,0,0,.87) !important;
+      padding: 1em 0 .5em 0;
+      position: relative;}
+    .app-icon-input-field-label, .app-icon-input-field-label-sm {
+      position: absolute;
+      left: 35px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transform: translate3d(0,0px,0) scale(1);
+      transition: .4s ease-out;
+      margin-bottom: 0;
+      color: $inputLabelColor !important;
+      order: 0!important;}
+      .app-no-icon-label {
+        left: 0px;}
+       @media ($lg-screen) {
+         .app-icon-input-field-label, .app-icon-input-field-label-sm {
+          left: 42px;} 
+        .app-no-icon-label {
+          left: 0px;}} 
+    .app-icon-input-field-label.has-value, .app-icon-input-field-label-sm.has-value,
+    .app-icon-input-field-label.has-focus, .app-icon-input-field-label-sm.has-focus {
+        transform: translate3d(-7.5%,-1.3em,0) scale(.85);}
+    .app-show-required::after {
+      content: "*";
+      color: rgba(255,0,0,.8);
+      font-size: 13px;
+      vertical-align: top;}
+    .app-input-icon {
+      margin-top: -3px;
+      line-height: 1em;
+      font-size: 30px;
+      margin-right: 5px;}
+      @media ($lg-screen) {
+        .app-input-icon {
+          font-size: 36px;
+          margin-right: 5px; }}
+    .app-form-input {
+      border-width: 0 0 1px;
+      background-color: transparent;
+      color: inherit;
+      z-index: 2; 
+      width: 100%;
+      transition: color .6s ease-in-out;
+      border-color: rgba(0,0,0,.12);
+      line-height: 1em;}
+      .app-form-input:disabled{
+        color: $disabledTextColor;}
+      .app-form-input:focus {
+        border-color: rgb(3,169,244);
+        border-width: 0 0 2px;
+        outline: none;}
+      .app-form-input.ng-touched:invalid {
+        border-color: rgba(255,0,0,.8);}
+    .app-field-messages {
+      color: red;
+      margin-left: 37px;
+      font-size: .6em;}
+      .app-no-icon-message {
+        margin-left: 0;}
+      @media ($lg-screen) {
+        .app-field-messages {
+          margin-left: 41px;}
+        .app-no-icon-message {
+          margin-left: 0;}}
+
+.app-icon-offset-width {
+  margin-left: 30px;
+  max-width: calc(100% - 30px) !important;}
+.app-input-icon-area {
+  margin: 0 5px 0 0;
+  width: 30px;}
+  @media ($lg-screen) {
+    .app-input-icon-area {
+      margin: 0 8px 0 0;
+      width: 36px;}}
+.app-form-header-padding {
+  padding: 4px 0px;}
+.app-form-image-button {
+  margin: 0px 0px 0px 10px;
+  padding: 0px;
+  cursor: pointer;
+  background-color: transparent;
+  max-height: 40px !important;
+  max-width: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;}
+  .app-form-header-image {
+    width: 38px !important;
+    height: 38px !important;}
+    @media ($lg-screen) {
+      .app-form-image-button {
+        max-height: 48px !important;
+        max-width: 48px !important;
+        min-width: 48px !important;
+        min-height: 48px !important;}
+      .app-form-header-image {
+        width: 46px !important;
+        height: 46px !important;}}
+$appFormCloseSize: 36px !important;
+$appFormCloseSizeLg: 40px !important;
+$appFormCloseIconSize: 34px !important;
+$appFormCloseSizeIconLg: 38px !important;
+.app-form-close-button {
+  margin: 0px;
+  padding: 0px;
+  background-color: transparent;
+  max-height: $appFormCloseSize;
+  max-width: $appFormCloseSize;
+  min-width: $appFormCloseSize;
+  min-height: $appFormCloseSize}
+  .app-form-close-icon {
+    vertical-align: top;
+    font-size: $appFormCloseIconSize;
+    width: $appFormCloseIconSize;
+    height: $appFormCloseIconSize;}
+    @media ($lg-screen) {
+      .app-form-close-button {
+        max-height: $appFormCloseSizeLg;
+        max-width: $appFormCloseSizeLg;
+        min-width: $appFormCloseSizeLg;
+        min-height: $appFormCloseSizeLg}
+      .app-form-close-icon {
+        font-size: $appFormCloseIconSizeLg;
+        width: $appFormCloseIconSizeLg;
+        height: $appFormCloseIconSizeLg}}
+.app-form-close-button:focus, .app-form-image-button:focus {
+  box-shadow: none;
+  outline: none;}
+.app-add-subtract-button {
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+  background-color: white;
+  max-width: 40px;
+  min-width: 40px;
+  max-height: 40px;
+  min-height: 40px;}
+  .app-add-subtract-button:focus {
+    outline: none;
+    box-shadow: none;}
+  .app-add-subtract-icon {
+    font-size: 40px;}
+.app-form-title {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  font-size: 1.25em;
+  text-align: center!important;
+  font-weight: normal;}
+.app-noscroll-frame-center {  
+  width: 100%;
+  overflow: hidden;}
+.app-scroll-frame-center {
+  width: 100%;
+  min-height: calc(100% - 53px);
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;}
+  @media ($lg-screen) {
+    .app-scroll-frame-center {
+      max-height: calc(100% - 61px);}}
+.app-central-container {
+  width: 100%;
+  min-height: 100%;
+  margin: auto;}
+  @media (min-width: 600px) {
+    .app-central-container,.app-central-container-130 {
+      width: 60%;}}
+  @media ($lg-screen) {
+    .app-central-container,.app-central-container-130 {
+      width: 50%;}}
+  @media (min-width: 1600px) {
+    .app-central-container,.app-central-container-130 {
+      width: 40%;}}
+.app-whiteframe-2dp {
+  box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
+              -1px 0px 0px 0 rgba(0,0,0,.2),
+              2px 2px 0px 0 rgba(0,0,0,.14),
+              3px 3px 0px 0 rgba(0,0,0,.12), 
+              0 4px 0px 0 rgba(0,0,0,.08);} 
+.app-scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow: auto !important;}
+.app-pan-y {
+  touch-action: pan-y !important;}
+.app-frame {
+  width: 100%;
+  max-height: 100%;}
+.app-form-message-area {
+  font-size: .9em;
+  overflow: hidden;
+  line-height: 1.2em;
+  height: 0px;}
+  .app-form-message-area.app-open {
+    height: 2.5em;}
+
+/**************************************
+/* STYLES MOSTLY RELATED TO: ABOUT     */
+/***************************************/
+
+  /* Lighter About panel theme */
+.app-about-header-theme {
+  padding: 4px 0;
+  border-bottom: 2px solid;
+  background-color: $accentColor3;
+  border-color:  $accentColor3;  
+  color: $headerDefaultColor;}
+  .app-about-body-theme {
+    background-color: white;
+    line-height: 1.15em;
+    padding: 0 8px 16px 8px;
+    color: rgba(0,0,0,.87);}
+.app-about-title {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  line-height: 1.2;
+  font-size: 1.25em;
+  text-align: center!important;
+  font-weight: 500;}
+.app-about-heading-icon-area {
+  margin-right: 10px;}
+.app-about-heading-text {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 110%;}
+.app-about-text-button {
+  vertical-align: middle;
+  font-size: 80%;}
+.app-about-heading-button {
+  font-weight: normal !important;
+  background-color: rgb(211,211,211);
+  border-radius: .25rem .25rem;
+  vertical-align: middle;
+  font-size: 80%;}
+.app-about-text-icon-lg {
+  font-size: 24px;}
+  @media ($lg-screen) {
+    .app-about-text-icon-lg {
+      font-size: 30px;}}
+.app-about-text-icon {
+  font-size: 18px;}
+  @media ($lg-screen) {
+    .app-about-text-icon {
+      font-size: 24px;}}
+.app-about-text-icon-label {
+  position: relative;
+  top: 4px;
+  font-weight: 500;}
+  @media ($lg-screen) {
+    .app-about-text-icon-label {
+      top: 6px;}}
+.app-about-text-icon-button {
+  color: $headerDefaultColor;
+  margin: 2px 0 0 0;
+  padding: 0 6px;
+  border-radius: 3px;
+  background-color: #d3d3d3!important;
+  border: 2px solid transparent;
+  line-height: 20px;
+  min-width: 40px;}
+.app-about-fab-icon {
+  position: relative;
+  font-size: 23px;}
+  @media ($lg-screen) {
+    .app-about-fab-icon {
+      font-size: 30px;}
+    .app-about-fab-icon-sm {
+      font-size: 20px;}}
+.app-about-fab-icon-sm {
+  font-size: 19px;}
+.app-about-icon {
+  cursor: text !important;
+  font-size: 24px;
+  max-height: 24px;
+  margin: 0 6px 0 0;}
+  @media ($lg-screen) {
+    .app-about-icon {
+      font-size: 30px;
+      max-height: 30px;
+      margin: 0 6px 0 0;}}
+.app-about-icon-color {
+  color: $helpHeaderColor;}
+.app-about-radio-icon {
+  cursor: text!important;
+  max-height: 20px;
+  max-width: 20px;
+  font-size: 16px;
+  margin: 0 6px 0 2px;
+  color: rgba(0,0,0,.5);
+  background-color: #ddd; 
+  font-weight: 100;
+  border-radius: 50%;
+  border: 2px solid darkgray;}
+.app-about-checkbox-icon {
+  cursor: text!important;
+  max-height: 20px;
+  max-width: 20px;
+  font-size: 16px;
+  margin: 0 6px 0 2px;
+  color: rgba(0,0,0,.6);
+  background-color: #ddd; 
+  font-weight: 600;
+  border-radius: 5px;
+  border: 2px solid darkgray;}
+.app-about-container {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 1110;
+  width: 90%;
+   background-color: white; 
+  bottom: 0px;}
+  @media (min-width: 600px) {
+    .app-about-container {
+      width: 60%;}}
+  @media ($lg-screen) {
+    .app-about-container {
+      width: 40%;}}
+  @media (min-width: 1200px) {
+    .app-about-container {
+      width: 33%;}}
+.app-scroll-frame-left {
+  width: 100%;
+  bottom: 0px;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  background-color: white;}
+.app-click-to-close-about {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1100;
+  background-color: transparent;}
+.app-about-text-divider {
+  width: 100%;
+  margin: 2px auto 2px auto;
+  border-bottom: 1px solid rgba(0,0,0,.12);}
+/******************************************/
+/* STYLES MOSTLY RELATED TO: RECIPE ENTRY */
+/******************************************/
+.app-tab-item-icon {
+  font-size: 16px;}
+  @media ($lg-screen) {
+    .app-tab-item-icon {
+      font-size: 20px;}}
+.app-dim {
+  opacity: .7;}
+.app-divider-100 {
+  width: 100%;
+  margin: .25em auto .25em auto;
+  border-bottom: 1px solid;}
+.app-divider-50 {
+  width: 50%;
+  margin: .25em auto .25em auto;
+  border-bottom: 1px solid;}
+.app-divider-90 {
+  width: 90%;
+  margin: .25em auto .25em auto;
+  border-bottom: 1px solid;}
+.app-recipe-edit-text {
+  font-style: normal;
+  line-height: 1.2em;
+  font-size: .7em;}
+.app-recipe-section-button {
+  cursor: pointer;
+  text-transform: none;
+  color: $infoLabelColor;
+  padding: 3px 0 3px 8px;
+  background-color: white;
+  border-radius: 0px;
+  width: 100%;
+  font-size: .85em!important;
+  transition: margin-bottom .5s ease-in;
+  margin: 0;}
+  .app-recipe-section-button:focus {
+    outline: none;
+    box-shadow: none;}
+  .app-recipe-section-button.app-open {
+    color: white;
+    background-color: lightslategray;
+    margin-bottom: .25rem;}
+.app-recipe-section-control {
+  margin-bottom: 0;
+  font-size: 30px;
+  color: $infoLabelColor;}
+  .app-recipe-section-control.app-open {
+    color: white;}
+.app-category-label {
+  border: 1px solid rgba(0,0,0,.08);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  box-shadow: none;
+  background-color: white;
+  transition: margin-bottom .5s, padding-bottom .5s, border-bottom .5s, box-shadow .5s ease-out;}
+.app-category-label.app-open {
+  /* border-top: 1px solid rgba(0,0,0,.08); */
+  border-bottom: 1px solid rgba(0,0,0,.6);
+  margin-bottom: .5rem!important;
+  padding-bottom: .5rem!important;
+  box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
+              -1px 0px 0px 0 rgba(0,0,0,.2),
+              2px 2px 0px 0 rgba(0,0,0,.14),
+              3px 3px 0px 0 rgba(0,0,0,.12), 
+              0 4px 0px 0 rgba(0,0,0,.08);}
+.app-category-container {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 0;
+  background-color: white;
+  transition: max-height .3s, opacity .5s, padding-bottom .5s ease-out;}
+  .app-category-container.app-open {
+    opacity: 1;
+    padding-bottom: .5rem;
+    max-height: 5000px;}
+.app-recipe-category-button {
+  border: 2px solid transparent;
+  line-height: 20px;
+  min-width: 40px;}
+.app-category-button-theme {
+  cursor: default;
+  color: rgba(0,0,0,.87) !important;
+  margin: 2px 8px 0 0;
+  padding: 0px 6px;
+  font-size: 14px;
+  border-radius: 3px;
+  background-color: lightgray !important;}
+.app-category-delete-icon {
+  font-size: 16px;
+  cursor: pointer;}
+.app-recipe-image-container {
+  padding: 0 0 .5rem;}
+.app-recipe-image {
+  max-width: 100%;
+  max-height: 1000px;}
+.app-recipes-menu-ul {
+  width: 100%;
+  min-height: 100%;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0 !important;}
+.app-recipes-menu-card {
+  display: block;
+  text-transform: none;
+  padding: 0;
+  background-color: white;
+  color: inherit;
+  margin: 0;
+  width: 98%;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
+            -1px 0px 0px 0 rgba(0,0,0,.2),
+            0px -1px 2px 0 rgba(0,0,0,.05),
+            2px 2px 0px 0 rgba(0,0,0,.14),
+            3px 3px 0px 0 rgba(0,0,0,.12), 
+            0 4px 0px 0 rgba(0,0,0,.08);
+overflow: hidden;}
+.app-recipe-menu-item-header {
+  width: 100%;}
+.app-recipe-menu-image {
+  max-width: 100%;
+  max-height: 1000px;}
+.app-recipe-menu-item-title {
+  color: firebrick;
+  line-height: 1em;
+  font-size: 1em;}
+.app-recipe-menu-item-control-icon {
+  font-size: 20px;
+  cursor: pointer;}
+  @media ($lg-screen) {
+    .app-recipe-menu-item-control-icon{
+      font-size: 24px;}}
+.app-recipe-view-text {
+  color: darkslateblue;
+  line-height: 1.5em;
+  font-style: italic;
+  font-size: .7em;}
+.app-recipe-view-main-image {
+  float: left;
+  margin: -.25rem .5rem 0 -.25rem;
+  max-width: 50%;
+  max-height: 200px;}
+.app-recipe-view-categories {
+  font-style: normal;}
+.app-recipe-view-origin {
+  font-style: normal;}
+.app-recipe-view-origin-notes {
+  font-size: .65em;}
+.app-recipe-view-ingredients-header {
+  font-style: normal;
+  font-size: 1.25em;}
+.app-recipe-view-ingredients {
+  font-style: normal;}
+.app-recipe-view-notes-header {
+  font-style: normal;
+  font-weight: 500;
+  font-size: .85em;}
+.app-recipe-view-recipe-notes {
+  font-size: .65em;}
+.app-recipe-view-pics-header {
+  font-style: normal;
+  font-size: 1em;}
+.app-recipe-view-picture-note {
+  font-style: normal;
+  font-size: .65em;}
+.app-icon-input-field-label-sm.app-recipe-pics-field-label {
+  transform: translate3d(-7.5%,0,0) scale(.85);}
+.app-catList-container {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1110;
+  width: 65%;
+  max-height: 95%;
+  background-color: white;}
+  @media ($lg-screen) {
+    .app-catList-container {
+      width: 40%;}}
+.app-catlist-header-theme {
+  padding: 4px 0;
+  border-bottom: 2px solid;
+  background-color: $accentColor2;
+  border-color: $accentColor2;  
+  color: white;}
+  .app-catlist-body-theme {
+    background-color: white;
+    line-height: 1.15em;
+    padding: 0 8px 0;
+    color: rgba(0,0,0,.87);}
+  .app-catlist-footer-theme {
+    padding: 4px 0;
+    border-top: 2px solid;
+    background-color: $accentColor2;
+    border-color: $accentColor2;  
+    color: white;}
+.app-catlist-label {
+  font-weight: 500;}
+.app-recipe-image-controls {
+  max-width: 100%;}
+.app-picture-note {
+  width: 100%;
+  font-size: 60%;}
+.app-picture-note-input {
+  border-width: 0;}
+.app-recipe-dataset-control {
+  width: 98%;}
+.app-date-range-input-control {
+  order: 0 !important;
+  width: 35% ;
+  background-color: white;
+  border-width: 0 0 1px;
+  border-color: rgba(0,0,0,.12);
+  line-height: 1em;}
+   .app-date-range-input-control:focus {
+    outline: none;
+    box-shadow: none;} 
+.app-date-range-input-control:disabled {
+  color: $disabledTextColor;}
+.app-date-range-end-error-message{
+  margin-left: 14px;}
+.app-recipe-action-title {
+  color: firebrick;
+  font-size: 1.1em;}
+.app-recipe-action-origin {
+  line-height: 1.35;}
+.app-recipe-action-origin-date {
+  line-height: 1.35;}
+/***************************************/
+/* STYLES MOSTLY RELATED TO: UTILITIES */
+/***************************************/
+.app-dialog-container {
+  /* -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  overflow-y: auto; */
+}
+.app-confirm-dialog-content {
+  text-align: center;
+  min-height: 30px;}
+.app-dialog-header {
+  border: 0;
+  padding: 0;
+  border-radius: .3em .3em 0 0;}
+.app-dialog-footer {
+  background-color: $primaryColor;
+  border-radius: 0 0 .3em .3em;}
+/***************************************/
+/* STYLES MOSTLY RELATED TO: COLORS    */
+/***************************************/
+.app-cursor-default {
+  cursor: default;}
+.app-cursor-pointer {
+  cursor: pointer;}
+.app-disabled {
+  cursor: default !important;
+  color: $disabledTextColor !important;}
+.app-disabled-text {
+  color: $disabledTextColor !important;}
+.app-transparent-text {
+  color: transparent !important;}
+.app-faint-text {
+  color: rgba(0,0,0,.09) !important;}
+.app-faint-white-text {
+  color: rgba(255,255,255,.55) !important;}
+.app-recipe-edit-color {
+  color: $recipeEditColor}
+.app-recipe-search-color {
+  color: $recipeSearchColor}
+.app-lists-color {
+  color: rgba(204,153,102,1);}
+.app-logs-color {
+  color: rgba(98,134,95,.9);}
+.app-shared-recipes-color {
+  color: $sharedRecipesColor}
+.app-accounts-color {
+  color: rgba(190,66,56,.9);}
+.app-about-color {
+  color: #5bc0de;}
+.app-success {
+  color: green;}
+.app-error {
+  color: red;}
+.app-white {
+  color: white!important;}
+.app-green {
+  color: green;}
+.app-blue {
+  color: blue;}
+.app-transparent {
+  background-color: transparent !important;
+  color: inherit;}
+.app-court-green {
+  color: rgb(98,134,95);}
+.app-court-ltgreen {
+  color: rgba(98,134,95,.9);}
+.app-court-red {
+  color: rgb(190,66,56);}
+.app-check-green {
+  color: #59b300!important;}
+.app-check-red {
+  color: #ff0000!important;}
+  .app-check-green.app-check-red {
+    color: #ff0000!important;}
+.app-retro-red {
+  color: #a61e1e!important;}
+.app-retro-ltblue {
+  color: #7cc7e2;}
+.app-bg-retro-ltblue {
+  background-color: #7cc7e2!important;
+  color: inherit;}
+.app-retro-brown {
+  color: #997149;}
+.app-bg-retro-brown {
+  background-color: #997149!important;
+  color: inherit;}
+.app-light-brown {
+  color: #cc9966;}
+.app-brite-orange {
+  color: #ff9100;}
+.app-firebrick {
+  color: firebrick;}
+.app-darkgrey {
+  color: darkgrey;}
+.app-darkslateblue {
+  color: darkslateblue;}
+.app-lightslategray {
+  color: lightslategray;}
+.app-retro-cream {
+  color: #fef7e6;}
+.app-bg-retro-cream {
+  background-color: #fef7e6;}
+.app-retro-dark-cream {
+  color: #ffe8b3;}
+.app-bg-retro-dark-cream {
+  background-color: #ffe8b3;}
+.app-bg-transparent {
+  background-color: transparent !important;}
+.app-bg-white {
+  background-color: white !important;}
+.app-bg-gwhite { 
+  background-color: ghostwhite;}
+.app-bg-ltgray { 
+  background-color: lightgray;}
+.app-bg-fab-gray {
+  background-color: rgba(244,243,242,1)!important;}
+.app-bg-fab-accent {
+  background-color: rgba(255,229,127,1)!important;}
+.app-warn {
+  color: $warnColor !important;}
+.app-primary {
+  color: $primaryColor !important;}
+.app-bg-primary {
+  background-color: $primaryColor !important;}
+.app-secondary {
+  color: $secondaryColor !important;}
+.app-bg-secondary {
+  background-color: $secondaryColor !important;}
+.app-accent1 {
+  color: $accentColor1 !important;}
+.app-checkbox {
+  color: $checkboxColor !important;}
+.app-link-active {
+  color: #0275D8;}
+/**********************************************/
+/* STYLES MOSTLY RELATED TO: ngb-bootstrap    */
+/**********************************************/
+.app-flex-1 {
+  flex: 1;}
+.app-flex-wrap {
+  flex-wrap: wrap;}
+/*modifications for ngb-bootstrap modal*/
+.modal-backdrop.show {
+  opacity: .7;}
+.modal-dialog {
+  margin: 25% 2%;}
+  @media ($lg-screen) {
+    .modal-dialog {
+      margin: 10% auto;}}
+  @media (orientation: landscape) {
+    .modal-dialog {
+      margin: 10% auto;}}
+.modal-content {   
+  background-color: transparent;
+  border: 0;}
+.modal-footer {
+  padding: 10px;
+  border-top: 1px solid gray;}
+.app-modal-action-btn {
+  cursor: pointer;
+  background-color: $modalActionBackground;}
+.app-action-btn {
+  cursor: pointer;
+  background-color: $modalActionBackground;}
+   .app-action-btn:focus {
+    outline: none;
+    box-shadow: none;} 
+#toast-container > div {
+  min-width: 20em !important;}
+  @media($lg-screen) {
+    #toast-container > div {
+      min-width: 25em !important;}}
+.app-toast-msg {
+  font-style: italic;}
+/*modifications for ngb-bootstrap tabs*/
+.nav-tabs {
+  background-color: $secondaryColor;
+}
+ .nav-link {
+  padding: 0 .25em;} 
+.nav-tabs .nav-link.active {
+  border-bottom: 2px solid $accentColor1;
+  background-color: $secondaryColor;
+  color: white;}
+.nav-tabs .nav-link {
+  border: 0;
+  padding: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: 3px;
+  color: white;
+  background-color: $secondaryColor;
+  transition: border .5s ease-in;}
+.nav-tabs .nav-item {
+  margin: .5em .25em .5em .25em;}
+.app-tab-container {
+  visibility: hidden;
+}
+  .app-tab-container.app-open {
+    visibility: visible;
+  }
+.app-tab-title {
+  font-size: .75em;}
+  @media($lg-screen) {
+    .app-tab-title {
+      font-size: .85em;}}
+ngb-tabset {
+  width: 100%;}
+ngb-tabset > ul{
+  background-color: white;
+  padding-top: .15rem; 
+  position: sticky;
+  top: 0;
+  z-index: 1000; }
+.tab-content {
+  box-shadow: 0 1px 0px 0 rgba(0,0,0,.2),
+              0 2px 0px 0 rgba(0,0,0,.14),
+              0 3px 0px 0 rgba(0,0,0,.12), 
+              0 4px 0px 0 rgba(0,0,0,.08);
+  border-radius: 0 0 4px 4px;
+  margin-bottom: 10px;
+  background-color: white;}
+b, strong {
+  font-weight: bold;}
+.btn {
+  font-size: 14px;}
+.app-icon-xsm {
+  font-size: 20px;}
+  @media ($lg-screen) {
+    .app-icon-xsm {
+      font-size: 24px;}}

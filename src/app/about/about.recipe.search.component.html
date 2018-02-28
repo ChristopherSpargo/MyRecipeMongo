@@ -1,0 +1,42 @@
+  <div>
+    &nbsp;&nbsp;The <b>Match Log Search</b> tab allows you to specify parameters to identify the match logs you
+    want to view at this time.<br/>
+    The fields and buttons are:
+
+    <app-about-heading fIcon="face" fText="Player" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;This is the name of the player participating in all the matches of interest.
+    Select a player from the drop-down list.
+
+    <app-about-heading fIcon="thumbs_up_down" fText="Player's Result" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;Indicate whether the player selected in the Player field needs to have won or lost the matches of interest.
+
+    <app-about-heading fIcon="person" fText="Opponent" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;This is the name of the other player, the opponent, participating in all the matches of interest.
+    Select a player from the drop-down list.
+
+    <app-about-heading fIcon="swap_horiz" fText="Opponent Plays" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;Indicate whether the opponent in the matches of interest needs to have been left or right handed.
+
+    <app-about-heading fIcon="group" fText="Tournament" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;This is the name of the tournament where all the matches of interest were played.
+    Select a tournament from the drop-down list.
+
+    <app-about-heading fIcon="insert_invitation" fText="Matches Since" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;All the matches of interest were played on or after this date.
+    Select a date from the pop-up calendar.
+
+    <app-about-heading fIcon="today" fText="Matches Before" fIconColor="app-court-green"></app-about-heading>
+    &nbsp;&nbsp;All the matches of interest were played before this date.
+    Select a date from the pop-up calendar.
+
+    <app-about-heading fIcon="check_circle_outline" fText="Search" [fFab]="true" fIconColor="app-primary"></app-about-heading>
+    &nbsp;&nbsp;Press this button to submit your search request. 
+    If successful, the <b>Match Log Menu</b> tab will be displayed.
+    If no matches meeting the parameters are found, a message to that effect will be given and the 
+    <b>Match Log Search</b> form will remain displayed.
+    
+    <app-about-heading fIcon="warning" fText="Tips and Warnings" fIconColor="app-checkbox" [fDivider]="true"></app-about-heading>
+    &nbsp;&nbsp;If the search continues to find no matches, make sure the parameters you are specifying do not conflict.
+    For example, indicating a specific <b>Tournament</b> <i>and</i> a specific <b>Opponent</b> but that player 
+    was not an opponent in any of the matches for the <b>Player</b> at that tournament.
+  </div>

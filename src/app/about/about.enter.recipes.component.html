@@ -1,0 +1,75 @@
+  <div>
+    &nbsp;&nbsp;This tab of the Recipe Access Area is where information about a recipe is entered/edited.
+    <br/>The fields and buttons are:
+
+    <app-about-heading fIcon="title" fText="Title" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This is the title of the recipe.
+    Each word of the title will be capitalized automatically. Words/phrases in the title can be searched for
+    using the <b>Keywords</b> field of the <b>SEARCH</b> tab.
+
+    <app-about-heading fIcon="description" fText="Description" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;Enter a description of the dish created from this recipe. The description is displayed on
+    a search results menu.
+
+    <app-about-heading fIcon="assessment" fText="Categories" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;Here you assign categories to the recipe. Categories are one of the main ways to
+    organize recipes. You can create as many different categories as you like (see help when using the 
+    <b>Manage Categories</b> feature).<br/>
+    &nbsp;Add categories from the menu that appears by tapping 
+    <app-about-text-icon fIcon="add" fLabel="Add" 
+    fSize="S" [fReverse]="true" fExtraCSS="app-about-text-icon-button" fColor="app-green">
+    </app-about-text-icon>.<br/>
+    &nbsp;Categories can be removed by tapping the remove (<app-about-text-icon fIcon="close" fSize="S" 
+    fColor="app-warn"></app-about-text-icon>) icon that appears with each category shown in this field.
+
+    <app-about-heading fIcon="face" fText="Origin" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;Where the recipe originated. Select an entry from the list.
+
+    <app-about-heading fIcon="insert_invitation" fText="Origin Date" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;The year the recipe originated. Enter a 4-digit year.
+
+    <app-about-heading fIcon="edit" fText="Notes" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This field is for adding any clarifying information about the recipe's origin.
+
+    <app-about-heading fIcon="list" fText="Ingredients" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;Enter the list of ingredients for the recipe. Type in each ingredient 
+    followed by the enter key.  The program will automatically bullet each ingredient when you hit the
+    enter key.  You can enter subtitles like 'FOR THE SAUCE:' by ending the line with a semicolon. 
+    The program will display subtitles in all caps. 
+    Blank lines (lines that start with the enter key) will be maintained.
+    <br/>&nbsp;Words/phrases in the ingredients can be searched for using the <b>Keywords</b> field of 
+    the <b>SEARCH</b> tab.
+
+    <app-about-heading fIcon="assignment" fText="Instructions" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;Enter the list of instructions for the recipe. Type in each instruction
+    followed by the enter key.  The program will automatically number each instruction when you hit the
+    enter key.  You can enter subtitles like 'FOR THE SAUCE:' by ending the line with a semicolon. 
+    The program will display subtitles in all caps. Step numbers start over after a subtitle.
+    Blank lines (lines that start with the enter key) will be maintained.
+
+    <app-about-heading fIcon="edit" fText="Recipe Notes" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;Enter any special considerations regarding ingredients or 
+    preparation of the recipe.
+
+    <app-about-heading fIcon="photo" fText="Pictures" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This field is for adding pictures to the recipe. The first picture entered will
+    be the one displayed on a search results menu. Tap the 
+    <app-about-text-icon fIcon="add_a_photo" fLabel="Add" 
+    fSize="S" fColor="app-light-brown" fLabelCSS="app-link-active app-underlined">
+    </app-about-text-icon>
+    button to browse for pictures and/or to use the camera on a mobile device.
+
+    <app-about-heading fIcon="check_circle_outline" fText="Save" fIconColor="app-primary"></app-about-heading>
+    &nbsp;&nbsp;Press this button to save the recipe to the database.
+
+    <app-about-heading fIcon="highlight_off" fText="Clear" fIconColor="app-brite-orange"></app-about-heading>
+    &nbsp;&nbsp;Press this button to clear all recipe information for a <b>NEW</b> recipe and start over.
+
+    <app-about-heading fIcon="highlight_off" fText="Cancel" fIconColor="app-brite-orange"></app-about-heading>
+    &nbsp;&nbsp;Press this button to cancel an <b>EDIT</b> of an existing recipe and return all the
+    fields to their original values.
+
+    <app-about-heading fIcon="warning" fText="Tips and Warnings" fIconColor="app-checkbox" [fDivider]="true"></app-about-heading>
+    &nbsp;&nbsp;If you will be sharing this recipe, be sure to add your own personal category before sharing
+    the recipe. This will make it easy for users to find recipes you have contributed.
+  </div>

@@ -1,0 +1,66 @@
+  <div class="container app-tab-container px-0 pt-1 app-bg-gwhite"
+       [ngClass]="{'app-open': menuOpen}">
+
+	      	<!-- Menu for list of recipes for View Recipes -->
+
+    <div class="app-theme-inherit d-flex flex-column justify-content-start align-items-start app-frame pt-0">
+      <app-radio-group *ngIf="allowStatusChoice()"
+        fTitle      = "List Recipes that I have:"
+        fIcon       = "share"
+        fIconColor  = "app-accent1 app-icon-xsm mr-2"
+        [fOnChange] = "updateRecipeCountLabel"
+        [fOnFocus]  = "clearRequestStatus"
+        [fDividerAfter] = "false"
+        [(fModel)]  = "sharedFilter" 
+        fExtraCSS   = "app-smaller-font pb-2 pl-1"
+        fValues     = "Shared|Private|Either" 
+        fLabels     = "Shared|Not Shared|Either" 
+        fName       = "sFilter">
+      </app-radio-group>
+      <div class="app-frame pt-0">
+        <ul class="app-recipes-menu-ul">
+          <li *ngFor="let r of menuRecipeList(); index as i"
+              class="d-flex flex-column align-items-center">
+            <div *ngIf="applySharedFilter(i)" class="app-recipes-menu-card mb-2">
+              <div class="app-cursor-pointer"
+                      (click)="setSelectedRecipe(i)">
+                <div class="d-flex flex-row">
+                  <div class="d-flex flex-column flex-wrap align-items-start">
+                    <div class="app-recipe-view-text px-1 py-1">
+                      <img [src]="getMenuImage(r)" class="app-recipe-view-main-image">
+                      {{getDescription(r)}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-row align-items-center app-recipe-menu-item-header pt-1 px-1">
+                <div class="app-recipe-menu-item-title">
+                  {{r.data.title}}
+                </div>
+              </div> 
+              <!-- Origin and Origin Date -->
+              <div class="d-flex flex-row align-items-center px-1 pt-1">
+                <div class="app-recipe-view-text app-recipe-view-origin pr-4">
+                  Recipe From: {{getOriginName(r)}}
+                </div>
+                <div class="app-recipe-view-text app-recipe-view-origin">
+                  circa: {{getOriginDate(r)}}
+                </div>
+              </div>
+              <div class="d-flex flex-row justify-content-between align-items-center px-1 py-1">
+                <i *ngIf="showShareIcon(r)"  class="material-icons app-recipe-menu-item-control-icon app-accent1" 
+                    data-toggle="tooltip" data-placement="top" title="Share Recipe" data-delay="200"
+                  (click)="makeRecipeShared(r)">share</i>
+                <i *ngIf="showSharedSettingsIcon(r)"  class="material-icons app-recipe-menu-item-control-icon app-secondary" 
+                    data-toggle="tooltip" data-placement="top" title="Shared Settings" data-delay="200"
+                  (click)="sharedRecipeSettings(r)">settings</i>
+                <i *ngIf="showDeleteIcon(r)"  class="material-icons app-recipe-menu-item-control-icon app-warn ml-auto" 
+                    data-toggle="tooltip" data-placement="top" title="Delete Recipe" data-delay="200"
+                  (click)="deleteMenuItem(i)">close</i>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+     </div> 
+  </div>

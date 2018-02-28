@@ -1,0 +1,324 @@
+                <!--Form used to provide the RECIPE ENTRY feature-->
+<!--<app-waiting-indicator [fOpen]="formOpen && formWasOpen"></app-waiting-indicator>-->
+
+<div
+  class="container app-tab-container app-no-overflow-x px-0 pt-2 app-bg-gwhite"
+  [ngClass]="{'app-open': editTabOpen}"
+  >
+
+    <!-- define a component to add recipe categoreis -->
+    <app-checkbox-menu 
+            fTitle       = "Recipe Categories"
+            fMessage     = "Select all that apply:"
+            fOpenMsg     = "openEntryCategoriesMenu"
+            [fOnSave]    = "categoriesAdded"
+            [fItems]     = "categoryListItems()"
+            [(fSelected)] = "rCategories.cats">
+    </app-checkbox-menu>
+ 
+    <!-- Instructional messages -->
+    <div *ngIf="createNew" class="d-flex flex-row justify-content-center app-flex-1 
+                                  app-darkgrey align-items-center mb-2 app-small-font">
+      Creating a new recipe document.
+    </div>
+    <div *ngIf="!createNew" class="d-flex flex-row justify-content-center app-flex-1 
+                                    app-darkgrey align-items-center mb-2 app-small-font">
+      Updating an existing recipe document.
+    </div>
+
+    <!-- Start of Form -->
+    <div class="container px-0">
+      <form #recipeEntryForm = "ngForm" role="form" 
+            name='recipeEntryForm' novalidate method="post" enctype="multipart/form-data"
+            (ngSubmit)="submitRequest(recipeEntryForm)">
+        <div class="d-flex flex-column app-width-98 mx-auto">
+
+          <app-recipe-section fLabel="Title and Categories" [(fOpenFlag)]="titleAndTagsOpen" [fTextOnly]="true"
+            fExtraCSS="px-1">
+            <!-- Recipe Title field -->
+            <app-icon-input
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "rT" 
+              fName         = "rTitle" 
+              fType         = "text" 
+              fLabel        = "Title:"  
+              fIcon         = "title"
+              [fRequired]   = "true"
+              fColor        = "app-recipe-edit-color" 
+              [(fValue)]    = "rTitle" 
+              [fCapitalize] = "true"
+              fPattern      = "^[ /\-'%$#.,()!?\w]*$"
+              fMaxlength    = "200"
+              fErrors       = "required|pattern"
+              fErrorMsgs    = "A Title is required.|Invalid character in Title."
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-input>
+  
+            <!-- Dish Description field -->
+            <app-icon-textarea
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "rD" 
+              fName         = "rDesc" 
+              fLabel        = "Description:"  
+              fIcon         = "description"
+              fColor        = "app-recipe-edit-color" 
+              [fRequired]   = "true" 
+              [(fValue)]    = "rDescription" 
+              fMaxlength    = "10000"
+              fRows         = "15"
+              fErrors       = "required"
+              fErrorMsgs    = "A Description is required."
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-textarea> 
+
+              <!-- Category selection field -->
+            <div class="d-flex flex-row justify-content-end align-items-center pr-1 pt-3">
+              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label pl-1"
+                    [ngClass]="{'app-show-required': !haveCategories()}">
+                Categories:
+              </label>
+            </div> 
+            <div class="app-icon-input-field-container pt-3">
+              <div class="d-flex flex-row align-items-center">
+                <i class="material-icons app-input-icon app-recipe-edit-color">assessment</i>
+                <div class="d-flex flex-row flex-wrap">
+                  <div *ngFor="let c of rCategories.cats" 
+                          class="d-flex flex-row justify-content-center align-items-center 
+                                app-recipe-category-button app-category-button-theme mb-1">
+                    {{getCategoryName(c)}}
+                    <i class="material-icons app-category-delete-icon app-warn ml-1" 
+                      (click)="removeCategory(c)">close</i>
+                  </div> 
+                  <!-- display a button at the end of the list to activate the selection menu -->
+            <app-fab
+                    fType       = "button"
+                    [fOpen]     = "true"
+                    fButtonCSS  = "ml-2 d-flex app-fab-button-sm app-bg-white app-accent1 app-fab-raised"
+                    [fDelay]    = "200"
+                    fAria       = "add"
+                    fIcon       = "add_circle"
+                    fIconCSS    = "app-fab-icon-btn-sm"
+                    [fOnClick]  = "openCatList"
+                    fIconColor  = "app-primary">
+            </app-fab>
+                </div>
+              </div>
+
+              <div class="app-field-messages" 
+                    [style.visibility]="(rCategories.touched || checkAll) ? 'visible' : 'hidden'">
+                <validation-messages [vField]="rCategories">
+                  <validation-message name="required">
+                    At least 1 category is required.
+                  </validation-message>
+                </validation-messages>
+              </div> 
+            </div>
+          </app-recipe-section>
+
+          <app-recipe-section fLabel="Origins" [(fOpenFlag)]="originOpen" [fTextOnly]="true"
+            fExtraCSS="px-1">
+              <!-- Origin selection field -->
+            <app-list-item-field 
+              [fForm]         = "recipeEntryForm"
+              [(fCheckAll)]   = "checkAll"
+              fName           = "rOrig"
+              fRef            = "rO"
+              [fRequired]     = "false" 
+              [(fValue)]      = "rOrigin"
+              fLabel          = "Recipe Origin:" 
+              fIcon           = "face" 
+              fColor          = "app-recipe-edit-color "
+              [fOnFocus]      = "clearRequestStatus"
+              [fList]         = "originListItems()"
+              [fShowNew]      = "false"
+              [fAllowNew]     = "false"
+              fListValue      = "idName">
+            </app-list-item-field> 
+  
+            <!-- Origin Date Field -->
+
+            <app-icon-input
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "oD" 
+              fName         = "oDate" 
+              fType         = "number" 
+              fLabel        = "Origin Date:"  
+              fIcon         = "insert_invitation"
+              fColor        = "app-recipe-edit-color" 
+              [(fValue)]    = "rOriginDate" 
+              fPattern      = "^\d\d\d\d$"
+              fErrors       = "pattern"
+              fErrorMsgs    = "Format is: yyyy"
+              fExtraCSS     = "mb-0"
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-input>
+  
+            <!-- Origin Notes field -->
+            <app-icon-textarea
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "oN" 
+              fName         = "oNotes" 
+              fLabel        = "Origin Notes:"  
+              fIcon         = "edit"
+              fColor        = "app-recipe-edit-color" 
+              [(fValue)]    = "rOriginNotes" 
+              fMaxlength    = "10000"
+              fRows         = "15"
+              fTextSize     = "app-recipe-edit-text"
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-textarea> 
+          </app-recipe-section>
+
+          <app-recipe-section fLabel="Ingredients and Instructions" [(fOpenFlag)]="specificsOpen" [fTextOnly]="true"
+            fExtraCSS="px-1">
+            <!-- Ingredients field -->
+            <app-icon-textarea
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "rIng" 
+              fName         = "rIngr" 
+              fList         = "bullets"
+              fLabel        = "Ingredients:"  
+              fIcon         = "list"
+              fColor        = "app-recipe-edit-color" 
+              [(fValue)]    = "rIngredients" 
+              fMaxlength    = "10000"
+              fRows         = "15"
+              fTextSize     = "app-recipe-edit-text"
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-textarea> 
+  
+            <!-- Instructions field -->
+            <app-icon-textarea
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "rIns" 
+              fName         = "rInst" 
+              fLabel        = "Instructions:"  
+              fList         = "numbers"
+              fIcon         = "assignment"
+              fColor        = "app-recipe-edit-color" 
+              [(fValue)]    = "rInstructions" 
+              fMaxlength    = "10000"
+              fRows         = "15"
+              fExtraCSS     = "mt-2"
+              fTextSize     = "app-recipe-edit-text"
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-textarea>  
+
+            <!-- Recipe Notes field -->
+            <app-icon-textarea
+              [fForm]       = "recipeEntryForm" 
+              [(fCheckAll)] = "checkAll"
+              fRef          = "rN" 
+              fName         = "rNotes" 
+              fLabel        = "Recipe Notes:"  
+              fIcon         = "edit"
+              fColor        = "app-recipe-edit-color" 
+              [(fValue)]    = "rNotes" 
+              fMaxlength    = "10000"
+              fRows         = "15"
+              fExtraCSS     = "mt-2"
+              fTextSize     = "app-recipe-edit-text"
+              [fFocusFn]    = "clearRequestStatus">
+            </app-icon-textarea>  
+          </app-recipe-section>
+
+          <app-recipe-section fLabel="Pictures" [(fOpenFlag)]="picturesOpen" [fTextOnly]="true"
+            fExtraCSS="px-0">
+
+            <!-- Picture Files Field -->
+            <input type="file" name="rPics" ngModel multiple autocomplete="off"
+              id="rPicsID" class="app-no-display" accept="image/*"
+              (change)="fileSelected('rPicsID')">
+            <div class="d-flex flex-row justify-content-between align-items-center pr-1 mt-1">
+              <i class="material-icons app-input-icon app-recipe-edit-color">photo</i>
+              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label">
+                Recipe Pictures:
+              </label>
+              <div class="app-smaller-font"
+                    data-toggle="tooltip" data-placement="top" title="Add Pictures" data-delay="200">
+                <app-fab 
+                        fType       = "button"
+                        fLabel      = "Add"
+                        fAlignment  = "align-items-end"
+                        fLabelCSS   = "app-underlined app-link-active"
+                        fIcon       = "add_a_photo"
+                        fIconColor  = "app-recipe-edit-color"
+                        fIconCSS    = "app-icon-xsm"
+                        [fOnClick]  = "clickField"
+                        fParam      = "rPicsID"
+                        fAria       = "add pictures">
+                </app-fab> 
+              </div>
+            </div> 
+            <div class="app-icon-input-field-container app-recipe-image-container pt-3">
+              <div class="d-flex flex-column">
+                <div *ngFor="let p of rPictures; index as i"> 
+                  <div class="d-flex flex-row justify-content-end align-items-center 
+                              app-recipe-image-controls px-1">
+                    <i class="material-icons app-category-delete-icon app-warn" 
+                      (click)="removePicture(i)">close</i>
+                  </div>
+                  <img [src]="p.picURL" class="app-recipe-image" name="{{'pic'+i}}">
+                  <div class="app-picture-note mb-2 px-1">
+                    <input type="text" name="{{'picNote'+i}}" id="{{'picNoteID'+i}}"
+                            class="app-form-input app-picture-note-input"
+                            placeholder="{{p.picSize}}"
+                            maxlength="200"
+                            [(ngModel)]="p.noteText"
+                    >
+                  </div>
+                </div> 
+              </div>
+            </div> 
+
+          </app-recipe-section>
+                            
+          <!-- Messages Area -->
+          <app-form-messages 
+            [fWorkingOpen]  ="!haveStatusMessages() && working"
+            [fMessageOpen]  ="haveStatusMessages() && !working"
+            [fMessageObj]   ="requestStatus">
+          </app-form-messages>                    
+                            
+        </div>
+
+        <!-- Actions Area -->
+        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary mt-1 py-1">
+          <div class="app-smaller-font mr-4 mb-0">
+            <app-fab
+                    fType       = "submit"
+                    fLabel      = "Save"
+                    [fOpen]     = "true"
+                    fButtonCSS  = "app-fab-sm-sq app-white mb-1"
+                    [fDelay]    = "200"
+                    fAria       = "add"
+                    fIcon       = "check_circle_outline"
+                    fIconCSS    = "app-fab-icon-sm"
+                    fIconColor  = "app-white">
+            </app-fab>
+          </div>
+          <div class="app-smaller-font mb-0">
+            <app-fab 
+                    fType       = "button"
+                    fLabel      = "{{createNew ? 'Clear' : 'Cancel'}}"
+                    [fOpen]     = "true"
+                    fButtonCSS  = "app-fab-sm-sq app-white mb-1"
+                    [fDelay]    = "200"
+                    [fOnClick]  = "resetForm"
+                    [fParam]    = "recipeEntryForm"
+                    fAria       = "cancel"
+                    fIcon       = "highlight_off"
+                    fIconCSS    = "app-fab-icon-sm"
+                    fIconColor  = "app-white">
+            </app-fab>
+          </div>
+        </div>
+      </form>
+    </div> 
+</div>

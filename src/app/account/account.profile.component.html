@@ -1,0 +1,62 @@
+<!--Form used to provide the PROFILE UPDATE feature-->
+
+<!--<app-waiting-indicator awi-open="!fC.formOpen && !fC.formWasOpen"></app-waiting-indicator>-->
+
+<div 
+  class=" app-central-container app-fade-in"
+  [ngClass]="{'app-open': formOpen}"
+  >
+
+
+  <!-- Form Header -->
+
+  <app-form-header  headerType        = "center" 
+                    headerIcon        = "person"
+                    headerTitle       = "Update Profile" 
+                    headerTheme       = "app-account-header-theme"
+                    [headerClose]     = "closeForm">
+  </app-form-header>
+
+  <!-- Start of Form -->
+
+  <div class=" app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
+    <div class="container app-form-theme px-0 pt-3">
+      <form #profileForm = "ngForm" role="form" novalidate
+            (ngSubmit)="submitRequest(profileForm)">
+        <div class="d-flex flex-column px-2">
+
+             <!-- Default Player field -->
+          <app-list-item-field 
+              [fForm]         = "profileForm"
+              [fCheckAll]     = "checkAll"
+              fName           = "origin"
+              fRef            = "rO"
+              [(fValue)]      = "profile.defaultRecipeOrigin"
+              fLabel          = "Usual recipe origin:"
+              fIcon           = "face" 
+              fColor          = "app-accounts-color"
+              [fOnFocus]      = "clearRequestStatus"
+              [fList]         = "originList"
+              fListValue      = "idName"
+              [fAllowNew]     = "false">
+          </app-list-item-field>
+
+            <!-- Status Message Area -->
+          <app-form-messages 
+            [fWorkingOpen]  ="!haveStatusMessages() && working"
+            [fMessageOpen]  ="haveStatusMessages() && !working"
+            [fMessageObj]   ="requestStatus">
+          </app-form-messages>                    
+
+        </div>
+                            
+          <!-- Actions Area -->
+          <app-update-actions
+            [fLabels]     ="true"
+            >
+          </app-update-actions>
+          
+        </form>
+    </div>
+  </div>
+</div>

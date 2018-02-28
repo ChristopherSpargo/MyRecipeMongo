@@ -1,0 +1,30 @@
+  <div>
+    &nbsp;&nbsp;The events list contains the names of the events players play in, such as 'Girls 18S', when they enter tournaments.
+    <br/>The <b>Manage Events</b> form allows you to add/remove/change entries in your events list.<br/>
+    The fields and buttons are:
+
+    <app-about-heading fIcon="description" fText="Event Name" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This is the name of an event players can play in as part of a tournament.
+    From the drop-down list, select an event name to change/remove or select <strong>New Event Name</strong> to add
+    a new event name to the list.
+
+    <app-about-heading fIcon="edit" fText="Existing Event Name" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This icon will display next to the input field if you choose an exitsing event from the 
+    list in the Event Name field. Edit or delete this event name.
+
+    <app-about-heading fIcon="add_circle_outline" fText="New Event Name" fIconColor="app-light-brown"></app-about-heading>
+    &nbsp;&nbsp;This icon will display next to the input field if you choose New Event Name from the list 
+    in the Event Name field. Enter a name for the new event here.
+
+    <app-about-heading fIcon="check_circle_outline" fText="Save" [fFab]="true" fIconColor="app-primary"></app-about-heading>
+    &nbsp;&nbsp;Press this button to submit your list update request.  If successful, you will
+    receive a brief notification.
+
+    <app-about-heading fIcon="remove_circle_outline" fText="Remove" fIconColor="app-warn" 
+    [fFab]="true"></app-about-heading>
+    &nbsp;&nbsp;Press this button to remove the selected event from the list.
+
+    <app-about-heading fIcon="highlight_off" fText="Cancel" fIconColor="app-brite-orange" 
+    [fFab]="true"></app-about-heading>
+    &nbsp;&nbsp;Press this button to return to name selection without changing the current selection.
+  </div>
