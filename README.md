@@ -4,11 +4,11 @@
     <b>What is MyRecipeMongo?</b><br/>
     &nbsp;&nbsp;MyRecipeMongo is a website where you can organize and share recipes.<br/>&nbsp;&nbsp;Organize
     recipes by categories, origin, and origin date. Retreive recipies using categories, origin, date or keywords
-    found in the title or ingredients.<br />&nbsp;&nbsp;Share recipes with everyone or just specific users.
+    found in the title or ingredients.<br/>&nbsp;&nbsp;Share recipes with everyone or just specific users.
     &nbsp;&nbsp;Recipes are stored in the cloud and can be accessed at anytime from any device.
   </p>
   <p>
-    <b>Create an Account"></b><br/>
+    <b>Create an Account</b><br/>
     &nbsp;&nbsp;The first thing you'll need to do to start using MyRecipeMongo is create an account.  Since all data
     is stored in the cloud, we need to know which data is yours. MyRecipeMongo accounts are simple, just an
     email address and a password.<br/><br/>
@@ -22,7 +22,7 @@
   <p>
     <b>Getting Help</b><br/>
     &nbsp;&nbsp;If at any time you are unsure of what to do just tap the icon in the upper 
-    left corner of the screen and a help panel, like this one, will be displayed that has information 
+    left corner of the screen and a help panel will be displayed that has information 
     relevant to the current activity.
   </p>
   <p>
@@ -49,15 +49,15 @@
     &nbsp;&nbsp;&nbsp;&nbsp;<b>Recipe Notes</b><br/>
     &nbsp;&nbsp;&nbsp;&nbsp;<b>Pictures</b><br/>
     &nbsp;&nbsp;Choices for <b>Categories</b>and <b>Origin</b> 
-    are maintained by you in separate lists using the <b>List Management</b> menu.  
-    Each function in List Management has its own help panel.
+    are maintained by you in separate lists using the <b>Lists</b> menu.  
+    Each List function has its own help panel.
   </p>
   <p>
     <b>Viewing Recipes</b><br/>
     &nbsp;&nbsp;To find and view recipes, tap the <b>search</b> icon in the 
     main title bar (or navigate to <b>Recipes>Recipe Search</b> on the main menu).
     This will open the Recipe Access Area with the <b>SEARCH</b> tab active.<br/>
-    &nbsp;&nbsp;Fill in any search criteria and tap <b>Searcg</b>. If matching recipes are found, 
+    &nbsp;&nbsp;Fill in any search criteria and tap <b>Search</b>. If matching recipes are found, 
     a menu of those recipes will be displayed on the <b>RECIPES</b> tab. 
     Tapping the picture or description on the menu item will display the full recipe in the <b>VIEW</b> tab.<br/><br/>
     &nbsp;&nbsp;To access a different tab of the Recipe Access Area, tap its name at the top of the display.
