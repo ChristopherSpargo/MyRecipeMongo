@@ -13,12 +13,12 @@ import { Component, Input } from '@angular/core';
 export class AboutHeadingComponent  {
 
   @Input() fText        : string;                             // text for the heading
-  @Input() fColor       : string = "app-primary";             // CSS class for the text color
+  @Input() fColor       : string = "app-darkslategray";       // CSS class for the text color
   @Input() fImage       : string;                             // source for an image to display before the text
   @Input() fIcon        : string;                             // icon to display before the text
   @Input() fIconColor   : string = "app-about-icon-color";    // CSS class for color of icon to display before the text
   @Input() fButton      : string;                             // text to display on a button
-  @Input() fButtonColor : string = "app-primary";             // CSS class for button color
+  @Input() fButtonCSS   : string;                             // CSS class for button color
   @Input() fFab         : boolean = false;                    // if display as FAB button
   @Input() fFabColor    : string = "app-bg-gwhite";           // background color for FAB button
   @Input() fDivider     : boolean = false;                    // 'true' for divider line above title

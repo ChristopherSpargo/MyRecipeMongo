@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { IMAGE_DIRECTORY, FORM_HEADER_ICON  } from '../constants'
+import { UtilSvc } from '../utilities/utilSvc';
 
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -8,12 +9,12 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'shared.recipe.settings.modal.component.html'
 })
 
-export class SharedRecipeSettingsModalComponentTemplate implements OnInit {
+export class SharedRecipeSettingsModalComponentTemplate {
   icon : string = IMAGE_DIRECTORY + FORM_HEADER_ICON;
 
   @Input() mode         : string;
   @Input() heading      : string;
-  @Input() itemList     : string[];
+  @Input() itemList     : string[] = [];
   @Input() recipeTitle  : string;
   @Input() origin       : string;
   @Input() originDate   : string;
@@ -30,14 +31,9 @@ export class SharedRecipeSettingsModalComponentTemplate implements OnInit {
   newItemName         : string    = "";
   deleteItem          : boolean   = false;
   requestStatus       : { [key: string]: any }  = {};
-  working             : boolean   = false;
 
   constructor(public activeModal: NgbActiveModal) {}
 
-
-  ngOnInit() {
-    if(this.itemList === undefined){ this.itemList = [];}
-  }
 
   // delete the item that has been selected
   deleteSelectedItem = (form : NgForm) => {
@@ -45,6 +41,12 @@ export class SharedRecipeSettingsModalComponentTemplate implements OnInit {
     this.submitRequest(form)
   }
 
+  // clear the list of items
+  clearItemList = () => {
+    this.itemList = [];
+    this.clearRequestStatus();
+    this.requestStatus.itemListCleared = true;
+  }
 
   // prepare and send request to database service
   submitRequest(form : NgForm) : void {
@@ -58,7 +60,6 @@ export class SharedRecipeSettingsModalComponentTemplate implements OnInit {
     if(this.checkForProblems(form)){   // can't do anything yet, form still has errors
       return;
     }
-    this.working = true;
     this.itemName = this.newItemName;
     msg = "Email " + "'" + this.itemName + "'";
     // now set the action to perform and the status message for the user
@@ -90,8 +91,16 @@ export class SharedRecipeSettingsModalComponentTemplate implements OnInit {
     }
     this.requestStatus[msgId] = true;
     this.resetForm(form);
-    this.working = false;
   }
+
+  // return the list index position for the item with the given name
+  getListItemIndexByName = (n : string) : number => {
+    for(let i=0; i<this.itemList.length; i++){
+      if(this.itemList[i].toLowerCase() === n.toLowerCase() ){ return i;}
+    }
+    return -1;    //not found
+  }
+
 
   // user has selected a list entry, copy it to the edit field
   copyItemName = () => {
@@ -136,6 +145,12 @@ export class SharedRecipeSettingsModalComponentTemplate implements OnInit {
     if(form.invalid){
        this.requestStatus.formHasErrors = true;
       return true;
+    }
+    if(this.selectedItem == "999"){  // user specify new item name?
+      if(this.getListItemIndexByName(this.newItemName) !== -1){
+        this.requestStatus.itemAlreadyInList = true;
+        return;
+      }
     }
     return this.selectedItem == "";
   }

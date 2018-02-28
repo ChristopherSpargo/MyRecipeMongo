@@ -1,5 +1,7 @@
 <div>
-    <app-about-heading fIcon="local_dining" fText="What is MyRecipeMongo?"></app-about-heading>
+  &nbsp;&nbsp;Here's a little Quick Start information to help you get going with <b>MyRecipeMongo</b>.
+
+  <app-about-heading fIcon="local_dining" fText="What is MyRecipeMongo?"></app-about-heading>
     &nbsp;&nbsp;MyRecipeMongo is a website where you can organize and share recipes.<br/>&nbsp;&nbsp;Organize
     recipes by categories, origin, and origin date. Retreive recipies using categories, origin, date or keywords
     found in the title or ingredients.<br />&nbsp;&nbsp;Share recipes with everyone or just specific users.
@@ -16,7 +18,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;- Check the <b>Create new account</b> box<br/>
     &nbsp;&nbsp;&nbsp;&nbsp;- Enter the same password again<br/>
     &nbsp;&nbsp;&nbsp;&nbsp;- Finally, tap <app-about-text-icon fIcon="add_circle_outline" fLabel="Create Account" 
-    fSize="S" fColor="app-primary"></app-about-text-icon><br/>
+    fSize="S" fColor="app-white" fLabelCSS="app-white" fExtraCSS="app-bg-primary" [fBtn]="true"></app-about-text-icon><br/>
 
     <app-about-heading fIcon ="local_dining" fText="Getting Help"></app-about-heading>
     &nbsp;&nbsp;If at any time you are unsure of what to do just tap the icon in the upper 
@@ -54,8 +56,9 @@
     main title bar (or navigate to <b>Recipes>Recipe Search</b> on the main menu).
     This will open the Recipe Access Area with the <b>SEARCH</b> tab active.<br/>
     &nbsp;&nbsp;Fill in any search criteria and tap
-    <app-about-text-icon fIcon="check_circle_outline" fLabel="Search" 
-    fSize="S" fColor="app-primary"></app-about-text-icon>. If matching recipes are found, 
+    <app-about-text-icon fIcon="check_circle_outline" fLabel="Search" fSize="S" fColor="app-white" 
+    fLabelCSS="app-white" fExtraCSS="app-bg-primary" [fBtn]="true"></app-about-text-icon>
+    . If matching recipes are found, 
     a menu of those recipes will be displayed on the <b>RECIPES</b> tab. 
     Tapping the picture or description on the menu item will display the full recipe in the <b>VIEW</b> tab.<br/><br/>
     &nbsp;&nbsp;To access a different tab of the Recipe Access Area, tap its name at the top of the display.

@@ -2,11 +2,11 @@
     &nbsp;&nbsp;The <b>Account Sign In</b> form allows you to sign in to your account.<br/>
     The fields and buttons are:
 
-    <app-about-heading fIcon="mail_outline" fText="Email Address" fIconColor="app-accounts-color"></app-about-heading>
+    <app-about-heading fIcon="mail_outline" fText="Email Address" fIconColor="app-accent1 app-mb--2"></app-about-heading>
       &nbsp;&nbsp;Enter the email address to be associated with this account.  The value must be
       in the correct format for an email address.
 
-    <app-about-heading fIcon="lock_open" fText="Password" fIconColor="app-accounts-color"></app-about-heading>
+    <app-about-heading fIcon="lock_open" fText="Password" fIconColor="app-accent1"></app-about-heading>
       &nbsp;&nbsp;Enter the password to be associated with this account.  This value must be between 6
       and 16 characters.
 
@@ -14,21 +14,21 @@
       &nbsp;&nbsp;Check this box if you wish to use the email and password to create a new account.
       When checked, this will reveal the password confirmation field.
 
-    <app-about-heading fIcon="lock_outline" fText="Confirm Password" fIconColor="app-accounts-color"></app-about-heading>
+    <app-about-heading fIcon="lock_outline" fText="Confirm Password" fIconColor="app-accent1"></app-about-heading>
       &nbsp;&nbsp;Reenter the value given in the Password field.  These values must match exactly.
 
     <app-about-heading fIcon="check" fText="Remember Me" fIconColor="app-about-checkbox-icon"></app-about-heading>
       &nbsp;&nbsp;Check this box to have your Email and Password automatically filled in for
       you when you log in.
 
-    <app-about-heading fIcon="check_circle_outline" fText="Sign In" fIconColor="app-primary" [fFab]="true"></app-about-heading>
+    <app-about-heading fIcon="check_circle_outline" fButton="Sign In"></app-about-heading>
       &nbsp;&nbsp;Press this button to submit your information for verification.  If successful, you will
       receive a brief notification and the user icon at the top of the page
       will become solid. Also, the user status on the <b>About Menu</b>
       will show your email address.
 
-    <app-about-heading fIcon="sentiment_dissatisfied" fText="Forgot Password" fIconColor="app-warn" [fFab]="true"></app-about-heading>
+    <app-about-heading fIcon="sentiment_dissatisfied" fButton="Reset Password"></app-about-heading>
       &nbsp;&nbsp;If the password entered is incorrect, this button will appear. Pressing this button will give
       you the option to receive an email containing a temporary password that can be used to sign in.<br />
-      &nbsp;&nbsp;To retry your sign in, enter your password again and press the Sign In Button.
+      &nbsp;&nbsp;To retry your sign in, re-enter your password and press the Sign In button.
   </div>

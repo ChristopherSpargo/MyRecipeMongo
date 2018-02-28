@@ -1,10 +1,12 @@
 // data stored for each picture in a recipe
+// images are compressed and stored inside the recipe document in the database
+// typical image is < 200KB when compressed, maximum mongoDB document size is 16MB
 export interface RecipePic {
-  pic: string;             // binary data for the image
+  pic: string;            // binary data for the image
   picSize: number;        // size length of pic string (bytes)
   contentType: string;    // MIME type for image(eg. 'image/jpec')
   note: string;           // annotation for picture
-  picURL?: string;        // optional filed for base64 DataUrl
+  picURL?: string;        // optional field for base64 DataUrl used to display image on client
 }
 
 // this is the record stored for a Recipe in the database
@@ -12,11 +14,12 @@ export interface RecipeData {
   _id             ?: string;   // mongoDB item id
   userId          ?: string;   // owner's 40-char login ID
   createdOn       ?: string;   // date document added to database
-  title           ?: string;   // (Country Chicken and Potatoes)
-  categories      ?: number[]; // (Vacations, Desserts(0,4,18))
+  lastUpdate      ?: number;   // getTime() value when last written to DB
+  title           ?: string;   // (Country Chicken And Potatoes)
+  categories      ?: number[]; // (Dinner, Dessert)
   description     ?: string;   // This sauce is rich and delicious
   origin          ?: number;   // (Mom, Internet, TV(1,2,3))
-  originDate      ?: string;   // (1978<197800>, 05/1988 <198805>, 7-1999 <199907>)
+  originDate      ?: string;   // stored as YYYYMM, MM is currently always 00
   originNotes     ?: string;   // Notes about the origin of this document
   ingredients     ?: string;   // (any free-form text )
   instructions    ?: string;   // (any free-form text )
@@ -25,10 +28,10 @@ export interface RecipeData {
   extraImages     ?: RecipePic[]; // additional pictures for the recipe
   numExtras       ?: number;   // count of extra images
   dataVersion     ?: number;   // what fields are present in the document
-  status          ?: string;   // document status
-  sharedItem_id   ?: string;   // mongoDB item id for shared copy 
-  submittedBy     ?: string;   // login ID of data owner for (in shared recipe)
-  restrictedTo    ?: string[]; // list of authorized user email addresses (in shared recipe)
+  status          ?: string;   // document status, currently unused
+  sharedItem_id   ?: string;   // mongoDB item id for shared copy (if shared)
+  submittedBy     ?: string;   // login ID of data owner for (in a shared recipe)
+  restrictedTo    ?: string[]; // list of authorized user email addresses (in a shared recipe)
 }
 
 export class Recipe {
@@ -47,7 +50,8 @@ export class Recipe {
     return new Recipe(rData);
   }
 
-  //static method to validate the data and call the constructor
+  // static method to convert a RecipePic object from one with a binary pic property to one with
+  // a base64 picURL property
   static imageToAscii(p: RecipePic) : RecipePic {
           let newP          = <RecipePic>{};
           newP.picURL       = "data:" + p.contentType + ";base64," + btoa(p.pic);
@@ -57,11 +61,25 @@ export class Recipe {
           return newP;
   }
 
-  // set the properties object for the Recipe
+  // static method to convert a RecipePic object from one with a base64 picURL property to one with
+  // a binary pic property
+  static imageToBinary(p: RecipePic) : RecipePic {
+    let newP          = <RecipePic>{};
+    let n             = p.picURL.indexOf(',');  // find start of data
+    let dataString    = p.picURL.substr(n+1);
+    newP.pic          = atob(dataString);       // convert back to binary
+    newP.contentType  = p.contentType;              
+    newP.picSize      = p.picSize;
+    newP.note         = p.note;
+    return newP;
+}
+
+// set the properties of the Recipe's RecipeData object from the given RecipeData object
   setRecipeProperties(rData: RecipeData) : void {
     this.data._id =            rData._id;
     this.data.userId =         rData.userId;
     this.data.createdOn =      rData.createdOn;
+    this.data.lastUpdate =     rData.lastUpdate;
     this.data.title =          rData.title || '';
     this.data.description =    rData.description || '';
     this.data.categories =     [];
@@ -84,34 +102,21 @@ export class Recipe {
       this.data.categories = rData.categories.map((c) : number =>{return c;}) // copy categories
     }
     if(rData.mainImage){
-      this.data.mainImage              = Recipe.imageToAscii(rData.mainImage);
-      // <RecipePic>{};
-      // this.data.mainImage.picURL       = "data:" + rData.mainImage.contentType + 
-      //                                     ";base64," + btoa(rData.mainImage.pic);
-      // this.data.mainImage.contentType  = rData.mainImage.contentType;              
-      // this.data.mainImage.picSize      = rData.mainImage.picSize;
-      // this.data.mainImage.note         = rData.mainImage.note;
+      this.data.mainImage     = Recipe.imageToAscii(rData.mainImage);
       if(rData.extraImages){
         this.data.extraImages = rData.extraImages.map(Recipe.imageToAscii);
-        // .map((p,i,a) : RecipePic =>{
-        //   let newP          = <RecipePic>{};
-        //   newP.picURL       = "data:" + p.contentType + ";base64," + btoa(p.pic);
-        //   newP.contentType  = p.contentType;              
-        //   newP.picSize      = p.picSize;
-        //   newP.note         = p.note;
-        //   return newP;
-        // })
       }
     }
   };
 
-  // return the Match properties
+  // return the Recipe properties in a new RecipeData object
   getRecipeData() : RecipeData {
     
     var rData: RecipeData = {
       _id:            this.data._id,
       userId:         this.data.userId,
       createdOn:      this.data.createdOn,
+      lastUpdate:     this.data.lastUpdate,
       title:          this.data.title,
       description:    this.data.description,
       categories:     this.data.categories.map((c) : number => {return c;}), // 'copy' categories array
@@ -126,32 +131,16 @@ export class Recipe {
       dataVersion:    this.data.dataVersion,
       status:         this.data.status,
       sharedItem_id:  this.data.sharedItem_id,
-      submittedBy:    this.data.submittedBy,
+      submittedBy:    this.data.submittedBy
     }
     if(this.data.mainImage){     // copy and convert main image from base64 encoded strings to binary
-      rData.mainImage              = <RecipePic>{};
-      let n                        = this.data.mainImage.picURL.indexOf(',');  // find start of data
-      let dataString               = this.data.mainImage.picURL.substr(n+1);
-      rData.mainImage.pic          = atob(dataString);                         // convert back to binary
-      rData.mainImage.contentType  = this.data.mainImage.contentType;              
-      rData.mainImage.picSize      = this.data.mainImage.picSize;
-      rData.mainImage.note         = this.data.mainImage.note;
-      
-      if(this.data.extraImages){ // copy extra images
-        rData.extraImages = this.data.extraImages.map((p, i, a) : RecipePic => { 
-          let newP          = <RecipePic>{};
-          let n             = p.picURL.indexOf(',');  // find start of data
-          let dataString    = p.picURL.substr(n+1);
-          newP.pic          = atob(dataString);       // convert back to binary
-          newP.contentType  = p.contentType;              
-          newP.picSize      = p.picSize;
-          newP.note         = p.note;
-          return newP;
-        })
+      rData.mainImage              = Recipe.imageToBinary(this.data.mainImage);      
+      if(this.data.extraImages){ // copy and convert extra images
+        rData.extraImages = this.data.extraImages.map(Recipe.imageToBinary);
       }
     }
-    if(this.data.restrictedTo){
-      rData.restrictedTo = this.data.restrictedTo.map((r) : string =>{return r;}); // copy authorized emails
+    if(this.data.restrictedTo){  // Authorized Users List?
+      rData.restrictedTo = this.data.restrictedTo.map((r) : string =>{return r;});
     }
     return rData;
   };

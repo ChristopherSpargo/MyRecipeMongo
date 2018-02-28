@@ -1,11 +1,21 @@
 
     <!-- Template used for icons in help text. 
          Used with <app-about-text-icon> COMPONENT -->
-<div class="d-inline-flex flex-row justify-content-center align-items-center 
-             {{fExtraCSS}}">
+<div *ngIf="!fFab" class="d-inline-flex flex-row justify-content-center align-items-center
+             {{fExtraCSS}}"
+             [ngClass]="{'app-about-text-icon-btn': fBtn}">
   <div *ngIf="fLabel && fReverse" class="mr-1 {{fLabelCSS}}">{{fLabel}}</div>
-  <i class="material-icons {{fColor}}"
-      [ngClass]="{'app-about-text-icon-lg' : fSize === 'L',
-                  'app-about-text-icon' : (fSize !== 'L')}">{{fIcon}}</i>
+  <i *ngIf="fIcon" class="material-icons {{fColor}}"
+      [ngClass]="{'app-fab-icon-smm' : fSize === 'XL',
+                  'app-about-text-icon-lg' : fSize === 'L',
+                  'app-about-text-icon' : (fSize === 'S')}">{{fIcon}}</i>
   <div *ngIf="fLabel && !fReverse" class="ml-1 {{fLabelCSS}}">{{fLabel}}</div>
+</div>
+<div *ngIf="fFab" class="app-about-fab-container">
+  <button type="button" class="btn app-fab-button d-inline-flex app-fab-button-sm 
+              app-bg-white app-accent1 app-fab-raised">
+    <div class="d-flex flex-row justify-content-center align-items-center">
+      <i class="material-icons app-fab-icon app-fab-icon-btn-sm {{fColor}}">{{fIcon}}</i> 
+    </div>       
+  </button>
 </div>

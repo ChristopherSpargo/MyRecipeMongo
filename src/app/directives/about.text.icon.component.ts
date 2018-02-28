@@ -11,14 +11,15 @@ import { Component, Input } from '@angular/core';
 export class AboutTextIconComponent  {
 
   @Input() fIcon        : string;   // name of icon to display
-  @Input() fSize        : string;   // size of icon to display
+  @Input() fSize        : string = 'S';   // size of icon to display
   @Input() fColor       : string  = "app-about-icon-color";   // CSS class for the icon color
-  @Input() fFab         : boolean = false;                  // 'true' if display icon on a button
+  @Input() fBtn         : boolean = false;                  // 'true' if display icon on a button
+  @Input() fFab         : boolean = false;                  // 'true' if display icon as a fab
   @Input() fFabColor    : string  = "app-bg-gwhite";    // CSS class for button color
   @Input() fLabel       : string  = ''; // label to go with icon
   @Input() fLabelCSS    : string  = ''; // css to be applied to the label only
   @Input() fReverse     : boolean = false; // true if label goes before icon
-  @Input() fExtraCSS    : string = 'app-about-text-icon-label'; // extra css applied to main div
+  @Input() fExtraCSS    : string = 'app-about-text-icon-label'; // css applied to main div
 
 
   constructor() {

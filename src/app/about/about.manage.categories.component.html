@@ -1,30 +1,37 @@
-  <div>
-    &nbsp;&nbsp;The events list contains the names of the events players play in, such as 'Girls 18S', when they enter tournaments.
-    <br/>The <b>Manage Events</b> form allows you to add/remove/change entries in your events list.<br/>
-    The fields and buttons are:
+<div>
+  &nbsp;&nbsp;The categories list contains the names of categories you can assign to recipes.
+  <br/>The <b>Manage Categories</b> form allows you to add/remove/change entries in your categories list.<br/>
+  The fields and buttons are:
+  
+  <app-about-heading fIcon="assessment" fText="Category Name" fIconColor="app-active-input-icon-color"></app-about-heading>
+  &nbsp;&nbsp;This is the name for the category.
+  From the drop-down list, select a category to change/remove it or select <b>New Category Name</b> to add
+  a new category name to the list.
 
-    <app-about-heading fIcon="description" fText="Event Name" fIconColor="app-light-brown"></app-about-heading>
-    &nbsp;&nbsp;This is the name of an event players can play in as part of a tournament.
-    From the drop-down list, select an event name to change/remove or select <strong>New Event Name</strong> to add
-    a new event name to the list.
+  <app-about-heading fIcon="edit" fText="Existing Category Name" fIconColor="app-active-input-icon-color"></app-about-heading>
+  &nbsp;&nbsp;This icon will display next to the input field if you choose an exitsig category from the 
+  list in the Category Name field. Edit or delete this category name.
 
-    <app-about-heading fIcon="edit" fText="Existing Event Name" fIconColor="app-light-brown"></app-about-heading>
-    &nbsp;&nbsp;This icon will display next to the input field if you choose an exitsing event from the 
-    list in the Event Name field. Edit or delete this event name.
+  <app-about-heading fIcon="add_circle_outline" fText="New Category Name" fIconColor="app-active-input-icon-color"></app-about-heading>
+  &nbsp;&nbsp;This icon will display next to the input field if you choose New Category Name from 
+  the list in the Category Name field. Enter a name for the new category here.<br/>
+  &nbsp;&nbsp;You can create as many category names as you like and it is usually best to create names
+  that allow you to have a family structure to your categories. Broad categories like Appetizer, Entre, Dessert,
+  etc. are a good starting point. Categories like Meat could be a category you always include with more
+  specific categories like Chicken, Beef, Pork and Lamb. Remember, when you specify categories in a Search, 
+  ALL categories specified must be present on the recipe for it to be a 'match'.  The more thought you put
+  into the organization of your categories the easier it will be to quickly find just the recipes you want.<br/>
+  &nbsp;&nbsp;Also, as an option, you can create a category that represents you like, 'Julie R. Jacobson', that you can 
+  attach to recipes you share.  This way, other users can easily find recipes you have contributed by searching for 
+  recipes that have that category.
 
-    <app-about-heading fIcon="add_circle_outline" fText="New Event Name" fIconColor="app-light-brown"></app-about-heading>
-    &nbsp;&nbsp;This icon will display next to the input field if you choose New Event Name from the list 
-    in the Event Name field. Enter a name for the new event here.
+  <app-about-heading fIcon="check_circle_outline" fButton="Save"></app-about-heading>
+  &nbsp;&nbsp;Press this button to submit your list update request.  If successful, you will
+  receive a brief notification.
 
-    <app-about-heading fIcon="check_circle_outline" fText="Save" [fFab]="true" fIconColor="app-primary"></app-about-heading>
-    &nbsp;&nbsp;Press this button to submit your list update request.  If successful, you will
-    receive a brief notification.
+  <app-about-heading fIcon="remove_circle_outline" fButton="Remove"></app-about-heading>
+  &nbsp;&nbsp;Press this button to remove the selected category from the list.
 
-    <app-about-heading fIcon="remove_circle_outline" fText="Remove" fIconColor="app-warn" 
-    [fFab]="true"></app-about-heading>
-    &nbsp;&nbsp;Press this button to remove the selected event from the list.
-
-    <app-about-heading fIcon="highlight_off" fText="Cancel" fIconColor="app-brite-orange" 
-    [fFab]="true"></app-about-heading>
-    &nbsp;&nbsp;Press this button to return to name selection without changing the current selection.
-  </div>
+  <app-about-heading fIcon="highlight_off" fButton="Cancel"></app-about-heading>
+  &nbsp;&nbsp;Press this button to return to name selection without changing the current selection.
+</div>

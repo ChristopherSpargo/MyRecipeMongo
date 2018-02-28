@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { RecipeData } from '../model/recipe';
+import { RecipeData, Recipe } from './recipe';
 import { Http, Response } from '@angular/http';
-// import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo } from '../app.globals';
+import { UserInfo, CurrentRecipe } from '../app.globals';
 import { Profile, RESTRICTION_WRITE } from './profile';
+import { SHARED_USER_ID } from '../constants';
 
 export const CATEGORY_TABLE_NAME = 'categories';
 export const ORIGIN_TABLE_NAME   =    'origins';
@@ -15,6 +15,7 @@ export const RECIPE_TABLE_NAME   =    'recipes';
 export interface ListTableItem {
   id      : number;
   name    : string;
+  disabled? : boolean;
 }
 
 // define structure for list tables
@@ -27,18 +28,17 @@ export interface ListTable {
 
 // define structure for recipe query params
 export interface RecipeFilterData {
-  recordId          : string;
-  collectionOwnerId : string,
-  title             : string,
-  origin            : number,
-  categories        : number[],
-  keywords          : string,
-  startDate         : string,
-  endDate           : string,
-  sortOrder         : string,
-  checkEmail       ?: string,
-  projection       ?: {},
-  userId           ?: string
+  recordId          ?: string;
+  collectionOwnerId ?: string,
+  title             ?: string,
+  origin            ?: number,
+  categories        ?: number[],
+  keywords          ?: string,
+  startDate         ?: string,
+  endDate           ?: string,
+  sortOrder         ?: string,
+  checkEmail        ?: string,
+  projection        ?: {}
 }
 
 
@@ -48,7 +48,8 @@ export class RecipeService {
     private apiUrl = 'https://serve-mdb.appspot.com/api/'
     private recipesUrl = this.apiUrl + RECIPE_TABLE_NAME;
 
-    constructor (private http: Http, private utilSvc: UtilSvc, private userInfo: UserInfo) {}
+    constructor (private http: Http, private utilSvc: UtilSvc, private userInfo: UserInfo,
+            private currentRecipe: CurrentRecipe) {}
 
     // get("/api/recipes")
     getRecipes(filter: RecipeFilterData): Promise<void | RecipeData[]> {
@@ -95,6 +96,10 @@ export class RecipeService {
             queryStr += queryStr.length ? '&' : '?';
             queryStr += 'pr=' + JSON.stringify(filter.projection);
             break;
+          case 'count':
+            queryStr += queryStr.length ? '&' : '?';
+            queryStr += 'ct=true';
+            break;
          default:
         }
       }
@@ -138,7 +143,6 @@ export class RecipeService {
     }
 
     // read the list from the given list table in the database
-    // note**: this is not called to read from the matches table, see queryMatchTable
     // returns: promise
     // get("/api/<list>")
     readList(tableName: string, uid: string): Promise<any | ListTable[]> {
@@ -168,7 +172,7 @@ export class RecipeService {
 
       // delete the selected item from the given table in the database 
       // returns: promise
-    deleteList(tableName: string, list: ListTable) : Promise<any | string | String> {
+    deleteList(tableName: string, listId: string) : Promise<any | string | String> {
       if(this.userInfo.profile.hasRestriction(RESTRICTION_WRITE)){
         this.utilSvc.setUserMessage("noWriteAccess");          
         return new Promise<string>((resolve,reject) => {
@@ -177,10 +181,10 @@ export class RecipeService {
           }, 100);
         });
       }
-       return this.http.delete(this.apiUrl + tableName)
-                .toPromise()
-                .then(response => response.json() as String)
-                .catch((error) => {});
+      return this.http.delete(this.apiUrl + tableName + '/' + listId)
+              .toPromise()
+              .then(response => response.json() as String)
+              .catch((error) => {});
     }
 
     // get the list of items from specified table
@@ -223,7 +227,7 @@ export class RecipeService {
 
       action = action || "Add";
 
-      if(action == "Remove"){ // check for item present in any recipes
+      if(action === "Remove"){ // check for item present in any recipes
         var filter : any = {
           id: uid,
           countOnly: true
@@ -231,7 +235,7 @@ export class RecipeService {
         switch(tableName){
           case CATEGORY_TABLE_NAME:
             filter.categories = [item.id];
-            tableType = 'Catecory';
+            tableType = 'Category';
             break;
           case ORIGIN_TABLE_NAME:
             filter.origin = [item.id];
@@ -251,7 +255,7 @@ export class RecipeService {
               }
             }
             if(i<tItems.length){
-              if(action == "Update"){
+              if(action === "Update"){
                 tItems[i] = item;          // Update item
               }
               else {
@@ -294,7 +298,7 @@ export class RecipeService {
         case CATEGORY_TABLE_NAME:
           iList = 
               { userId: uid,
-                nextId: 22,
+                nextId: 23,
                 items: [{id: 1, name:'Dinner'},{id: 2, name:'Breakfast'},
                   {id: 3, name:'Lunch'},{id: 4, name:'Dessert'},
                   {id: 5, name:'Pastries'},{id: 6, name:'Meat'},{id: 7, name:'Mexican'},
@@ -302,7 +306,7 @@ export class RecipeService {
                   {id: 11, name:'Holiday'},{id: 12, name:'Snack'},{id: 13, name:'Salads'},{id: 14, name:'Fish'},
                   {id: 15, name:'Beef'},{id: 16, name:'Chicken'},{id: 17, name:'Pork'},
                   {id: 18, name:'Casseroles'},{id: 19, name:'Cookies'},{id: 20, name:'Bread'},
-                  {id: 21, name:'Drinks'}]
+                  {id: 21, name:'Drinks'},{id: 22, name:'Gluten Free'}]
               };
           break;
         case ORIGIN_TABLE_NAME:
@@ -316,5 +320,159 @@ export class RecipeService {
       }
       return this.saveList(iList, tableName);
     }
+
+  //remove database items associated with this user
+  //return: Promise
+  removeUserData(id : string){
+    var promises  = [];
+
+    return new Promise((resolve, reject) => {
+
+      // first, delete the categories and origins lists for this user
+      this.getList(CATEGORY_TABLE_NAME, id)
+      .then((cList: ListTable) => {
+        this.deleteList(CATEGORY_TABLE_NAME,cList._id)
+        .then((cListDeleted) =>{
+          this.getList(ORIGIN_TABLE_NAME, id)
+          .then((oList: ListTable) => {
+            this.deleteList(ORIGIN_TABLE_NAME,oList._id)
+            .then((oListDeleted) =>{
+              
+              // now read all this user's recipes but only retreive the object ids
+              this.getRecipes({collectionOwnerId: id, projection: {_id: 1}})
+              .then((data : RecipeData[]) => {
+                data.forEach((r) => {
+                  // save a promise for each deleteRecipe request
+                  promises.push(this.deleteRecipe(r._id));
+                });
+                Promise.all(promises)       // wait till all are done (or 1 fails)
+                .then((success) => {        //.finally would be nice because either way we're done
+                  resolve("Ok");})
+                .catch((error) => {
+                  reject("errorDeletingRecipes");})
+              })
+              .catch((error) => {
+                reject("errorReadingRecipesForDelete");})
+            })
+            .catch((error) => {
+              reject("errorDeletingOrigins");})
+          })
+          .catch((error) => {
+            reject("errorReadingOrigins");})
+        })
+        .catch((error) => {
+          reject("errorDeletingCategories");})
+      })
+      .catch((error) => {
+        reject("errorReadingCategories");})
+    })
+  }
+
+  // store/update a copy of the given RecipeData to the database using the SHARED_USER_ID
+  // if this is for an update, pass the restrictedTo array as well
+  addSharedRecipe = (rdOrig : RecipeData, restrictedTo? : string[]) : Promise<any>  => {
+    var rd : RecipeData; 
+
+    return new Promise((resolve, reject) => {
+      // make sure any extra images are included
+      this.readExtraImages(rdOrig)
+      .then((extraImagesRead) => {
+        rd = Recipe.build(rdOrig).getRecipeData();  // copy recipe
+        this.getList(CATEGORY_TABLE_NAME, SHARED_USER_ID)
+        .then((cList) => {
+          // replace the category ids with ones from the SHARED_USER's category list
+          for(let i=0; i<rd.categories.length; i++){
+            rd.categories[i] = this.getSharedListItemId(<ListTable>cList, 
+                                      this.currentRecipe.categoryListName(rd.categories[i]));
+          }
+          this.getList(ORIGIN_TABLE_NAME, SHARED_USER_ID)
+          .then((oList) => {
+            // replace the origin id with one from the SHARED_USER's origin list
+            rd.origin = this.getSharedListItemId(<ListTable>oList,
+                              this.currentRecipe.originListName(rd.origin));
+
+            rd.submittedBy = rdOrig.userId;   // note who shared it (the owner)
+            rd.userId = SHARED_USER_ID;       // will be accessable under SHARED_USER_ID collection
+            rd._id = rdOrig.sharedItem_id ? rdOrig.sharedItem_id : undefined;    // so it works if this is an update of shared copy
+            rd.sharedItem_id = undefined;     // shared copies don't have this property
+            if(restrictedTo){
+              rd.restrictedTo = restrictedTo; // set authorized users list if update
+            }
+            this.saveRecipe(rd)     // save shared version
+            .then((sharedVersion : RecipeData) => {
+              this.saveList(cList, CATEGORY_TABLE_NAME) // save updated SHARED categories list
+              .then((categoryListUpdated) => {
+                this.saveList(oList, ORIGIN_TABLE_NAME) // save SHARED origins list
+                .then((originListUpdated) => {
+                  resolve(sharedVersion);            
+                })
+                .catch((failToSaveOriginList) => {
+                  reject('errorUpdatingOriginList');
+                })
+              })
+              .catch((failToSaveCategoryList) => {
+                reject('errorUpdatingCategoryList');
+              })
+            })
+            .catch((failToSaveSharedRecipe) => {
+              reject('errorUpdatingSharedCopy');
+            })
+          })
+          .catch((failToReadOriginList) => {
+            reject('errorReadingOriginList');
+          })
+        })
+        .catch((failToReadCategoryList) => {
+          reject('errorReadingCategoryList');
+        })
+      })
+      .catch((failReadingExtraImages) => {
+        reject('errorReadingExtraImages')
+      })
+    })
+  }
+
+  // check 'list' for given name, return id if found otherwise add name to list and use nextId value
+  private getSharedListItemId = (list : ListTable, iName : string) => {
+    var i     : number;
+    var newItem = <ListTableItem>{};
+
+    for(i=0; i<list.items.length; i++){   //see if name already in list
+      if(iName === list.items[i].name){
+        return list.items[i].id;
+      }
+    }
+    // name not found, add a new entry to SHARED items list
+    newItem.id = list.nextId++;   // use nextId number (multi-user <bug>)
+    newItem.name = iName;
+    list.items.push(newItem);     
+
+    return newItem.id;
+  }
+
+  // read extra images for given recipeData (if necessary)
+  // resolve(updated recipeData) if images read successfully
+  // resolve(null) if no need to read anything
+  // reject(null) if error read error  
+  readExtraImages = (r: RecipeData) => {
+    let filter = <RecipeFilterData>{};
+
+    return new Promise((resolve, reject) => {
+      if(r.numExtras && !r.extraImages.length){
+        filter.recordId = r._id;
+        filter.projection = {extraImages: 1};
+        this.getRecipes(filter)
+        .then((data : RecipeData[]) => {
+          r.extraImages = data[0].extraImages.map(Recipe.imageToAscii);
+          resolve(r)
+        })
+        .catch((errorReadingExtraImages) => {
+          reject(errorReadingExtraImages);
+        })
+      } else{
+        resolve(null);    // no extra images or already read
+      }
+    })
+  }
 
 }

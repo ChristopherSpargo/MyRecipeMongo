@@ -4,6 +4,7 @@ import { UtilSvc } from '../utilities/utilSvc';
 import { UserInfo } from '../app.globals';
 import { UserSvc } from '../model/userSvc'
 import { CookieSvc } from '../utilities/cookieSvc';
+import { RecipeService } from '../model/recipeSvc'
 
     // COMPONENT for DELETE ACCOUNT feature
 
@@ -13,14 +14,13 @@ import { CookieSvc } from '../utilities/cookieSvc';
 export class AccountDeleteComponent implements OnInit {
 
   constructor(private user: UserInfo, private utilSvc: UtilSvc, private userSvc: UserSvc,
-              private cookieSvc: CookieSvc){
+    private recipeSvc: RecipeService, private cookieSvc: CookieSvc){
   };
     
   checkAll           : boolean   = false; //true if form fields to be checked for errors (touched or not)
   userEmail          : string;
   password           : string = "";
   requestStatus      : { [key: string]: any } = {};
-  working            : boolean = false;
   formOpen           : boolean = false;
 
   ngOnInit() {
@@ -29,37 +29,14 @@ export class AccountDeleteComponent implements OnInit {
     }
     else{
       this.userEmail = this.user.userEmail;
-      //update the current help context and open the Email Change form
+      //update the current help context and open the Account Delete form
       this.utilSvc.setCurrentHelpContext("DeleteAccount"); //note current state
       this.utilSvc.displayUserMessages();
       setTimeout( () => { this.formOpen = true; }, 300 );
     }
   }
 
-  // Finish up Account Delete process.  Remove user's cookie, profile & data.
-  // Report status message.
-  deleteUserItems() : void {
-    this.user.userEmail = "";
-    this.user.password = "";
-    this.cookieSvc.deleteCookie();
-    this.userSvc.removeUserProfile(this.user)
-    .catch((error) => {
-        this.utilSvc.setUserMessage("profileDeleteFail");
-    });
-    // this.userSvc.removeUserData(this.user)
-    // .then((success) => {
-    //   this.user.authData = null;
-    //   this.utilSvc.setUserMessage("accountDeleted");
-    //   this.closeForm();
-    // })
-    // .catch((error)=> {
-    //   this.user.authData = null;
-    //   this.utilSvc.setUserMessage("accountDeleted");
-    //   this.closeForm();
-    // })
-  }
-
-  // send delete request to Firebase service
+  // process request to delete user account and data
   submitRequest(form: NgForm) : void {
     this.clearRequestStatus();
     this.checkAll = true;
@@ -67,26 +44,72 @@ export class AccountDeleteComponent implements OnInit {
       this.requestStatus.formHasErrors = true;
       return;
     }
-    this.working = true;
-    this.userSvc.deleteAccount(this.userEmail, this.password)
-    .then((success) => {
-      this.deleteUserItems(); // finish account delete process
-      this.utilSvc.displayUserMessages();
+    // Double check with user that they really want to do this
+    this.utilSvc.getConfirmation('Delete Account', 
+      'Are you sure you want to delete your account?  All of your recipes will be permanently removed.', 
+      'Delete Account')
+     .then((proceed) => {
+      this.utilSvc.displayWorkingMessage(true, 'Deleteing Account');
+      // first, try to delete the user's login account
+        this.userSvc.deleteAccount(this.userEmail, this.password)
+        .then((userAccountGone) => {
+          // next, try to delete their profile and recipe database items
+          this.deleteUserItems() 
+          .then((userItemsGone) => {
+            this.utilSvc.displayWorkingMessage(false);
+          })
+          .catch((somethingHappenedBut) => {
+            this.utilSvc.displayWorkingMessage(false);
+          });
+        })
+        .catch((accountDeleteFailed) => {
+          switch (accountDeleteFailed) {  // decide which status message to give
+            case "INVALID_PASSWORD":
+              this.requestStatus.incorrectPassword = true;
+              break;
+            case "INVALID_USER":
+              this.requestStatus.unrecognizedEmail = true;
+              break;
+            default:
+              this.utilSvc.setUserMessage("accountDeleteFailed");
+          }
+          this.requestStatus.deleteFail = true;
+          this.utilSvc.displayWorkingMessage(false);
+        });
+      })
+      .catch((neverMind) => {
+      });
+  }
+
+  // Finish up Account Delete process.  Remove user's cookie, profile & data.
+  // Report status message.
+  deleteUserItems() : Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.userSvc.removeUserProfile(this.user)
+      .then((profileGone) => {
+        this.user.userEmail = "";
+        this.user.password = "";
+        this.cookieSvc.deleteCookie();
+        this.recipeSvc.removeUserData(this.user.authData.uid)
+        .then((success) => {
+          this.user.authData = null;
+          this.utilSvc.setUserMessage("accountDeleted");
+          this.closeForm();
+          resolve('Ok');
+        })
+        .catch((error)=> {
+          this.user.authData = null;
+          this.utilSvc.setUserMessage(error);      // display what happened
+          this.utilSvc.setUserMessage("accountDeleted");
+          this.closeForm();
+          resolve('Errors');
+        })
+      })
+      .catch((error) => {
+          this.utilSvc.setUserMessage("profileDeleteFail");
+          reject('Fail');
+      });
     })
-    .catch((error) => {
-      switch (error) {  // decide which status message to give
-        case "INVALID_PASSWORD":
-          this.requestStatus.incorrectPassword = true;
-          break;
-        case "INVALID_USER":
-          this.requestStatus.unrecognizedEmail = true;
-          break;
-        default:
-          this.utilSvc.displayThisUserMessage("accountDeleteFailed");
-      }
-      this.requestStatus.deleteFail = true;
-      this.working = false;
-    });
   }
 
   // clear status messages object

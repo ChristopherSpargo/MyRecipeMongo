@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
   createAccount         : boolean = false;
   newAccount            : boolean = false;
   rememberLogin         : boolean = true;
-  working               : boolean = false;
 
   constructor(private user: UserInfo, private utilSvc: UtilSvc, private cookieSvc: CookieSvc,
               private userSvc: UserSvc, private recipeSvc: RecipeService, private crossSvc: CrossSvc){
@@ -96,7 +95,7 @@ export class LoginComponent implements OnInit {
         this.utilSvc.setUserMessage("noProfile");
       })
     });
-    this.working = false;
+    this.utilSvc.displayWorkingMessage(false);
     this.closeForm();
   }
 
@@ -108,14 +107,14 @@ export class LoginComponent implements OnInit {
       this.requestStatus.formHasErrors = true;
       return;
     }
-    this.working = true;
     if (this.createAccount && !this.newAccount) {  // creating new account
+      this.utilSvc.displayWorkingMessage(true, 'Creating New Account');
       this.userSvc.createAccount(this.userEmail, this.userPassword)
       .then((success) => {
         this.requestStatus.createSuccess = true;
         this.requestStatus.accountCreated = true;
         this.newAccount = true;
-        this.working = false;
+        this.utilSvc.displayWorkingMessage(false);
       })
       .catch((failure) => {
         this.requestStatus.createFail = true;
@@ -129,10 +128,11 @@ export class LoginComponent implements OnInit {
           default:
             this.requestStatus.weirdProblem = true;
         }
-        this.working = false;
+        this.utilSvc.displayWorkingMessage(false);
       })
     }
     else {  // logging in
+      this.utilSvc.displayWorkingMessage(true, 'Authorizing');
       this.userSvc.authWithPassword(this.userEmail, this.userPassword)
       .then((authData) => {
         this.reportLogin(authData);
@@ -153,7 +153,7 @@ export class LoginComponent implements OnInit {
         }
         this.requestStatus.authFail = true;
         this.user.authData = null;
-        this.working = false;
+        this.utilSvc.displayWorkingMessage(false);
       })
     }
   }
@@ -166,9 +166,10 @@ export class LoginComponent implements OnInit {
       'that you can use to log in.  You can then set your password to something else.' +
       '  Or, you can try to sign in again now.','Send Email','Try Again')
     .then(function () {
-      this.working = true;
+      this.utilSvc.displayWorkingMessage('Sending Email');
       this.userSvc.resetPassword(this.userEmail)
       .then((success) => {
+        this.utilSvc.displayWorkingMessage(false);
         this.requestStatus.passwordResetSent = true;
         this.requestStatus.enterTempPassword = true;
         this.haveStatusMessages = true;
@@ -180,11 +181,11 @@ export class LoginComponent implements OnInit {
             break;
           default:
         }
+        this.utilSvc.displayWorkingMessage(false);
         this.requestStatus.passwordResetFail = true;
         this.haveStatusMessages = true;
       })
     });
-    this.working = false;
   }
 
   // clear status messages object

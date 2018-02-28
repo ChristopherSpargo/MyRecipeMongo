@@ -1,4 +1,4 @@
-<div id="view-top" class="container app-tab-container app-no-overflow-x px-0 pt-2 app-bg-gwhite"
+<div id="view-top" class="app-tab-container px-0 pt-2 app-bg-gwhite"
     [class.app-open]="searchTabOpen">
 
   <!-- define a component to add recipe categoreis -->
@@ -12,7 +12,7 @@
  
     <!-- Instructional messages -->
     <div class="d-flex flex-row justify-content-center app-flex-1 
-                                  app-darkgrey align-items-center mb-2 app-small-font">
+                                  app-black-text-low app-bold align-items-center mb-2 app-small-font">
       Use the fields below to define a search.
     </div>
 
@@ -24,7 +24,7 @@
           <app-radio-group
             fTitle      = "Search In:"
             fIcon       = "{{dataSet === 'Personal' ? 'folder' : 'folder_shared'}}"
-            fIconColor  = "app-recipe-search-color"
+            fIconColor  = "app-active-input-icon-color"
             [fOnChange] = "dataSetChange()"
             [fOnFocus]  = "clearRequestStatus"
             [fDividerAfter] = "false"
@@ -51,7 +51,7 @@
             </div> 
             <div class="app-icon-input-field-container pt-3">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-input-icon app-recipe-search-color">assessment</i>
+                <i class="material-icons app-input-icon app-active-input-icon-color">assessment</i>
                 <div class="d-flex flex-row flex-wrap">
                   <!-- display a button for each currently selected category -->
                   <div *ngFor="let c of categories" 
@@ -86,7 +86,7 @@
               [(fValue)]      = "origin"
               fLabel          = "Origin:"
               fIcon           = "face" 
-              fColor          = "app-recipe-search-color"
+              fColor          = "app-active-input-icon-color"
               [fOnFocus]      = "clearRequestStatus"
               [fList]         = "originListItems()"
               fListValue      = "idName"
@@ -103,7 +103,7 @@
               fType         = "text" 
               fLabel        = "Keywords:"  
               fIcon         = "vpn_key"
-              fColor        = "app-recipe-search-color" 
+              fColor        = "app-active-input-icon-color" 
               fPattern      = "^[ /\-'%$#.,()!?\w]*$"
               fMaxlength    = "200"
               fErrors       = "pattern"
@@ -120,7 +120,7 @@
             </div> 
             <div class="app-icon-input-field-container pt-2 pb-0">
               <div class="d-flex flex-row align-items-center mt-1">
-                <i class="material-icons app-input-icon app-recipe-search-color">today</i>
+                <i class="material-icons app-input-icon app-active-input-icon-color">today</i>
                 <div class="d-flex flex-row align-items-center">
                   <input type="number" name="startDate" autocomplete="off" 
                           class="app-date-range-input-control"
@@ -129,7 +129,8 @@
                           placeholder="yyyy"
                           [(ngModel)]="startDate" #sDate="ngModel"
                           (focus)="clearRequestStatus()">
-                  <i class="material-icons app-input-icon app-recipe-search-color app-cursor-pointer app-icon-xsm"
+                  <i class="material-icons app-input-icon app-warn app-cursor-pointer app-icon-xsm"
+                      data-toggle="tooltip" data-placement="top" title="Clear" data-delay="200"
                       (click)="clearDateRange('start')">close</i>
                   <div class="px-2"> - </div>
                   <input type="number" name="endDate" autocomplete="off" 
@@ -139,7 +140,8 @@
                           placeholder="yyyy"
                           [(ngModel)]="endDate" #eDate="ngModel"
                           (focus)="clearRequestStatus()">
-                  <i class="material-icons app-input-icon app-recipe-search-color app-cursor-pointer app-icon-xsm"
+                  <i class="material-icons app-input-icon app-warn app-cursor-pointer app-icon-xsm"
+                      data-toggle="tooltip" data-placement="top" title="Clear" data-delay="200"
                       (click)="clearDateRange('end')">close</i>
                 </div>
               </div>
@@ -166,11 +168,15 @@
             </div>
 
             <!-- Messages Area -->
-
-            <app-form-messages 
-              [fWorkingOpen]  ="!haveStatusMessages() && working"
-              [fMessageOpen]  ="haveStatusMessages() && !working"
-              [fMessageObj]   ="requestStatus">
+            <app-form-messages [fMessageOpen] = "haveStatusMessages()">
+              <app-messages [mList]="requestStatus" [mMax]="2">
+                <app-message name="formHasErrors" class="app-error">
+                    Please correct the fields with errors.
+                </app-message>
+                <app-message name="dateConflict" class="app-error">
+                    Given date range appears reversed.
+                </app-message>
+              </app-messages>
             </app-form-messages>  
 
           </div>

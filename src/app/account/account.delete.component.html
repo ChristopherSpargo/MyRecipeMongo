@@ -1,6 +1,6 @@
-﻿                <!--Form used to provide the CHANGE PASSWORD feature-->
+﻿                <!--Form used to provide the DELETE ACCOUNT feature-->
 
-<div class=" app-central-container app-fade-in  " 
+<div class=" app-central-container-sm app-fade-in  " 
      [ngClass]="{'app-open': formOpen}">
 
   <!-- Form Header -->
@@ -15,7 +15,7 @@
   <!-- Start of Form -->
 
   <div class=" app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
-    <div class="container app-form-theme px-0 pt-3">
+    <div class="app-form-theme px-0 pt-3">
       <form #deleteForm = "ngForm" role="form" novalidate
             (ngSubmit)="submitRequest(deleteForm)">
         <div class="d-flex flex-column px-2">
@@ -29,7 +29,7 @@
             fType         = "email" 
             fLabel        = "Email Address"  
             fIcon         = "mail_outline"
-            fColor        = "app-accounts-color" 
+            fColor        = "app-disabled-icon-color" 
             [fValue]      = "userEmail">
           </app-icon-input>
 
@@ -43,22 +43,32 @@
             fType         ="password" 
             fLabel        ="Password" 
             fIcon         ="lock_open"
-            fColor        ="app-accounts-color" 
+            fColor        ="app-accent1" 
             [(fValue)]    ="password" 
             fErrors       ="required|pattern|minlength"
             fErrorMsgs    ="A password is required.|Invalid password character/format.|Password must be at least 6 characters."
             fMinlength    ="6" 
             fMaxlength    ="16" 
             fPattern      ="^[a-zA-Z]+[!#$%\^\-+*\w]*$" 
-            fExtraCSS     ="mb-2"
             [fFocusFn]    ="clearRequestStatus">
           </app-icon-input>
 
           <!-- Status Message Area -->
-          <app-form-messages 
-            [fWorkingOpen]    = "!haveStatusMessages() && working"
-            [fMessageOpen]    = "haveStatusMessages() && !working"
-            [fMessageObj]     = "requestStatus">
+          <app-form-messages [fMessageOpen] = "haveStatusMessages()">
+            <app-messages [mList]="requestStatus" [mMax]="2">
+              <app-message name="formHasErrors" class="app-error">
+                  Please correct the fields with errors.
+              </app-message>
+              <app-message name="deleteFail" class="app-error">
+                  Unable to delete account.
+              </app-message>
+              <app-message name="unrecognizedEmail" class="app-error">
+                  No account for current email.
+              </app-message>
+              <app-message name="incorrectPassword" class="app-error">
+                  Password value is incorrect.
+              </app-message>
+            </app-messages>
           </app-form-messages>                    
         </div>
 

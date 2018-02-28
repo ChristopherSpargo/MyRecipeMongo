@@ -1,7 +1,7 @@
 <!-- dialog template used for changes to Shared Recipe Settings -->
 <div class="app-fade-in app-dialog-container" [ngClass]="{'app-open': openModal}">
-  <div class="modal-header app-dialog-header app-shared-recipes-settings-theme">
-    <div class="modal-title d-flex flex-row justify-content-start align-items-center app-flex-1 app-all-paddings-8px">
+  <div class="modal-header app-dialog-header">
+    <div class="modal-title d-flex flex-row justify-content-start align-items-center app-flex-1 px-2 py-1">
       <button type="button" class="btn app-form-image-button ml-0 mr-2" aria-label="help"
         data-toggle="tooltip" data-placement="top" title="Help" data-delay="200"
                   (click)="toggleAbout()"> 
@@ -26,7 +26,7 @@
 
         <!-- Remove Recipe from Public Recipes field -->
         <div *ngIf="mode === 'Edit'" class="d-flex flex-row align-items-center mt-1">
-          <i class="material-icons app-input-icon-area app-accent1">remove_circle_outline</i>
+          <i class="material-icons app-input-icon app-active-input-icon-color">remove_circle_outline</i>
           <label class="mb-0">
             <input type="checkbox" name="delMat" [(ngModel)]="deleteRecipe" (change)="clearRequestStatus()">
             Stop sharing this Recipe
@@ -35,57 +35,85 @@
 
         <!-- Add Recipe to Public Recipes field -->
         <div *ngIf="mode === 'Create'" class="d-flex flex-row align-items-center mt-1">
-          <i class="material-icons app-input-icon-area app-shared-recipes-color">add_circle_outline</i>
+          <i class="material-icons app-input-icon app-active-input-icon-color">add_circle_outline</i>
           <label class="mb-0">
             Sharing this Recipe
           </label>
         </div>
 
         <div class="d-flex flex-row justify-content-start app-flex-1 align-items-center 
-                    app-disabled-text mt-3 app-smaller-font">
+                    app-black-text-low app-bold  mt-3 app-smaller-font">
           Optional list of authorized users by email:
         </div>
+
+
         <!-- User Email Field -->
-        <app-list-item-field 
-            [fForm]         = "listForm"
-            [fCheckAll]     = "checkAll"
-            fName           = "itemName"
-            fRef            = "iName"
-            [(fValue)]      = "selectedItem"
-            fLabel          = "Authorized User" 
-            fIcon           = "mail_outline" 
-            fColor          = "app-accent1"
-            [fRequired]     = "false"
-            [fDisabled]     = "deleteRecipe"
-            [fOnFocus]      = "clearRequestStatus"
-            [fOnChange]     = "copyItemName"
-            [fOnDelete]     = "deleteSelectedItem"
-            [fList]         = "itemList"
-            fListValue      = "index"
-            [fEqual]        = "false"
-            fNewTest        = ""
-            fNewName        = "newIName"
-            fNewRef         = "nIName"
-            [(fNewValue)]   = "newItemName"
-        >
-        </app-list-item-field>
+        <div class="d-flex flex-row justify-content-start align-items-center">
+          <div class="app-width-90">
+            <app-list-item-field 
+                [fForm]         = "listForm"
+                [fCheckAll]     = "checkAll"
+                fName           = "itemName"
+                fRef            = "iName"
+                [(fValue)]      = "selectedItem"
+                fLabel          = "Authorized User" 
+                fIcon           = "mail_outline" 
+                fColor          = "app-active-input-icon-color"
+                [fRequired]     = "false"
+                [fDisabled]     = "deleteRecipe"
+                [fOnFocus]      = "clearRequestStatus"
+                [fOnChange]     = "copyItemName"
+                [fOnDelete]     = "deleteSelectedItem"
+                [fList]         = "itemList"
+                fListValue      = "index"
+                [fEqual]        = "false"
+                fNewTest        = ""
+                fNewName        = "newIName"
+                fNewRef         = "nIName"
+                [(fNewValue)]   = "newItemName">
+            </app-list-item-field>            
+          </div>
+          <div class="app-item-list-clear-btn">
+            <i class="material-icons app-input-icon app-warn app-cursor-pointer app-icon-xsm"
+                data-toggle="tooltip" data-placement="top" title="Clear List" data-delay="200"
+                (click)="clearItemList()">close</i>            
+          </div>
+        </div>
 
         <!-- Messages Area -->
-        <app-form-messages 
-          [fWorkingOpen]    = "!haveStatusMessages() && working"
-          [fMessageOpen]    = "haveStatusMessages() && !working"
-          [fMessageObj]     = "requestStatus">
+        <app-form-messages [fMessageOpen] = "haveStatusMessages()">
+          <app-messages [mList]="requestStatus" [mMax]="2">
+            <app-message name="formHasErrors" class="app-error">
+                Please correct the fields with errors.
+            </app-message>
+            <app-message name="itemAlreadyInList" class="app-error">
+                Item already in list.
+            </app-message>
+            <app-message name="listItemAdded" class="app-success">
+                List item added.
+            </app-message>
+            <app-message name="listItemRemoved" class="app-success">
+                List item removed.
+            </app-message>
+            <app-message name="listItemUpdated" class="app-success">
+                List item updated.
+            </app-message>
+            <app-message name="itemListCleared" class="app-success">
+                Item list cleared.
+            </app-message>
+          </app-messages>
         </app-form-messages>                    
                           
       </div>
     </form>
   </div>
-  <div class="modal-footer d-flex flex-row app-flex-1 justify-content-around align-items-center app-dialog-footer">
+  <div class="modal-footer d-flex flex-row app-flex-1 justify-content-around align-items-center 
+              app-dialog-footer px-2 py-1">
     <app-fab
           fType       = "button"
           [fLink]     = "cancelText"
           [fOnClick]  = "dismiss"
-          fButtonCSS  = "app-white pb-0"
+          fButtonCSS  = "app-white"
           fLabelCSS   = "app-bigger-font"
           fAria       = "cancel">
     </app-fab> 
@@ -93,7 +121,7 @@
           fType       = "button"
           [fLink]     = "!deleteRecipe ? okText : deleteText"
           [fOnClick]  = "close"
-          fButtonCSS  = "app-white pb-0"
+          fButtonCSS  = "app-white"
           fLabelCSS   = "app-bigger-font"
           fAria       = "Ok">
     </app-fab> 

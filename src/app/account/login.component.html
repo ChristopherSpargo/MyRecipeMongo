@@ -1,6 +1,6 @@
 ﻿                <!--Form used to provide the ACCOUNT LOGIN feature-->
 
-<div class="app-central-container app-fade-in" 
+<div class="app-central-container-sm app-fade-in" 
      [class.app-open]="formOpen">
 
   <!-- Form Header -->
@@ -15,7 +15,7 @@
   <!-- Start of Form -->
 
   <div class=" app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
-    <div class="container app-form-theme px-0 pt-3">
+    <div class="app-form-theme px-0 pt-3">
       <form #loginForm = "ngForm" role="form" novalidate
             (ngSubmit)="sendLoginRequest(loginForm)">
         <div class="d-flex flex-column px-2">
@@ -30,7 +30,7 @@
             fType         = "email" 
             fLabel        = "Email Address"  
             fIcon         = "mail_outline"
-            fColor        = "app-accounts-color" 
+            fColor        = "app-accent1" 
             [(fValue)]    = "userEmail" 
             fErrors       = "required|email"
             fErrorMsgs    = "An email address is required.|Invalid email address character/format."
@@ -47,7 +47,7 @@
             fType         ="password" 
             fLabel        ="Password" 
             fIcon         ="lock_open"
-            fColor        ="app-accounts-color" 
+            fColor        ="app-accent1" 
             [(fValue)]    ="userPassword" 
             fErrors       ="required|pattern|minlength"
             fErrorMsgs    ="A password is required.|Invalid password character/format.|Password must be at least 6 characters."
@@ -59,7 +59,7 @@
           </app-icon-input>
 
           <!-- Hidden fields for creating a new account -->
-          <div class=" d-flex flex-column app-vertical-expand app-form-theme-text"
+          <div class=" d-flex flex-column app-vertical-expand"
                 [class.app-open]="showNewAccountFields()">
 
             <!-- Password confirmation field -->
@@ -71,7 +71,7 @@
               [fRequired] ="showNewAccountFields()" 
               fType       ="password" 
               fLabel      ="Confirm Password" 
-              fColor      ="app-accounts-color" 
+              fColor      ="app-accent1" 
               [(fValue)]  ="passwordConfirm" 
               fErrors     ="required|pattern|minlength" 
               fIcon       ="lock_outline"
@@ -103,16 +103,54 @@
           </div>
 
           <!-- Status Message Area -->
-          <app-form-messages 
-            [fWorkingOpen]    = "!haveStatusMessages() && working"
-            [fMessageOpen]    = "haveStatusMessages() && !working"
-            [fMessageObj]     = "requestStatus">
+          <app-form-messages [fMessageOpen] = "haveStatusMessages()">
+            <app-messages [mList]="requestStatus" [mMax]="2">
+              <app-message name="formHasErrors" class="app-error">
+                  Please correct the fields with errors.
+              </app-message>
+              <app-message name="createFail" class="app-error">
+                Unable to create new account.
+              </app-message>
+              <app-message name="authFail" class="app-error">
+                Unable to sign in.
+              </app-message>
+              <app-message name="createSuccess" class="app-success">
+                Success!
+              </app-message>
+              <app-message name="accountCreated" class="app-success">
+                Account created, press Continue to Sign In.
+              </app-message>
+              <app-message name="emailInUse" class="app-error">
+                Email Address already in use.
+              </app-message>
+              <app-message name="emailInvalid" class="app-error">
+                Email Address is invalid.
+              </app-message>
+              <app-message name="weirdProblem" class="app-error">
+                Some weird problem occurred.
+              </app-message>
+              <app-message name="unrecognizedEmail" class="app-error">
+                No account for current email.
+              </app-message>
+              <app-message name="incorrectPassword" class="app-error">
+                Password value is incorrect.
+              </app-message>
+              <app-message name="passwordResetSent" class="app-success">
+                Password reset email sent.
+              </app-message>
+              <app-message name="enterTempPassword" class="app-success">
+                Enter the password from that email.
+              </app-message>
+              <app-message name="passwordResetFail" class="app-error">
+                Unable to reset password.
+              </app-message>
+            </app-messages>
           </app-form-messages>                    
                             
         </div>
 
         <!-- Actions Area -->
-        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary py-1" id="actions">
+        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary pt-1 pb-2" id="actions">
           <app-fab *ngIf="!newAccount && !requestStatus.incorrectPassword"
                     fAria="sign in"
                     fButtonCSS="app-fab-sm-sq app-white" fIconColor="app-white"

@@ -1,28 +1,65 @@
-# Organizer
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.6.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+# MyRecipeMongo
+<div>
+  <p>
+    <b>What is MyRecipeMongo?</b><br/>
+    &nbsp;&nbsp;MyRecipeMongo is a website where you can organize and share recipes.<br/>&nbsp;&nbsp;Organize
+    recipes by categories, origin, and origin date. Retreive recipies using categories, origin, date or keywords
+    found in the title or ingredients.<br />&nbsp;&nbsp;Share recipes with everyone or just specific users.
+    &nbsp;&nbsp;Recipes are stored in the cloud and can be accessed at anytime from any device.
+  </p>
+  <p>
+    <b>Create an Account"></b><br/>
+    &nbsp;&nbsp;The first thing you'll need to do to start using MyRecipeMongo is create an account.  Since all data
+    is stored in the cloud, we need to know which data is yours. MyRecipeMongo accounts are simple, just an
+    email address and a password.<br/><br/>
+    &nbsp;&nbsp;To create an account tap the <b>person</b> icon on the main title bar.<br/>
+    &nbsp;&nbsp;Then, on the Sign In form:<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Enter an email address and password<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Check the <b>Create new account</b> box<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Enter the same password again<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Finally, tap <b>Create Account"</b>
+  </p>
+  <p>
+    <b>Getting Help</b><br/>
+    &nbsp;&nbsp;If at any time you are unsure of what to do just tap the icon in the upper 
+    left corner of the screen and a help panel, like this one, will be displayed that has information 
+    relevant to the current activity.
+  </p>
+  <p>
+    <b>The Full Menu</b><br/>
+    &nbsp;&nbsp;On <b>smaller screens</b>, the full command menu is available by pressing the 
+    <b>vertical dots</b> icon at the far right of the MyRecipeMongo
+    title bar.  The title bar also contains a few quick access icons for the most commonly used features.<br/>
+    &nbsp;&nbsp;On <b>larger screens</b>, the full menu is displayed in the title bar with dropdowns for the commands.
+  </p>
+  <p>
+    <b>Saving a Recipe</b><br/>
+    &nbsp;&nbsp;To add a recipe tap the <b>edit</b> icon on the main 
+    screen (or navigate to <b>Recipes>Add a Recipe</b> on the main menu).<br/>
+    &nbsp;&nbsp;Every recipe starts out with the <b>NEW</b> (Add Recipe) tab of the Recipe Access Area.  This
+    is where all of the information for the recipe is entered.<br/>
+    &nbsp;&nbsp;This information includes:<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Title</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Description</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Categories</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Recipe Origin</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Origin Date</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Ingredients</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Instructions</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Recipe Notes</b><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<b>Pictures</b><br/>
+    &nbsp;&nbsp;Choices for <b>Categories</b>and <b>Origin</b> 
+    are maintained by you in separate lists using the <b>List Management</b> menu.  
+    Each function in List Management has its own help panel.
+  </p>
+  <p>
+    <b>Viewing Recipes</b><br/>
+    &nbsp;&nbsp;To find and view recipes, tap the <b>search</b> icon in the 
+    main title bar (or navigate to <b>Recipes>Recipe Search</b> on the main menu).
+    This will open the Recipe Access Area with the <b>SEARCH</b> tab active.<br/>
+    &nbsp;&nbsp;Fill in any search criteria and tap <b>Searcg</b>. If matching recipes are found, 
+    a menu of those recipes will be displayed on the <b>RECIPES</b> tab. 
+    Tapping the picture or description on the menu item will display the full recipe in the <b>VIEW</b> tab.<br/><br/>
+    &nbsp;&nbsp;To access a different tab of the Recipe Access Area, tap its name at the top of the display.
+  </p>
+</div>

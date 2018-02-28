@@ -28,14 +28,13 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
   requestStatus    : { [key: string]: any } = {};
   selectedItems    : boolean[] = [];
   recipeViewOpen   : boolean = false;
-  working          : boolean = false;
 
   constructor(private userInfo : UserInfo, private utilSvc : UtilSvc, private recipeSvc : RecipeService,
               private currentRecipe: CurrentRecipe){};
 
   ngOnInit() {
-    if(!this.userInfo.authData) { return; }
     this.setMessageResponders();
+    if(!this.userInfo.authData) { return; }
   }
 
   ngOnDestroy() {
@@ -67,11 +66,10 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
       request.endDate = this.utilSvc.formatOriginDate(this.endDate.toString());
     }
     if(this.checkForProblems(form, request.startDate, request.endDate)){return;}
-    this.working = true;
+    this.utilSvc.displayWorkingMessage(true, 'Searching');
 
     request.collectionOwnerId = this.viewShared ? SHARED_USER_ID : this.userInfo.authData.uid;
     if(this.origin && this.origin !== '0'){request.origin = parseInt(<string>this.origin,10);} 
-    this.working = true;
     if(this.categories.length){ request.categories = this.categories; }
     if(this.keywords) {  // clean up any wierd leading/trailing commas or comma-space combos
       this.keywords = this.keywords.replace(/( , | ,|, )/g,',').replace(/(^,|,$)/,'');
@@ -89,21 +87,21 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.checkAll = false;
     this.recipeSvc.getRecipes(request)
     .then((list : any) => {
-      this.working = false;
       this.currentRecipe.recipeList = [];
       for(let i=0; i<list.length; i++){
         this.currentRecipe.recipeList.push(Recipe.build(list[i]));
       }
       this.utilSvc.emitEvent("searchUpdate");
       if(!this.currentRecipe.recipeList.length){
-        this.utilSvc.displayThisUserMessage("noRecipesFound"); //let user know they need to try again
+        this.utilSvc.setUserMessage("noRecipesFound"); //let user know they need to try again
       }
+      this.utilSvc.displayWorkingMessage(false);
     })
     .catch((error) => {
-      this.working = false;
       this.currentRecipe.recipeList = [];
       this.utilSvc.emitEvent("searchUpdate");
-      this.utilSvc.displayThisUserMessage("errorReadingRecipesTable"); //let user know they need to try again
+      this.utilSvc.setUserMessage("errorReadingRecipesTable"); //let user know they need to try again
+      this.utilSvc.displayWorkingMessage(false);
     });
     this.utilSvc.scrollToTop();
   }
@@ -164,6 +162,7 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
   // open the category selection list
   openCatList = () => {
     this.clearRequestStatus();
+    this.utilSvc.scrollToTop();
     this.emit('openSearchCategoriesMenu');
   }
 

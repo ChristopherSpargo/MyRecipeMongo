@@ -34,7 +34,8 @@ export class UserInfo {
     authData    : any     = null;
     profile     : Profile;
     messages    : { [key: string]: any } = null;
-    messageOpen : boolean = false;
+    openToastId : string = null;
+    openToastTimer : any = null;
 
     isSharedUser = () : boolean => {
       return this.authData && (this.authData.uid === SHARED_USER_ID);
@@ -47,7 +48,24 @@ export class AboutStatus {
     open   : boolean = false;
 
     toggle = () => {
-      this.open = !this.open;
+      if(this.open){
+        this.closeAbout();
+      } else {
+        this.openAbout();
+      }
+    }
+
+    // open the about panel
+    openAbout = () => {
+      // turn off scrolling on the body while the about panel is open so it can scroll but not the body
+      document.body.style.overflowY = 'hidden';
+      this.open = true;
+    }
+
+    // close the about panel
+    closeAbout = () => {
+      document.body.style.overflowY = '';  // enable body scrolling
+      this.open = false;
     }
 }
 
@@ -87,13 +105,13 @@ export class CurrentRecipe {
   public categoryListName = (id: number) : string => {
     if(id === undefined || this.categoryList === undefined){ return '';}
     let i = this.categoryListIndex(id);
-    return i >= 0 ? this.categoryList.items[i].name : 'Removed';
+    return i >= 0 ? this.categoryList.items[i].name : '<Removed>';
   }
 
   public originListName = (id: number) : string => {
     if(id === undefined || this.originList === undefined){ return '';}
     let i = this.originListIndex(id);
-    return i >= 0 ? this.originList.items[i].name : 'Removed';
+    return i >= 0 ? this.originList.items[i].name : '<Removed>';
   }
 
   public categoryListItems = () => {

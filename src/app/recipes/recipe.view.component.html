@@ -1,4 +1,4 @@
-  <div class="container app-tab-container px-0 pt-1 app-bg-gwhite"
+  <div class="app-tab-container px-0 pt-1 app-bg-gwhite"
        [ngClass]="{'app-open': viewTabOpen}">
        <!-- [style.padding-bottom.px]="300"> -->
 
@@ -27,7 +27,7 @@
                 Recipe From: {{rOriginName}}
               </div>
               <div class="app-recipe-view-text app-recipe-view-origin">
-                circa: {{rOriginDate}}
+                Circa: {{rOriginDate}}
               </div>
             </div>
             <div *ngFor="let n of rOriginNotes" 
@@ -72,7 +72,7 @@
             </ng-container>
             <!-- Recipe Notes -->
             <ng-container *ngIf="dataPresent('RecipeNotes')">
-              <div class="app-recipe-view-text app-recipe-view-notes-header pl-3">
+              <div class="app-recipe-view-text app-recipe-view-notes-header">
                 Notes:
               </div>
               <div *ngFor="let n of rNotes" 

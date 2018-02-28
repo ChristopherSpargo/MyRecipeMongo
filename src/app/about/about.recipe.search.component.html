@@ -1,42 +1,57 @@
   <div>
-    &nbsp;&nbsp;The <b>Match Log Search</b> tab allows you to specify parameters to identify the match logs you
-    want to view at this time.<br/>
+    &nbsp;&nbsp;The <b>Recipe Search</b> tab allows you to specify parameters to locate recipes you
+    want to view or share.<br/>
     The fields and buttons are:
 
-    <app-about-heading fIcon="face" fText="Player" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;This is the name of the player participating in all the matches of interest.
-    Select a player from the drop-down list.
+    <app-about-heading fIcon="folder" fText="Search In" fIconColor="app-active-input-icon-color"></app-about-heading>
+    &nbsp;&nbsp;Here you specify which collection of recipes you want to search.<br/> <b>Personal Recipes</b> 
+    are just the recipes you have added yourself.<br/>
+    <b>Shared Recipes</b> are recipes that you have shared or others have shared that you have access to.<br/>
+    &nbsp;&nbsp;These collections must be searched separately. The internal values of the Origins and Categories in
+    the shared collection are different from those in any personal collection.
 
-    <app-about-heading fIcon="thumbs_up_down" fText="Player's Result" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;Indicate whether the player selected in the Player field needs to have won or lost the matches of interest.
+    <app-about-heading fIcon="assessment" fText="Categories" fIconColor="app-active-input-icon-color"></app-about-heading>
+    &nbsp;&nbsp;Here you specify any categories that apply to recipes of interest.  
+    A recipe must have <b>ALL</b> the specified categories to be selected.<br/>
+    &nbsp;&nbsp;Click the <app-about-text-icon fIcon="add_circle" [fFab]="true" 
+    fColor="app-primary"></app-about-text-icon> button to display a menu of categories.  Add categories to
+    the search by checking any you want to apply and click <app-about-text-icon fLabel="Ok" 
+    fSize="S" fColor="app-white" fLabelCSS="app-white" fExtraCSS="app-bg-primary" 
+    [fBtn]="true"></app-about-text-icon>.  Selected categories will appear in the categories field as labeled
+    chips.<br/>
+    &nbsp;&nbsp;To remove a selection click the <app-about-text-icon fIcon="close" fSize="S" 
+    fColor="app-warn"></app-about-text-icon> on the chip with that category label.
 
-    <app-about-heading fIcon="person" fText="Opponent" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;This is the name of the other player, the opponent, participating in all the matches of interest.
-    Select a player from the drop-down list.
+    <app-about-heading fIcon="person" fText="Origin" fIconColor="app-active-input-icon-color"></app-about-heading>
+    &nbsp;&nbsp;This field allows you to restrict the search to a particular origin.<br/>
+    Click the field and select an entry from the list.
 
-    <app-about-heading fIcon="swap_horiz" fText="Opponent Plays" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;Indicate whether the opponent in the matches of interest needs to have been left or right handed.
+    <app-about-heading fIcon="vpn_key" fText="Keywords" fIconColor="app-active-input-icon-color"></app-about-heading>
+    &nbsp;&nbsp;Here you can specify a list of words or phrases to search for in the Title and Ingredients
+    fields of the recipes. Enter words or phrases separated by commas.<br/> 
+    &nbsp;&nbsp;For example:<br/>
+    <i>coco,baking powder,Crisco</i><br/>
+    will select recipes whos Title or Ingredients fields contain
+    the <b>words</b> <i>coco</i> or <i>Crisco</i> or the <b>phrase</b> <i>baking powder</i>.
 
-    <app-about-heading fIcon="group" fText="Tournament" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;This is the name of the tournament where all the matches of interest were played.
-    Select a tournament from the drop-down list.
+    <app-about-heading fIcon="today" fText="Origin Date Range" fIconColor="app-active-input-icon-color"></app-about-heading>
+    &nbsp;&nbsp;Here you can limit the search to recipes with Origin dates before, after or between certain
+    dates.<br/>
+    &nbsp;&nbsp;To find recipes dated <b>on or since</b> a given year, enter that year in the first date field.<br/>
+    &nbsp;&nbsp;To find recipes dated <b>on or before</b> a given year, enter that year in the second date field.<br/>
 
-    <app-about-heading fIcon="insert_invitation" fText="Matches Since" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;All the matches of interest were played on or after this date.
-    Select a date from the pop-up calendar.
-
-    <app-about-heading fIcon="today" fText="Matches Before" fIconColor="app-court-green"></app-about-heading>
-    &nbsp;&nbsp;All the matches of interest were played before this date.
-    Select a date from the pop-up calendar.
-
-    <app-about-heading fIcon="check_circle_outline" fText="Search" [fFab]="true" fIconColor="app-primary"></app-about-heading>
+    <app-about-heading fIcon="check_circle_outline" fButton="Search"></app-about-heading>
     &nbsp;&nbsp;Press this button to submit your search request. 
-    If successful, the <b>Match Log Menu</b> tab will be displayed.
+    If successful, the <b>Recipes</b> tab will be displayed.
     If no matches meeting the parameters are found, a message to that effect will be given and the 
-    <b>Match Log Search</b> form will remain displayed.
+    <b>Recipe Search</b> form will remain displayed.
     
     <app-about-heading fIcon="warning" fText="Tips and Warnings" fIconColor="app-checkbox" [fDivider]="true"></app-about-heading>
-    &nbsp;&nbsp;If the search continues to find no matches, make sure the parameters you are specifying do not conflict.
-    For example, indicating a specific <b>Tournament</b> <i>and</i> a specific <b>Opponent</b> but that player 
-    was not an opponent in any of the matches for the <b>Player</b> at that tournament.
+    &nbsp;&nbsp;If a search continues to find no matches, make sure the parameters you are specifying 
+    are not too restrictive. <b>ALL</b> restrictions you specify must be satisfied for a recipe to be selected.
+    The more information you enter into this form, the more restricted your search will become.<br/>
+   
+    &nbsp;&nbsp;For example,
+    if you are looking for a recipe for Saffron Chicken, specifying the Category 'Chicken' and the 
+    keyword 'saffron' should do the trick.
   </div>

@@ -7,8 +7,7 @@
 README.md
 /src/test.ts
 /src/polyfills.ts
-/src/matchlog.min.css
-/src/app/Model/AWSModule.ts
+/src/myrecipemongo.min.css
 /src/favicon.ico
 /src/app/app.component.css
 /src/app/app.component.spec.ts
@@ -31,6 +30,7 @@ README.md
 *.launch
 .settings/
 *.sublime-workspace
+.editorconfig
 
 # IDE - VSCode
 .vscode/*

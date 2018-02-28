@@ -25,7 +25,6 @@ export class AccountEmailComponent implements OnInit {
   newEmail           : string = "";
   requestStatus      : { [key: string]: any } = {};
   rememberLogin      : boolean = (this.currEmail == this.cookieSvc.getCookieItem('userEmail'));
-  working            : boolean = false;
   formOpen           : boolean = false;
 
   ngOnInit() {
@@ -54,7 +53,8 @@ export class AccountEmailComponent implements OnInit {
       this.closeForm();
     })
     .catch((failure) => {
-      this.utilSvc.displayThisUserMessage("profileEmailChangeFailed");
+      this.utilSvc.setUserMessage("profileEmailChangeFailed");
+      this.utilSvc.displayWorkingMessage(false);
       this.closeForm();
     })
   }
@@ -67,7 +67,7 @@ export class AccountEmailComponent implements OnInit {
       this.requestStatus.formHasErrors = true;
       return;
     }
-    this.working = true;
+    this.utilSvc.displayWorkingMessage(true);
     this.userSvc.changeEmail(this.currEmail, this.password, this.newEmail)
     .then((success) => {
       this.reportEmailChange();
@@ -87,10 +87,10 @@ export class AccountEmailComponent implements OnInit {
           this.requestStatus.unrecognizedEmail = true;
           break;
         default:
-          this.utilSvc.displayThisUserMessage("emailChangeFailed");
+          this.utilSvc.setUserMessage("emailChangeFailed");
       }
       this.requestStatus.emailChangeFail = true;
-      this.working = false;
+      this.utilSvc.displayWorkingMessage(false);
     });
   }
 

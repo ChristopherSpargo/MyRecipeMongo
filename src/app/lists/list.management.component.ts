@@ -4,7 +4,9 @@ import { StateService } from "@uirouter/angular";
 import { UtilSvc } from '../utilities/utilSvc';
 import { UserInfo } from '../app.globals';
 import { RecipeService, CATEGORY_TABLE_NAME, ORIGIN_TABLE_NAME, 
-         ListTableItem, ListTable } from '../model/recipeSvc'
+         ListTableItem, ListTable, RecipeFilterData } from '../model/recipeSvc'
+import { RecipeData } from '../model/recipe';
+import { UNSET_ORIGIN_ID } from '../constants'
 
     // COMPONENT for MANAGE CATEGORIES feature
 
@@ -26,7 +28,6 @@ export class ListManagementComponent implements OnInit {
   deleteItem          : boolean   = false;
   itemList            : ListTableItem[]  = undefined;
   requestStatus       : { [key: string]: any }  = {};
-  working             : boolean   = false;
   listName            : string;
   listIcon            : string;
   itemReference       : string;
@@ -34,7 +35,6 @@ export class ListManagementComponent implements OnInit {
   formTitle           : string;
   helpContext         : string;
   formOpen            : boolean   = false;
-  formWasOpen         : boolean   = false;
 
   ngOnInit() {
   // make the user log in to manage lists
@@ -68,7 +68,6 @@ export class ListManagementComponent implements OnInit {
           this.listObj      = list;
           this.itemList     = list.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});
           this.formOpen     = true;
-          this.formWasOpen  = true;
       })
       .catch((error) => {   // no category table
           this.recipeSvc.initializeTable(this.tableName, this.user.authData.uid)
@@ -77,7 +76,6 @@ export class ListManagementComponent implements OnInit {
             this.listObj      = list;
             this.itemList     = this.listObj.items;
             this.formOpen     = true;
-            this.formWasOpen  = true;
           })
           .catch((error) => {
             this.utilSvc.returnToHomeMsg("errorInitializingList",400, this.tableName); // can't continue, database error
@@ -123,20 +121,75 @@ export class ListManagementComponent implements OnInit {
         action = "Remove";
       }
     }
-    this.working = true;
+    this.utilSvc.displayWorkingMessage(true);
     this.recipeSvc.updateList(this.tableName, this.listItem, action, this.user.authData.uid)   // send the update
     .then((list) => {
       this.itemList = list.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});
-      this.utilSvc.setUserMessage(msgId, msg);
-      this.utilSvc.displayUserMessages();
-      this.resetForm(form);
-      this.working = false;
+      this.checkForRecipeAdjustments(this.listItem.id, action)
+      .then((success) => {
+        this.resetForm(form);
+        this.utilSvc.setUserMessage(msgId, msg);
+        this.utilSvc.displayWorkingMessage(false);
+      })
+      .catch((failMsg) => {
+        this.utilSvc.setUserMessage(failMsg);
+        this.resetForm(form);
+        this.utilSvc.displayWorkingMessage(false);
+      })
     })
     .catch((error) => {
-        this.utilSvc.displayThisUserMessage("errorUpdatingList", this.listName);
+        this.utilSvc.setUserMessage("errorUpdatingList", this.listName);
         this.resetForm(form);
-        this.working = false;
-    });
+        this.utilSvc.displayWorkingMessage(false);
+      });
+  }
+
+  // if the action was 'remove' then see if any recipes contain the listItem and adjust
+  // the recipe accordingly
+  checkForRecipeAdjustments = (id: number, action: string) : Promise<string> => {
+    let promises = [];
+    let query = <RecipeFilterData>{};
+    query.collectionOwnerId = this.user.authData.uid;
+
+    return new Promise<string>((resolve, reject) => {
+      if(action !== 'Remove'){
+         resolve('Ok');
+      } else {
+        // read the necessary data from the affected recipes
+        if(this.tableName === CATEGORY_TABLE_NAME){
+          query.categories = [id];
+          query.projection = {'_id': 1, 'categories': 1}; // read categories list if Removed category
+        } else {
+          query.origin = id;
+          query.projection = {'_id': 1};      // just get object ids if Removed origin
+        }
+        this.recipeSvc.getRecipes(query)
+        .then((data : RecipeData[]) => {
+          data.forEach((r) => {
+            let updateObj;
+            if(this.tableName === CATEGORY_TABLE_NAME){
+              // remove category from the recipe's categories list
+              let i = r.categories.indexOf(id);
+              r.categories.splice(i,1);
+              updateObj = {"categories": r.categories};
+            } else {
+              // replace the origin with UNSET_ORIGIN
+              updateObj = {"origin": UNSET_ORIGIN_ID};
+            }
+            // update each recipe and save a promise for each update request
+            promises.push(this.recipeSvc.updateRecipe(r._id, updateObj));
+          });
+          Promise.all(promises)       // wait till all are done (or 1 fails)
+          .then((updateSuccess) => {  //.finally would be nice because either way we're done
+            resolve("Ok");})
+          .catch((errorUpdating) => {
+            reject("errorUpdatingRecipes");})
+        })
+        .catch((errorReading) => {
+          reject('errorReadingRecipesForUpdate');
+        })
+      }
+   });
   }
 
   // user has selected a list entry, copy it to the edit field

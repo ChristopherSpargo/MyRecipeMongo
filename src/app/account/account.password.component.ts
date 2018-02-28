@@ -25,7 +25,6 @@ export class AccountPasswordComponent implements OnInit {
   newPassword        : string = "";
   requestStatus      : { [key: string]: any } = {};
   rememberLogin      : boolean;
-  working            : boolean = false;
   formOpen           : boolean = false;
 
   ngOnInit() {
@@ -50,7 +49,8 @@ export class AccountPasswordComponent implements OnInit {
       this.cookieSvc.setCookieItem('password', 
             this.crossSvc.cross(this.userEmail, this.newPassword));
     }
-    this.utilSvc.displayThisUserMessage("passwordChanged");
+    this.utilSvc.setUserMessage("passwordChanged");
+    this.utilSvc.displayWorkingMessage(false);
     this.closeForm();
   }
 
@@ -61,10 +61,9 @@ export class AccountPasswordComponent implements OnInit {
       this.requestStatus.formHasErrors = true;
       return;
     }
-    this.working = true;
+    this.utilSvc.displayWorkingMessage(true);
     this.userSvc.changePassword(this.userEmail, this.currPassword, this.newPassword)
     .then((success) => {
-      this.working = false;
       this.reportPasswordChange();
     })
     .catch((error) => {
@@ -76,10 +75,10 @@ export class AccountPasswordComponent implements OnInit {
           this.requestStatus.unrecognizedEmail = true;
           break;
         default:
-          this.utilSvc.displayThisUserMessage("passwordChangeFailed");
+          this.utilSvc.setUserMessage("passwordChangeFailed");
       }
       this.requestStatus.passwordChangeFail = true;
-      this.working = false;
+      this.utilSvc.displayWorkingMessage(false);
     });
   }
 

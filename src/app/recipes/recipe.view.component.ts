@@ -1,11 +1,8 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input } from '@angular/core';
 import { NgForm, AbstractControl, FormControl } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe } from '../app.globals';
-import { RecipeService, ListTable, ListTableItem, CATEGORY_TABLE_NAME,
-         ORIGIN_TABLE_NAME } from '../model/recipeSvc';
+import { CurrentRecipe } from '../app.globals';
 import { RecipePic, RecipeData, Recipe } from '../model/recipe'
-import { APP_DATA_VERSION } from '../constants';
 
 
     // COMPONENT for RECIPE VIEW feature
@@ -22,33 +19,27 @@ interface PicItem {
 export class RecipeViewComponent implements OnInit {
   @Input() viewTabOpen      : boolean;
 
-  constructor(private userInfo: UserInfo, private utilSvc: UtilSvc, private recipeSvc: RecipeService,
-      private currentRecipe: CurrentRecipe){};
+  constructor(private utilSvc: UtilSvc, private currentRecipe: CurrentRecipe){};
 
-  checkAll            : boolean   = false; //true if form fields to be checked for errors (touched or not)
-  todaysDate          : string    = this.utilSvc.formatDate();
-  thisYear            : string    = this.utilSvc.formatDateJustYear();
     r_id         : string;
     rTitle       : string = '';
     rDescription : string = '';
     rCategories  : number[] = []; 
     rOriginName  : string = '';
-    rOriginDate  : string = this.thisYear;
+    rOriginDate  : string;
     rOriginNotes : string[];
     rIngredients : string[];
     rInstructions: string[];
     rNotes       : string[];
     rMainPic     : PicItem;
     rMorePics    : PicItem[] = [];
-    rCreatedOn   : string = this.todaysDate;
+    rCreatedOn   : string;
 
   requestStatus  : { [key: string]: any } = {};
-  formTitle      : string    = "View Recipe";
   recipeReady    : boolean = false;
 
   ngOnInit() {
     this.setMessageResponders();
-    // make the user is logged in to enter recipes
   }
 
   ngOnDestroy() {
@@ -90,44 +81,28 @@ export class RecipeViewComponent implements OnInit {
 
 
   // set the form fields to reflect the selected recipe or empty
-  setItemFields = (item? : RecipeData)  => {
-    if(item){
-      this.r_id            = item._id;
-      this.rTitle          = item.title;
-      this.rDescription    = item.description;
-      this.rCategories     = [];
-      item.categories.forEach((c) => {
-        this.rCategories.push(c);});
-      this.rOriginName     = item.origin ? this.getOriginName(item.origin) : 'Unknown';
-      this.rOriginDate     = this.utilSvc.displayOriginDate(item.originDate);
-      this.rOriginNotes    = item.originNotes ? item.originNotes.split('\n') : undefined;
-      this.rIngredients    = item.ingredients ? item.ingredients.split('\n') : undefined;
-      this.rInstructions   = item.instructions ? item.instructions.split('\n') : undefined;
-      this.rNotes          = item.recipeNotes ? item.recipeNotes.split('\n') : undefined;
-      this.rMainPic        = undefined;
-      this.rMorePics = [];
-      if(item.mainImage){
-        this.rMainPic      = {'URL': item.mainImage.picURL, 'note': item.mainImage.note};
-        if(item.extraImages.length){
-          this.setMorePics(item.extraImages);
-        }
+  setItemFields = (item : RecipeData)  => {
+    this.r_id            = item._id;
+    this.rTitle          = item.title;
+    this.rDescription    = item.description;
+    this.rCategories     = [];
+    item.categories.forEach((c) => {
+      this.rCategories.push(c);});
+    this.rOriginName     = item.origin ? this.getOriginName(item.origin) : 'Unknown';
+    this.rOriginDate     = this.utilSvc.displayOriginDate(item.originDate);
+    this.rOriginNotes    = item.originNotes ? item.originNotes.split('\n') : undefined;
+    this.rIngredients    = item.ingredients ? item.ingredients.split('\n') : undefined;
+    this.rInstructions   = item.instructions ? item.instructions.split('\n') : undefined;
+    this.rNotes          = item.recipeNotes ? item.recipeNotes.split('\n') : undefined;
+    this.rMainPic        = undefined;
+    this.rMorePics = [];
+    if(item.mainImage){
+      this.rMainPic      = {'URL': item.mainImage.picURL, 'note': item.mainImage.note};
+      if(item.extraImages.length){
+        this.setMorePics(item.extraImages);
       }
-      this.rCreatedOn           = item.createdOn;
-    } else{
-      this.r_id                 = undefined;
-      this.rTitle               = '';
-      this.rDescription         = '';
-      this.rCategories          = [];
-      this.rOriginName          = '';
-      this.rOriginDate          = this.thisYear;
-      this.rOriginNotes         = undefined;
-      this.rIngredients         = [];
-      this.rInstructions        = [];
-      this.rNotes               = [];
-      this.rMainPic             = undefined;
-      this.rMorePics            = [];
-      this.rCreatedOn           = this.todaysDate;
     }
+    this.rCreatedOn           = item.createdOn;
   }
 
   // use newly acquired extraImages to set the rMorePics array

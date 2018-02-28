@@ -1,9 +1,8 @@
-                <!--Form used to provide the EVENT MANAGEMENT feature-->
+                <!--Form used to provide the LIST MANAGEMENT feature-->
 
-<!--<app-waiting-indicator awi-open="!fC.formOpen && !fC.formWasOpen"></app-waiting-indicator>-->
 
 <div 
-  class=" app-central-container app-fade-in"
+  class=" app-central-container-sm app-fade-in"
   [ngClass]="{'app-open': formOpen}"
   >
 
@@ -20,22 +19,22 @@
                                               <!-- Start of Form -->
 
   <div class=" app-scroll-frame-center app-card-bottom-corners app-whiteframe-2dp">
-    <div class="container app-form-theme px-0 pt-3">
+    <div class="app-form-theme px-0 pt-3">
       <form #listForm = "ngForm" role="form" novalidate
             (ngSubmit)="submitRequest(listForm)">
         <div class="d-flex flex-column px-2">
 
         <!-- Instructional messages -->
         <div *ngIf="selectedItem === ''" class="d-flex flex-row justify-content-start app-flex-1 align-items-center
-                                                mb-2 app-smaller-font">
+                                                app-black-text-low app-bold mb-2 app-smaller-font">
           Select from the list to edit/create {{itemReference}} {{listName}}
         </div>
         <div *ngIf="selectedItem !== ''" class="d-flex flex-row justify-content-start app-flex-1 align-items-center 
-                                                mb-2 app-smaller-font">
+                                                app-black-text-low app-bold mb-2 app-smaller-font">
           Now edit and save or remove this {{listName}}
         </div>
 
-          <!-- Event Name Field -->
+          <!-- Item Name Field -->
           <app-list-item-field 
               [fForm]         = "listForm"
               [(fCheckAll)]   = "checkAll"
@@ -44,7 +43,7 @@
               [(fValue)]      = "selectedItem"
               fLabel          = "{{listName}} Name" 
               [fIcon]         = "listIcon" 
-              fColor          = "app-light-brown "
+              fColor          = "app-active-input-icon-color"
               [fOnDelete]     = "deleteSelectedItem"
               [fRequired]     = "false"
               [fOnFocus]      = "clearRequestStatus"
@@ -61,10 +60,15 @@
           </app-list-item-field>
 
           <!-- Messages Area -->
-          <app-form-messages 
-            [fWorkingOpen]    = "!haveStatusMessages() && working"
-            [fMessageOpen]    = "haveStatusMessages() && !working"
-            [fMessageObj]     = "requestStatus">
+          <app-form-messages [fMessageOpen] = "haveStatusMessages()">
+            <app-messages [mList]="requestStatus" [mMax]="2">
+              <app-message name="formHasErrors" class="app-error">
+                  Please correct the fields with errors.
+              </app-message>
+              <app-message name="itemAlreadyInList" class="app-error">
+                  Item already in list.
+              </app-message>
+            </app-messages>
           </app-form-messages>                    
                             
         </div>

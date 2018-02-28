@@ -18,10 +18,14 @@ export class AccountProfileComponent implements OnInit {
     // COMPONENT for PROFILE UPDATE feature
 
   checkAll           : boolean   = false; //true if form fields to be checked for errors (touched or not)
-  profile            : any = {};
+  defaultRecipeOrigin : string    ='';
+  itemName            : string    = "";
+  itemList            : string[]  = [];
+  selectedItem        : string    = "";
+  newItemName         : string    = "";
+  deleteItem          : boolean   = false;
   originList         : ListTableItem[] = [];
   requestStatus      : { [key: string]: any } = {};
-  working            : boolean = false;
   formOpen           : boolean = false;
 
   ngOnInit(){
@@ -30,7 +34,10 @@ export class AccountProfileComponent implements OnInit {
     }
     else{
       // set initial values for form fields
-      this.profile.defaultRecipeOrigin = this.userInfo.profile.defaultRecipeOrigin.toString() || "";
+      this.defaultRecipeOrigin =
+       this.userInfo.profile.defaultRecipeOrigin ? this.userInfo.profile.defaultRecipeOrigin.toString() : '';
+      this.itemList =
+       this.userInfo.profile.defaultSharedUsers ? this.userInfo.profile.defaultSharedUsers : [];
       this.recipeSvc.getList(ORIGIN_TABLE_NAME, this.userInfo.authData.uid ) //read list of origins
       .then((oList) => {
         this.originList = oList.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});  
@@ -46,26 +53,129 @@ export class AccountProfileComponent implements OnInit {
     }
   }
 
+  // clear the list of items
+  clearItemList = () => {
+    this.itemList = [];
+    this.clearRequestStatus();
+    this.requestStatus.itemListCleared = true;
+  }
+
+
   // send profile update request to Data service
-  submitRequest(form : NgForm) : void {
+  submitUpdate = (form : NgForm) : void => {
     this.checkAll = true;
     this.clearRequestStatus();
     if(form.invalid){
       this.requestStatus.formHasErrors = true;
       return;
     }
-    this.userInfo.profile.defaultRecipeOrigin =  parseInt(this.profile.defaultRecipeOrigin,10);
-    this.working = true;
+    this.userInfo.profile.defaultRecipeOrigin = 
+    this.defaultRecipeOrigin === '' ? 0 : parseInt(this.defaultRecipeOrigin,10);
+    this.userInfo.profile.defaultSharedUsers = this.itemList;
+    this.utilSvc.displayWorkingMessage(true);
     this.userSvc.updateUserProfile(this.userInfo)
     .then((success) => {
-      this.utilSvc.displayThisUserMessage("profileUpdated");
+      this.utilSvc.setUserMessage("profileUpdated");
+      this.utilSvc.displayWorkingMessage(false);
       this.closeForm();
     })
     .catch((failure) => {
-      this.utilSvc.displayThisUserMessage("profileUpdateFail");
+      this.utilSvc.setUserMessage("profileUpdateFail");
+      this.utilSvc.displayWorkingMessage(false);
       this.closeForm();
     })
   }
+
+  // delete the item that has been selected
+  deleteSelectedItem = (form : NgForm) => {
+    this.deleteItem = true;
+    this.userListAction(form)
+  }
+
+
+  // process a user list action
+  userListAction = (form : NgForm) : void => {
+    var msg   : string, 
+        msgId : string,
+        action: string,
+        index: number;
+
+    this.checkAll = true;
+    this.clearRequestStatus();
+    if(this.checkForProblems(form)){   // can't do anything yet, form still has errors
+      return;
+    }
+    this.itemName = this.newItemName;
+    msg = "Email " + "'" + this.itemName + "'";
+    // now set the action to perform and the status message for the user
+    if(this.selectedItem == "999"){  // user specify new item name?
+      msgId = "listItemAdded";
+      action = "Add";
+    } 
+    else {
+      if(!this.deleteItem){
+        msgId = "listItemUpdated";
+        action = "Update";
+      } else {
+        msgId = "listItemRemoved";
+        action = "Remove";
+      }
+    }
+    index = parseInt(this.selectedItem);
+    switch(action){
+      case "Update":
+        this.itemList[index] = this.itemName;      // update entry
+      break;
+      case "Remove":
+        this.itemList.splice(index,1);    // remove entry
+      break;
+      case "Add":
+      default:
+        this.itemList.push(this.itemName);         // Add entry          
+      break;
+    }
+    this.requestStatus[msgId] = true;
+    this.resetForm(form);
+  }
+
+  // user has selected a list entry, copy it to the edit field
+  copyItemName = () => {
+    setTimeout( () => {
+      if(this.selectedItem != "999"){
+        this.newItemName = this.itemList[this.selectedItem];
+      }
+      else{
+        this.newItemName = "";
+      }
+    }, 50);
+  }
+
+  // get the form ready for another operation
+  resetForm(form : NgForm) : void {
+    if(form){
+      // form.controls.origin.markAsUntouched();
+      form.controls.itemName.markAsUntouched();
+   }
+    this.checkAll = false;
+    this.selectedItem = "";
+    this.deleteItem   = false;
+    this.newItemName  = "";
+  }
+
+  // return whether the selecteditem value is a valid id number
+  canDeleteItem = () => {
+    return ((this.selectedItem != "") && (this.selectedItem != "999"));
+  } 
+
+  // return true if there is something wrong with the form input
+  checkForProblems(form: NgForm) : boolean {
+    if(form.invalid){
+       this.requestStatus.formHasErrors = true;
+      return true;
+    }
+    return this.selectedItem == "";
+  }
+
 
   // clear status messages object
   clearRequestStatus = () => {

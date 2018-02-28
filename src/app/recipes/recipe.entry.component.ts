@@ -1,25 +1,42 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input } from '@angular/core';
-import { DomSanitizer,SafeUrl } from '@angular/platform-browser';
 import { NgForm, AbstractControl, FormControl } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
 import { UserInfo, CurrentRecipe } from '../app.globals';
 import { RecipeService, ListTable, ListTableItem, CATEGORY_TABLE_NAME,
-         ORIGIN_TABLE_NAME } from '../model/recipeSvc';
+         ORIGIN_TABLE_NAME, RecipeFilterData } from '../model/recipeSvc';
 import { Subscription, Observable } from 'rxjs';
 import { RecipePic, RecipeData, Recipe } from '../model/recipe'
-import { APP_DATA_VERSION } from '../constants';
+import { APP_DATA_VERSION, UNSET_ORIGIN_ID_STR } from '../constants';
 import ImageCompressor from '@xkeshi/image-compressor/dist/image-compressor.esm.js'
 
 
-    // COMPONENT for MANAGE PLAYERS feature
 export interface PicObj {
-  file: File;       // File object for new pictures
-  picURL: string;  // URL to use for the picture display
+  file: File;           // File object for new pictures
+  picURL: string;       // URL to use for the picture display
   picSize: number;
-  noteText: string; // picture annotation
-  contentType: string; // MIME type for image
+  noteText: string;     // picture annotation
+  contentType: string;  // MIME type for image
 }
 
+// COMPONENT for RECIPE ENTRY function
+// The template for this component is the Recipe Data Entry form and is presented on the EDIT tab
+// of the Recipe Access Tabset.
+// This component shares data with other Recipe Access Tabset components via the CurrentRecipe service.
+// This component listens for the following messages:
+//  noRecipeSelection:      This indicates that no existing recipe is selected and the form should
+//                          be initialized for NEW recipe input.
+//  newRecipeSelection:     This indicates that there is data for an existing recipe in the CurrentRecipe
+//                          service and the form should be populated with it's data in preparation for EDIT.
+//  extraImagesReady:       This indicates that any extra images associated with the current recipe selection
+//                          have been read and can be populated into the form. To save time and data transfer,
+//                          a recipe's extra images are only read when the user first selects the recipe
+//                          from the RECIPES menu.
+// This component emits the following messages:
+//  updateMenuTabLabel:     This requests that the MENU tab label which displays the number of items on the
+//                          RECIPES menu be updated based on information in the CurrentRecipe service.
+//  newViewReady:           This requests that the information displayed on the VIEW tab be refreshed using
+//                          the data in the CurrentRecipe service.
+// The 3rd party module 'ImageCompressor' is used to compress recipe images
 
 @Component({
   selector: '<app-recipe-edit>',
@@ -29,10 +46,9 @@ export class RecipeEntryComponent implements OnInit {
   @Input() editTabOpen      : boolean;
 
   constructor(private userInfo: UserInfo, private utilSvc: UtilSvc, private recipeSvc: RecipeService,
-      private domSanitizer: DomSanitizer, private currentRecipe: CurrentRecipe){};
+      private currentRecipe: CurrentRecipe){};
 
   checkAll            : boolean   = false; //true if form fields to be checked for errors (touched or not)
-  selectedCategory    : string    = '';
   newItemName         : string    = '';
   deleteItem          : boolean   = false;
   todaysDate          : string    = this.utilSvc.formatDate();
@@ -46,7 +62,7 @@ export class RecipeEntryComponent implements OnInit {
                    touched: boolean,
                    invalid: boolean} = {cats: [], errors: {}, 
                                         statusChanges: new EventEmitter(), touched: false, invalid: false};
-    rOrigin      : string = '';
+    rOrigin      : string = UNSET_ORIGIN_ID_STR;
     rOriginDate  : string = this.thisYear;
     rOriginNotes : string = '';
     rIngredients : string = '';
@@ -55,29 +71,27 @@ export class RecipeEntryComponent implements OnInit {
     rPictures    : PicObj[] = [];
     rRestrictedTo: string[] = [];
     rSharedItemId: string = '';
+    rLastShareUpdate: number = undefined;
     rSubmittedBy : string = '';
     rCreatedOn   : string = this.todaysDate;
 
-  selectedPics        : File[] = <File[]>[];
-  requestStatus       : { [key: string]: any } = {};
-  working             : boolean   = false;
+  selectedPics        : File[] = <File[]>[]; // list of files obtained from the file input element
+  requestStatus       : { [key: string]: any } = {}; // object for messages displayed at bottom of the form
   formOpen            : boolean   = false;
-  formWasOpen         : boolean   = false;
-  titleAndTagsOpen    : boolean   = false;
-  originOpen          : boolean   = false;
-  specificsOpen       : boolean   = false;
-  picturesOpen        : boolean   = false;
-  createNew           : boolean   = true;
-  formTitle           : string    = "Add a Recipe";
+  titleAndTagsOpen    : boolean   = false;  // show-hide toggle for Title and Categories form section
+  originOpen          : boolean   = false;  // show-hide toggle for Origins form section
+  specificsOpen       : boolean   = false;  // show-hide toggle for Ingredients and Instructions form section
+  picturesOpen        : boolean   = false;  // show-hide toggle for Pictures form section
+  createNew           : boolean   = true;   // true if adding a recipe, false if editing an exitsing one
+  formTitle           : string    = "Add a Recipe";  // title to display at top of template
 
   ngOnInit() {
     this.setMessageResponders();
-    // make the user is logged in to enter recipes
+    // make sure the user is logged in to enter recipes
     if(!this.userInfo.authData) { return; }
     this.setItemFields();
     setTimeout( () => {
       this.formOpen = true;
-      this.formWasOpen = true;
     }, 300);
   }
 
@@ -126,15 +140,16 @@ export class RecipeEntryComponent implements OnInit {
       this.requestStatus.formHasErrors = true;
       return;
     }
-    this.working = true;                // show 'working' indicator on screen
+    this.utilSvc.displayWorkingMessage(true, 'Saving Recipe'); // show 'working' indicator on screen
     // now fill in the object for the database
     if(this.r_id) {rData._id = this.r_id;}
     rData.userId = this.userInfo.profile.id;
     rData.createdOn = this.rCreatedOn;
+    rData.lastUpdate = new Date().getTime();
     rData.title = this.rTitle;
     if(this.rDescription !== ""){rData.description = this.rDescription;} // don't store empty strings
     rData.categories = this.rCategories.cats;
-    if(this.rOrigin !== ""){rData.origin = parseInt(this.rOrigin,10)};
+    rData.origin = parseInt(this.rOrigin,10);
     rData.originDate = this.utilSvc.formatOriginDate(this.rOriginDate);
     if(this.rOriginNotes !== ""){rData.originNotes = this.rOriginNotes;}
     if(this.rIngredients !== ""){rData.ingredients = this.rIngredients;}
@@ -156,6 +171,7 @@ export class RecipeEntryComponent implements OnInit {
         }
       }
     }
+
     // send recipe to database
     this.recipeSvc.saveRecipe(rData)
     .then((storedData : RecipeData) => {
@@ -167,17 +183,61 @@ export class RecipeEntryComponent implements OnInit {
         this.currentRecipe.recipeList = [this.currentRecipe.recipe];
         this.currentRecipe.selectedIndex = 0;
       }
-      this.utilSvc.displayThisUserMessage("recipeSaved");
-      this.working = false;
+      this.utilSvc.setUserMessage("recipeSaved");
+      this.utilSvc.displayWorkingMessage(false);
       this.resetForm(form);
       this.emit('updateMenuTabLabel');
       this.emit('newViewReady')     // let the view tab know
+      this.utilSvc.scrollToTop();
+      // check for need to update shared copy
+      this.updateSharedCopy(storedData)
+      .then(()=>{})
+      .catch(()=>{})
     })
     .catch((error) => {
       this.resetForm(form);
-      this.utilSvc.displayThisUserMessage("errorSavingRecipe");
-      this.working = false;
+      this.utilSvc.setUserMessage("errorSavingRecipe");
+      this.utilSvc.displayWorkingMessage(false);
+      this.utilSvc.scrollToTop();
     });            
+  }
+
+  // see if there is a shared copy of the recipe to update
+  updateSharedCopy = (rData: RecipeData) : Promise<any> => {
+    return new Promise((resolve, reject) => {
+      if(rData.sharedItem_id){
+        this.utilSvc.getConfirmation('Update Shared Copy', 
+        'A shared copy of this recipe exists. Would you like it updated now?', 'Update It', 'Not Now')
+        .then((updateIt) => {
+          this.utilSvc.displayWorkingMessage(true, 'Updating Shared Copy')
+          // first, read 'restrictedTo' list from shared copy
+          let query = <RecipeFilterData>{};
+          query.recordId = rData.sharedItem_id;
+          query.projection = {'restrictedTo': 1};
+          this.recipeSvc.getRecipes(query)
+          .then((results : RecipeData[]) =>{
+            // then transfer the 'restrictedTo' list to the updated version
+            this.recipeSvc.addSharedRecipe(rData, results[0].restrictedTo)
+            .then((success) => {
+              this.utilSvc.setUserMessage('sharedCopyUpdated');
+              this.utilSvc.displayWorkingMessage(false);
+              resolve('updated');              
+            })
+            .catch((problem) =>{
+              this.utilSvc.setUserMessage(problem);
+              this.utilSvc.setUserMessage('errorUpdatingSharedCopy');
+              this.utilSvc.displayWorkingMessage(false);
+              resolve(problem);
+            })            
+          })
+        })
+        .catch((notNow) => {
+          resolve('notNow')
+        })
+      } else{
+        resolve("notShared");
+      }
+    })
   }
 
   // convert picture to format that is stored in database
@@ -206,6 +266,9 @@ export class RecipeEntryComponent implements OnInit {
   // open the category selection list
   openCatList = () => {
     this.clearRequestStatus();
+    // now scroll the screen to the top so the position of the category menu will be on screen, then
+    // emit the message to cause the checkbox.menu.component to open the menu
+    this.utilSvc.scrollToTop();
     this.emit('openEntryCategoriesMenu');
   }
 
@@ -250,8 +313,13 @@ export class RecipeEntryComponent implements OnInit {
       this.rCategories.errors.required = true;
       this.rCategories.invalid = true;
     } else {
-      this.rCategories.errors = {};
-      this.rCategories.invalid = false;
+      if(this.rCategories.cats.length > 10){
+        this.rCategories.errors.maxnumber = true;
+        this.rCategories.invalid = true;
+      } else {
+        this.rCategories.errors = {};
+        this.rCategories.invalid = false;
+      }
     }
     this.rCategories.statusChanges.emit(); // update observable
   }
@@ -351,12 +419,13 @@ export class RecipeEntryComponent implements OnInit {
     this.checkAll = false;
     this.setItemFields(this.currentRecipe.recipe ? this.currentRecipe.recipe.data : undefined);
     this.titleAndTagsOpen  = this.originOpen = this.specificsOpen = this.picturesOpen = false;
+    this.utilSvc.scrollToTop();
   }
 
   // set the form fields to reflect the selected recipe or empty
   setItemFields = (item? : RecipeData)  => {
     if(item){
-      this.r_id                 = item._id;
+      this.r_id                 = item._id;   // this is the database's ObjectID
       this.rTitle               = item.title;
       this.rDescription         = item.description;
       this.rCategories.cats     = [];
@@ -366,7 +435,7 @@ export class RecipeEntryComponent implements OnInit {
       this.rCategories.errors   = {};
       this.rCategories.invalid  = false;
       this.rCategories.statusChanges.emit();
-      this.rOrigin              = item.origin ? item.origin.toString() : '';
+      this.rOrigin              = item.origin ? item.origin.toString() : UNSET_ORIGIN_ID_STR;
       this.rOriginDate          = this.utilSvc.displayOriginDate(item.originDate);
       this.rOriginNotes         = item.originNotes;
       this.rIngredients         = item.ingredients;
@@ -394,7 +463,7 @@ export class RecipeEntryComponent implements OnInit {
       this.rCategories.invalid  = false;
       this.rCategories.statusChanges.emit();
       this.rOrigin              = this.userInfo.profile.defaultRecipeOrigin ?
-                                  this.userInfo.profile.defaultRecipeOrigin.toString() : '';
+                                  this.userInfo.profile.defaultRecipeOrigin.toString() : UNSET_ORIGIN_ID_STR;
       this.rOriginDate          = this.thisYear;
       this.rOriginNotes         = '';
       this.rIngredients         = '';
@@ -409,7 +478,7 @@ export class RecipeEntryComponent implements OnInit {
     }
   }
 
-    // convert picture to format that is stored in database
+    // create a PicObj from a RecipePic
   convertToPicObj = (p : RecipePic) : PicObj => {
         let newP = <PicObj>{};
         newP.noteText = p.note;

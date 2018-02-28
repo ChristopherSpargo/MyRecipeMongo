@@ -111,6 +111,34 @@ export class IconTextareaComponent implements OnInit {
     return result;
   }
 
+  // change certain ingredient things to make them more consistent and concise
+  makeIngrReplacements = (l : string) : string => {
+    let res = l.replace(/tablespoon/ig,'Tbsp');
+    res = res.replace(/tbsp[s]*/ig,'Tbsp');
+    res = res.replace(/(teaspoon[s]*|tsps)/ig,'tsp');
+    res = res.replace(/pound[s]*/ig,'lb');
+    res = res.replace(/ounce[s]*/ig,'oz');
+    res = res.replace(/gram[s]*/ig,'g');
+    res = res.replace(/liter[s]*/ig,'L');
+    res = res.replace(/pint[s]*/ig,'pt');
+    res = res.replace(/quart[s]*/ig,'qt');
+    res = res.replace(/millileter[s]*/ig,'ml');
+    res = res.replace(/gallon[s]*/ig,'gal');
+    res = res.replace(/dozen[s]*/ig,'doz');
+    res = res.replace(/1\/4/g, String.fromCharCode(188));
+    res = res.replace(/1\/2/g, String.fromCharCode(189));
+    res = res.replace(/3\/4/g, String.fromCharCode(190));
+    return res;
+  }
+
+  // change certain instruction things to make them more consistent and concise
+  makeInstReplacements = (l : string) : string => {
+    let res = l.replace(/(\-| )degree[s]*/ig, String.fromCharCode(176));
+    res = res.replace(/ deg$/ig, String.fromCharCode(176));
+    res = res.replace(/ deg /ig, String.fromCharCode(176)+' ');
+    return res;
+  }
+
   valueChange = (evt)=> {
     this.el = evt.target;
     if((this.fList !== '') && (this.fValue.charAt(this.el.selectionEnd-1)==='\n')){
@@ -121,9 +149,13 @@ export class IconTextareaComponent implements OnInit {
       let newVal = '';
       let lastLen = 0;
       let itemNum = 1;
+      let prevLineSubheading = false;
+      
       for(var i=0; i<sArray.length-1; i++){
         let l = sArray[i];
         let offset : number;
+        let oldL : number;
+
         lineInfo = this.checkLine(l);
         switch(this.fList){
 
@@ -131,6 +163,7 @@ export class IconTextareaComponent implements OnInit {
           // leave blank lines alone
           // treat a line that ends in semicolon as a sub-heading
           // show sub-heading in all caps but don't bullet it
+          // make sure there are blank lines before sub-headings except at the beginning
           case 'bullets':         
             offset = 0;
             switch(lineInfo){
@@ -153,9 +186,18 @@ export class IconTextareaComponent implements OnInit {
               default:
                 break;
             }
+            oldL = l.length;
+            l = this.makeIngrReplacements(l);
+            offset -= l.length - oldL;
+            if(!prevLineSubheading && (lineInfo & LEW_SEMICOLON) && (i>0 && sArray[i-1].length !== 0)){
+              newVal += '\n';
+              offset--;
+            }
+            prevLineSubheading = false;
             if(lineInfo !== L_EMPTY && lineInfo !== L_EMPTY+L_BULLET_ONLY){
               if(lineInfo & LEW_SEMICOLON){
                 l = l.toUpperCase();
+                prevLineSubheading = true
               } else {
                 l = String.fromCharCode(9679) + "  " + l;
                 offset -= 3;
@@ -172,6 +214,7 @@ export class IconTextareaComponent implements OnInit {
           // leave blank lines alone
           // treat a line that ends in semicolon as a sub-heading
           // show sub-heading in all caps but don't number it
+          // make sure there are blank lines before numbered lines and sub-headings except at the beginning
           case 'numbers':             
             offset = 0;
             let newNum = itemNum + ". ";
@@ -200,15 +243,25 @@ export class IconTextareaComponent implements OnInit {
                 newNum = '';
                 break;
             }
+            oldL = l.length;
+            l = this.makeInstReplacements(l);
+            offset -= l.length - oldL;
+            // make sure there is a blank line between instructions and before sub-headings
+            if(!prevLineSubheading && (newNum !=='' || (lineInfo & LEW_SEMICOLON)) && (i>0 && sArray[i-1].length !== 0)){
+              newVal += '\n';
+              offset--;
+            }
             if(newVal.length < this.selStart){ 
               this.selStart += (newNum.length-offset);  
               this.selEnd += (newNum.length-offset);
             }
+            prevLineSubheading = false;
             if(lineInfo & LEW_SEMICOLON){
               newVal += l.toUpperCase() + "\n"
               itemNum = 1;
+              prevLineSubheading = true;
             } else {
-              newVal += newNum + l + "\n";
+              newVal += newNum + l.substr(0,1).toUpperCase() + l.substr(1) + "\n";
             }
             break;
         }

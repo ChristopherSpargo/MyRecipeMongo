@@ -7,11 +7,10 @@
         class=" nav app-toolbar-theme app-main-short-toolbar hidden-md-up 
                d-flex flex-row justify-content-between align-items-center">
 
-                <!-- Display the Logo Text -->
-    <div class="d-flex flex-row justify-content-start align-items-start app-logo-area">
-      <div class="d-flex flex-column justify-content-start align-items-start app-logo-text-container ">
-        <div class="app-logo-text1 app-cursor-pointer" (click)="toggleAbout()">MyRecipeMongo</div>
-      </div>
+            <!-- Display the Logo Text -->
+    <div class="app-logo-text-container app-cursor-pointer" (click)="toggleAbout()"
+        data-toggle="tooltip" data-placement="top" title="Help" data-delay="200">
+      MyRecipeMongo
     </div>
                 <!-- Now some feature buttons -->
     <button type="button" class="btn app-bar-feature-button "  
@@ -65,7 +64,7 @@
           <li id="myLogsMenu">
             <button type="button" class="btn app-slide-menu-listitem" (click)="toggleLogsMenu()">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-logs-color app-menu-item-icon">local_dining</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon">local_dining</i>
                 Recipes
                 <i class="material-icons app-form-theme-text ml-1">{{!logsMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
@@ -76,7 +75,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('searchRecipes')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-logs-color app-menu-item-icon-sm">search</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
                       Recipe Search
                     </div>
                   </button>
@@ -85,7 +84,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('enterRecipe')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-logs-color app-menu-item-icon-sm">edit</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">edit</i>
                       Add a Recipe
                     </div>
                   </button>
@@ -96,7 +95,7 @@
           <li id="listsMenu">
             <button type="button" class="btn app-slide-menu-listitem" (click)="toggleListsMenu()">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-lists-color app-menu-item-icon ">list</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon ">list</i>
                 List Management
                 <i class="material-icons app-form-theme-text ml-1">{{!listsMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
@@ -107,7 +106,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('manageCategories')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-lists-color app-menu-item-icon-sm">description</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">description</i>
                       Manage Categories
                     </div>
                   </button>
@@ -116,7 +115,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('manageOrigins')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-lists-color app-menu-item-icon-sm">face</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">face</i>
                       Manage Origins
                     </div>
                   </button>
@@ -127,7 +126,7 @@
           <li id="accountMenu">
             <button type="button" class="btn app-slide-menu-listitem" (click)="toggleAccountMenu()">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-accounts-color app-menu-item-icon ">folder_open</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon ">folder_open</i>
                 Account
                 <i class="material-icons app-form-theme-text ml-1">{{!accountMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
@@ -138,7 +137,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('accountProfile')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-accounts-color app-menu-item-icon-sm">person</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">person</i>
                       Edit Profile
                     </div>
                   </button>
@@ -147,7 +146,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('accountEmail')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-accounts-color app-menu-item-icon-sm">mail_outline</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">mail_outline</i>
                       Change Email
                     </div>
                   </button>
@@ -156,7 +155,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('accountPassword')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-accounts-color app-menu-item-icon-sm">lock</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">lock</i>
                       Change Password
                     </div>
                   </button>
@@ -165,7 +164,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('accountDelete')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-accounts-color app-menu-item-icon-sm">delete_forever</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">delete_forever</i>
                       Delete Account
                     </div>
                   </button>
@@ -176,7 +175,7 @@
           <li>
             <button id="aboutMenuBtn" type="button" class="btn app-slide-menu-listitem" (click)="toggleAboutMenu()">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-about-color app-menu-item-icon ">info_outline</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon ">info_outline</i>
                 About
                 <i class="material-icons app-form-theme-text ml-1">{{!aboutMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
@@ -187,7 +186,7 @@
                   <button id="aboutMatchLogBtn" type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="showAbout('UsingMyRecipeMongo')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-about-color app-menu-item-icon-sm">local_dining</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">local_dining</i>
                       Using MyRecipeMongo
                     </div>
                   </button>
@@ -196,7 +195,7 @@
                   <button id="aboutContactBtn" type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="showAbout('ContactUs')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-about-color app-menu-item-icon-sm">contact_mail</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">contact_mail</i>
                       Contacting Us
                     </div>
                   </button>
@@ -204,7 +203,7 @@
                 <li>
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing app-disabled">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-about-color app-menu-item-icon-sm">person</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">person</i>
                         User: {{loggedIn() ? userEmail() : 'Not signed in'}}
                     </div>
                   </button>
@@ -213,7 +212,7 @@
                   <button type="button" class="btn app-small-font 
                                               app-slide-menu-listitem app-subitem-spacing app-disabled">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-about-color app-menu-item-icon-sm">build</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">build</i>
                       MyRecipeMongo Version: {{version}}
                     </div>
                   </button>
@@ -225,7 +224,7 @@
             <button id="signInBtn" type="button" aria-label="sign in"
                        class="btn app-slide-menu-listitem " (click)="menuItemSelected('login')">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-retro-ltblue app-menu-item-icon">person_outline</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon">person_outline</i>
                 Sign In
               </div>
             </button>
@@ -234,7 +233,7 @@
             <button id="signOutBtn" type="button" aria-label="sign out"
                        class="btn app-slide-menu-listitem " (click)="closeSlidenav(); logout($event)">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-retro-ltblue app-menu-item-icon">person</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon">person</i>
                 Sign Out
               </div>
             </button>
@@ -251,14 +250,14 @@
   <div  id="mainToolbarLg"
         class=" nav app-toolbar-theme app-main-short-toolbar hidden-sm-down 
                d-flex flex-row justify-content-between align-items-center">
-    <div class="d-flex flex-row justify-content-start align-items-start app-logo-area app-inherit-z">
-      <div class="d-flex flex-column justify-content-start align-items-start app-logo-text-container ">
-        <div class="app-logo-text1">MyRecipeMongo</div>
-      </div>
+    <div class="app-logo-text-container app-cursor-pointer" (click)="toggleAbout()"
+        data-toggle="tooltip" data-placement="top" title="Help" data-delay="200"
+    >
+      MyRecipeMongo
     </div>
     <ul id="mainMenu" class="nav app-white app-inherit-z">
-                <!-- Dropdown menu for private recipe features -->
-      <li id="myLogsMenu" ngbDropdown class="nav-item dropdown app-lt-border-right">
+                <!-- Dropdown menu for recipe features -->
+      <li id="myLogsMenu" ngbDropdown class="nav-item dropdown mx-2">
         <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" 
            href="#" role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
@@ -267,16 +266,16 @@
         </div>
       </li>
                 <!-- Dropdown menu for list management features -->
-      <li id="listsMenu" ngbDropdown class="nav-item dropdown app-lt-border-right">
+      <li id="listsMenu" ngbDropdown class="nav-item dropdown  mx-2">
         <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" href="#" 
-           role="button" aria-haspopup="true" aria-expanded="false">List Management</a>
+           role="button" aria-haspopup="true" aria-expanded="false">Lists</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
           <a role="button" class="dropdown-item app-dropdown-text" uiSref="manageCategories">Manage Categories</a>
           <a role="button" class="dropdown-item app-dropdown-text" uiSref="manageOrigins">Manage Origins</a>
         </div>
       </li>
                 <!-- Dropdown menu for account management features -->
-      <li id="accountMenu" ngbDropdown class="nav-item dropdown app-lt-border-right">
+      <li id="accountMenu" ngbDropdown class="nav-item dropdown mx-2">
         <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" href="#" 
            role="button" aria-haspopup="true" aria-expanded="false">Account</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
@@ -287,7 +286,7 @@
         </div>
       </li>
                 <!-- Dropdown menu for about features -->
-      <li ngbDropdown class="nav-item dropdown app-lt-border-right">
+      <li ngbDropdown class="nav-item dropdown mx-2">
         <a  id="aboutMenuBtn" ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" 
            href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
@@ -299,17 +298,20 @@
         </div>
       </li>
                 <!-- Button for Sign In/Sign Out function -->
-      <li id="signInBtn" *ngIf="!loggedIn()" class="nav-item">
+      <li id="signInBtn" *ngIf="!loggedIn()" class="nav-item mx-2">
         <a role="button" class="nav-link app-toolbar-text" (click)="closeSlidenav()" uiSref="login">Sign In</a>
       </li>
-      <li id="signOutBtn" *ngIf="loggedIn()" class="nav-item">
+      <li id="signOutBtn" *ngIf="loggedIn()" class="nav-item mx-2">
         <a role="button" class="nav-link app-toolbar-text" (click)="closeSlidenav(); logout($event)">Sign Out</a>
       </li>
     </ul>  
                 <!-- Icon for signed in/out status -->
-    <div id="authStatus" class="pr-2 d-flex flex-row align-items-center">
-      <i *ngIf="!loggedIn()" class="material-icons">person_outline</i>
-      <i *ngIf="loggedIn()" class="material-icons">person</i>
+    <div id="authStatus" class="mr-4 d-flex flex-row align-items-center">
+      <i *ngIf="!loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
+          data-toggle="tooltip" data-placement="top" title="Sign In" data-delay="200"
+          (click)="closeSlidenav()" uiSref="login">person_outline</i>
+      <i *ngIf="loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
+          data-toggle="tooltip" data-placement="top" title="Sign Out" data-delay="200"
+          (click)="closeSlidenav(); logout($event)">person</i>
     </div>
-  </div>
  </div>

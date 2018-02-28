@@ -1,9 +1,7 @@
-<!-- Template recipe-search, recipe-create states -->
-<!-- <app-waiting-indicator awi-open="!vC.viewOpen && !vC.viewWasOpen"></app-waiting-indicator> -->
-
 <div id="app-view-top"
-		 class="d-flex flex-column app-central-container app-fade-in"
-     [class.app-open]="viewOpen">
+     class="d-flex flex-column app-central-container app-fade-in"
+     [ngClass]="{'app-open': viewOpen,
+                 'app-no-display': printingRecipe}">
 
   <!-- Form Header -->
 
@@ -11,6 +9,7 @@
                     [headerIcon]      = "headerIcon"
                     [headerTitle]     = "headerTitle" 
                     headerTheme       = "app-recipes-header-theme"
+                    [appBarItems]     = "appBarItems"
                     [headerClose]     = "closeView">
                     
   </app-form-header>

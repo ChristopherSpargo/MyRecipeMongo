@@ -1,6 +1,6 @@
     <!-- Template used for gathering a list item. 
          Used with <app-list-item-field> DIRECTIVE -->
-<div class="app-list-item-field-container"
+  <div class="app-list-item-field-container"
       [ngClass]="{'app-list-item-height-2': fAllowNew && fActionButtons,
                   'app-list-item-height-1': !fAllowNew || !fActionButtons}">
 
@@ -38,6 +38,7 @@
             </ng-container>
             <ng-container *ngIf=" fListValue === 'idName' || fListValue === 'player' ">
               <option *ngFor="let item of fList"
+                      [disabled]="item.disabled"
                       value="{{item.id}}" class="app-form-theme-select-menu">
                       {{item.name}}
               </option>

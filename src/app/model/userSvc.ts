@@ -14,8 +14,8 @@ interface ParamObj {
 @Injectable()
 export class UserSvc {
 
-    constructor(private userInfo: UserInfo, private fireBaseSvc: FireBaseSvc, 
-      private utilSvc: UtilSvc) {
+    constructor(private userInfo: UserInfo, private fireBaseSvc: FireBaseSvc,
+       private utilSvc: UtilSvc) {
     }
 
   //******************************************************************************
@@ -139,28 +139,4 @@ export class UserSvc {
         return this.fireBaseSvc.changePassword(email, currPassword, newPassword);
       }
 
-      //remove database items associated with this user
-      //return: array of promises
-      // removeUserData(aUser : any){
-      //   var promises  = [];
-      //   var id = aUser.authData.uid;
-
-      //   promises.push(this.deleteTableItem(EVENT_TABLE_NAME, id));
-      //   promises.push(this.deleteTableItem(TOURNAMENT_TABLE_NAME, id));
-      //   promises.push(this.deleteTableItem(LOCATION_TABLE_NAME, id));
-      //   promises.push(this.deleteTableItem(PLAYER_TABLE_NAME, id));
-      //   return new Promise((resolve, reject) => {
-      //     this.queryMatchTable(id)
-      //     .then((data) => {
-      //       data.Items.forEach(function(m){
-      //         promises.push(this.deleteTableItem(this.MATCH_TABLE_NAME, id, m.sortDate));
-      //       });
-      //       Promise.all(promises)
-      //       .then((success) => {        //.finally?
-      //         resolve("Ok");})
-      //       .catch((error) => {
-      //         resolve("Ok");})
-      //     });
-      //   })
-      // }
 }

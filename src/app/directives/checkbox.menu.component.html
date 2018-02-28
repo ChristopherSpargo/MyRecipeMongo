@@ -2,7 +2,7 @@
   <div *ngIf="menuOpen" class="app-click-to-close-about" 
       (click)="closeMenu()"></div>
         
-  <!-- slid-out container for menu -->
+  <!-- container for menu -->
   <div class="d-flex flex-column app-catList-container app-fade-in
               app-whiteframe-2dp app-card-corners mb-1"
       [ngClass]="{'app-open': menuOpen,
@@ -38,7 +38,7 @@
             fType       = "button"
             fLink       = "Cancel"
             [fOnClick]  = "closeMenu"
-            fButtonCSS  = "app-white mb-1"
+            fButtonCSS  = "app-white"
             fLabelCSS   = "app-bigger-font"
             fAria       = "cancel">
       </app-fab> 
@@ -46,7 +46,7 @@
             fType       = "button"
             fLink       = "Ok"
             [fOnClick]  = "addSelections"
-            fButtonCSS  = "app-white mb-1"
+            fButtonCSS  = "app-white"
             fLabelCSS   = "app-bigger-font"
             fAria       = "Save">
       </app-fab> 

@@ -1,22 +1,24 @@
-  <div class="container app-tab-container px-0 pt-1 app-bg-gwhite"
+  <div class="app-tab-container px-0 pt-1 app-bg-gwhite"
        [ngClass]="{'app-open': menuOpen}">
 
 	      	<!-- Menu for list of recipes for View Recipes -->
 
     <div class="app-theme-inherit d-flex flex-column justify-content-start align-items-start app-frame pt-0">
-      <app-radio-group *ngIf="allowStatusChoice()"
-        fTitle      = "List Recipes that I have:"
-        fIcon       = "share"
-        fIconColor  = "app-accent1 app-icon-xsm mr-2"
-        [fOnChange] = "updateRecipeCountLabel"
-        [fOnFocus]  = "clearRequestStatus"
-        [fDividerAfter] = "false"
-        [(fModel)]  = "sharedFilter" 
-        fExtraCSS   = "app-smaller-font pb-2 pl-1"
-        fValues     = "Shared|Private|Either" 
-        fLabels     = "Shared|Not Shared|Either" 
-        fName       = "sFilter">
-      </app-radio-group>
+      <div class="app-width-98 mx-auto">
+        <app-radio-group *ngIf="allowStatusChoice()"
+          fTitle      = "List Recipes that I have:"
+          fIcon       = "share"
+          fIconColor  = "app-accent1 app-icon-xsm mr-3"
+          [fOnChange] = "updateRecipeCountLabel"
+          [fOnFocus]  = "clearRequestStatus"
+          [fDividerAfter] = "false"
+          [(fModel)]  = "sharedFilter" 
+          fExtraCSS   = "app-smaller-font pb-2"
+          fValues     = "Shared|Private|Either" 
+          fLabels     = "Shared|Not Shared|Either" 
+          fName       = "sFilter">
+        </app-radio-group>
+      </div>
       <div class="app-frame pt-0">
         <ul class="app-recipes-menu-ul">
           <li *ngFor="let r of menuRecipeList(); index as i"
@@ -44,7 +46,7 @@
                   Recipe From: {{getOriginName(r)}}
                 </div>
                 <div class="app-recipe-view-text app-recipe-view-origin">
-                  circa: {{getOriginDate(r)}}
+                  Circa: {{getOriginDate(r)}}
                 </div>
               </div>
               <div class="d-flex flex-row justify-content-between align-items-center px-1 py-1">

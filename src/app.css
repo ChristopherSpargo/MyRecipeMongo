@@ -3,53 +3,60 @@
 /*********************************************/
 /* STYLES MOSTLY RELATED TO: GENERAL STYLING */
 /*********************************************/
-/* z-indexes:
-    main background image ... -2
-    main background dim   ... -1
-    slide right windows   ... 3
-    slide left windows    ... 4
-    about fab             ... 5
-    slideout backdrop     ... 10
-    about container       ... 50
-    slide-down menu       ... 60
-    main toolbar          ... 75
+/* z-index: assignments:
+    print container          ... -20
+    main background image    ... -10
+    main background dim      ... -9
+    form inputs              ... 2
+    slide right windows      ... 3
+    slide left windows       ... 4
+    slideout click-to-close  ... 10
+    slide-down menu          ... 60
+    main toolbar             ... 75
+    recipe tab set           ... 1000
+    about click-to-close     ... 1100
+    about container          ... 1110
+    category list container  ... 1110
 */
-$lg-screen: (min-width: 960px);
+$xl-screen: (min-width: 1200px);
+$lg-screen: (min-width: 992px);
+$md-screen: (min-width: 768px);
+$sm-screen: (min-width: 576px);
 $modalActionBackground: transparent;
 $courtGreenLight: rgb(109, 149, 106);
 $helpHeaderColor: #5bc0de;
 /* $helpHeaderColor: rgba(156, 39, 176, 1); */
 $appBarIconSize: 30px !important;
-$headerDefaultBgColor: #009688;
-$headerDefaultColor: white;
-$toolbarDefaultColor: white;
-$primaryColor: #009688;
-$secondaryColor: #4DB6AC;
-$accentColor1: #AA00FF;
+$primaryColor: #1E88E5;
+$secondaryColor: #42A5F5;
+$tertiaryColor: #448AFF;
+$accentColor1: #FFC107;
 $accentColor2: #4A148C;
 $accentColor3: #BA68C8;
 $warnColor: #E53935;
 $textOnPrimary: white;
 $checkboxColor: #E6B800;
-$blackTextColor: rgba(0,0,0,.87) !important;
-$disabledTextColor: rgb(166,166,166);
-$recipeEditColor: #ba68c8;
-$recipeSearchColor: #ba68c8;
-/* $infoLabelColor: rgb(0,137,123); */
+$blackTextHigh: rgba(0,0,0,.87) !important;
+$blackTextMedium: rgba(0,0,0,.54) !important;
+$blackTextLow: rgba(0,0,0,.38) !important;
+$blackTextDivider: rgba(0,0,0,.12) !important;
+$whiteTextHigh: rgba(255,255,255,1) !important;
+$whiteTextMedium: rgba(255,255,255,.70) !important;
+$whiteTextLow: rgba(255,255,255,.50) !important;
+$disabledTextColor: $blackTextLow;
+$disabledIconColor: $blackTextLow;
+$modalHeaderColor: $tertiaryColor;
 $infoLabelColor: darkslategray;
-/* $inputLabelColor: rgba(0,137,123,.54); */
 $inputLabelColor: lightslategray;
-$sharedRecipesColor: rgba(0,110,110,1);
-$sharedRecipesColorMuted: rgba(0,110,110,.7);
-$accountsColor: rgba(190,66,56,.9);
-$listsColor: rgba(204,153,102,1);
-$recipesColor: #7B1FA2;
+$headerDefaultBgColor: $primaryColor;
+$headerDefaultColor: $textOnPrimary;
+$toolbarDefaultBgColor: $primaryColor;
+$toolbarDefaultColor: $textOnPrimary;
 
 html {
   position: relative;
   height: 100%;
-  min-height: 100%;
-}
+  min-height: 100%;}
 body {
   position: relative;
   height: 100%;
@@ -58,6 +65,9 @@ body {
   margin: 0;
   padding: 0;
   font-size: 16px;}  
+  @media ($sm-screen) {
+    body {
+      font-size: 18px;}}
   @media ($lg-screen) {
     body {
       font-size: 20px;}}
@@ -72,28 +82,29 @@ body {
   top: 0;
   left: 0;
   z-index: -10;
-  background-size: auto 100%;
+  background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-image: url(Assets/Images/recipeMeasuring.jpg);
   background-position: left top;
-  width: 960px;
-  height: 700px;
+  width: 1152px;
+  height: 752px;
 }
   @media ($lg-screen){
     .app-bg-container {
       width: 1920px;
       height: 1254px;}}
+      /* background-size: 100% auto;}}
   @media (orientation: landscape) {
     .app-bg-container {
-      background-size: 100% auto;}}
+      background-size: 100% auto;}} */
 .app-background-shadow {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: -10;
+  z-index: -9;
   background-color: rgba(0,0,0,.08);}
   @media ($lg-screen) {
     .app-background-shadow {
@@ -156,6 +167,9 @@ body {
   font-size: 40px;}
 .app-fab-icon-smm {
   font-size: 30px;}
+  @media($lg-screen) {
+    .app-fab-icon-smm {
+      font-size: 38px;}}
 .app-fab-sm {
   max-width: 30px;
   min-width: 30px;}
@@ -198,7 +212,7 @@ body {
 .app-visible {
   visibility: visible;}
 .app-no-display {
-  display: none;}
+  display: none !important;}
 .app-underlined, .app-underlined:hover, .app-underlined:focus {
   text-decoration: underline;}
 .app-lt-border-right {
@@ -218,7 +232,7 @@ body {
   height: 18px;
   width: 18px;
   font-size: 24px;
-  margin: 0 .35em .25em 0;}
+  margin: 0 .5em .25em 0;}
 .app-card-corners {
   border-radius: 3px 3px 3px 3px !important;}
 .app-card-bottom-corners {
@@ -245,6 +259,10 @@ body {
   flex: 1 1 80%;
   max-width: 80%;
   width: 80%;}
+.app-width-90 {
+  flex: 1 1 90%;
+  max-width: 90%;
+  width: 90%;}
 .app-width-98 {
   flex: 1 1 98%;
   max-width: 98%;
@@ -257,10 +275,20 @@ body {
   margin-left: 5%;}
 .app-all-paddings-8px {
   padding: 8px;}
+.app-mt-2 {
+  margin-top: 2px!important;}
+.app-mb-2 {
+  margin-bottom: 2px!important;}
 .app-mt--2 {
-  margin-top: -2px;}
+  margin-top: -2px!important;}
+.app-mt--4 {
+  margin-top: -4px!important;}
+.app-mb--2 {
+margin-bottom: -2px!important;}
+.app-mb--4 {
+  margin-bottom: -4px!important;}
 .app-bt-gray-1px {
-  border-top: 1px solid gray;}
+border-top: 1px solid gray;}
 .app-no-overflow {
   overflow: hidden;}
 .app-no-overflow-x {
@@ -298,6 +326,9 @@ body {
   z-index: inherit;
   background-color: transparent;
   padding: 0px !important;
+  margin-right: 2%;
+  margin-left: auto;
+  cursor: pointer;
   height: $appBarIconSize;
   width: $appBarIconSize;
   max-height: $appBarIconSize;
@@ -353,48 +384,37 @@ body {
 /***************************************/
 /* Themes */
 
-  /* Darker toolbar theme */
 .app-toolbar-theme {
-  /* background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.01))!important; */
-  background-color: $headerDefaultBgColor;
-  color: $headerDefaultColor !important;} 
+  background-color: $toolbarDefaultBgColor;
+  color: $toolbarDefaultColor !important;} 
   .app-toolbar-text {
-    color: $headerDefaultColor !important;}
+    color: $toolbarDefaultColor !important;}
   .app-dropdown-text {
-    color: $headerDefaultColor !important;}
+    color: $toolbarDefaultColor !important;}
     .app-dropdown-text:hover {
-      background-color: rgba(0,0,0,.75) !important;
+      background-color: rgba(0,0,0,.35) !important;
     }
   .app-dropdown-disabled-text {
     color: rgba(255,255,255,.75) !important;}
     .app-dropdown-disabled-text:hover {
-      background-color: transparent !important;
-    }
+      background-color: transparent !important;}
   .app-toolbar-submenu-theme {
     padding-top: 0;
     border: 0;
-    background-color: transparent !important;
+    background-color: $toolbarDefaultBgColor;
     color: $toolbarDefaultColor !important;} 
 .app-theme-inherit {
   background-color: inherit;
   color: inherit;}
 /* Main header and menus */
-.app-logo-area {
-  z-index: inherit;
-  width: 45%;
-  padding-left: 5%;}
-  @media ($lg-screen) {
-    .app-logo-area {
-      width: 15%;}}
 .app-logo-text-container {
+  z-index: inherit;
   font-family: 'MV Boli';
-  margin-top: -4px;
   font-style: italic;
-  margin-bottom: 0px;}
-.app-logo-text1 {
   font-size: 1.2em;
-  margin-top: 0px;
-  margin-bottom: 0px;}
+  padding-left: 5%;
+  margin-top: 0;
+  margin-bottom: 0;}
 .app-main-short-toolbar {
   z-index: 75;
   min-height: 60px;}
@@ -497,35 +517,21 @@ body {
   border-color: rgba(211,211,211,.2);
   color: rgba(0,0,0,.87) !important;
   }
-  .app-form-header-theme, .app-recipes-header-theme, .app-account-header-theme, .app-lists-header-theme,
-   .app-shared-recipes-settings-theme, .app-recipe-action-modal-theme, .app-simple-modal-theme {
+  .app-form-header-theme, .app-recipes-header-theme, .app-account-header-theme,
+  .app-lists-header-theme, .app-print-header-theme {
     font-size: 1.25em !important;
     background-color: $headerDefaultBgColor;
     border-bottom: 2px solid $headerDefaultBgColor;
     color: $headerDefaultColor;
   }
-  .app-recipes-header-theme {
-    /* border-color: $recipesColor;
-    background-color: $recipesColor; */
-  }
-  .app-shared-recipes-settings-theme {
-    /* border-color: $sharedRecipesColor;
-    background-color: $sharedRecipesColor; */
+  .app-print-header-theme {
+    background-color: white;
+    color: $blackTextHigh;
   }
   .app-account-header-theme {
-    /* border-color: $accountsColor;
-    background-color: $accountsColor; */
   }
   .app-lists-header-theme {
-    /* border-color: $listsColor;
-    background-color: $listsColor; */
   }
-  .app-simple-modal-theme {
-    color: $textOnPrimary;
-    background-color: $primaryColor;}    
-  .app-recipe-action-modal-theme {
-    color: $textOnPrimary;
-    background-color: $primaryColor;}    
   .app-form-theme-text {
     -webkit-text-fill-color: rgba(0,0,0,.87) !important; 
     color: rgba(0,0,0,.87) !important;}
@@ -564,6 +570,9 @@ body {
   min-width: 100%;
   left: 0;
   top: 0;}
+.app-item-list-clear-btn {
+  position: relative;
+  top: -20px;}
 .app-z--5 {
   z-index: -5!important;}
 .app-z--1 {
@@ -697,7 +706,7 @@ body {
 $appFormCloseSize: 36px !important;
 $appFormCloseSizeLg: 40px !important;
 $appFormCloseIconSize: 34px !important;
-$appFormCloseSizeIconLg: 38px !important;
+$appFormCloseIconSizeLg: 38px !important;
 .app-form-close-button {
   margin: 0px;
   padding: 0px;
@@ -741,9 +750,11 @@ $appFormCloseSizeIconLg: 38px !important;
 .app-form-title {
   margin-bottom: 0px;
   margin-top: 0px;
-  font-size: 1.25em;
-  text-align: center!important;
+  font-size: 1.1em;
   font-weight: normal;}
+  @media ($lg-screen){
+    .app-form-title {
+      font-size: 1.25em;}}
 .app-noscroll-frame-center {  
   width: 100%;
   overflow: hidden;}
@@ -755,19 +766,35 @@ $appFormCloseSizeIconLg: 38px !important;
   @media ($lg-screen) {
     .app-scroll-frame-center {
       max-height: calc(100% - 61px);}}
-.app-central-container {
+.app-print-container {
+  position: absolute;
+  background-color: white;
+  top: 0;
+  z-index: -20;}
+  .app-print-container.app-open {
+    z-index: 2000;}
+    @media ($lg-screen) {
+      .app-print-container {
+        left: 20%;}}
+  .app-central-container, .app-central-container-sm {
   width: 100%;
   min-height: 100%;
   margin: auto;}
-  @media (min-width: 600px) {
-    .app-central-container,.app-central-container-130 {
+  @media ($sm-screen) {
+    .app-central-container-sm {
+      width: 60%;}
+    .app-central-container {
+      width: 80%;}}
+  @media ($md-screen) {
+    .app-central-container-sm {
+      width: 50%;}
+    .app-central-container {
+      width: 70%;}}
+  @media ($xl-screen) {
+    .app-central-container-sm {
+      width: 40%;}
+    .app-central-container {
       width: 60%;}}
-  @media ($lg-screen) {
-    .app-central-container,.app-central-container-130 {
-      width: 50%;}}
-  @media (min-width: 1600px) {
-    .app-central-container,.app-central-container-130 {
-      width: 40%;}}
 .app-whiteframe-2dp {
   box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
               -1px 0px 0px 0 rgba(0,0,0,.2),
@@ -796,10 +823,8 @@ $appFormCloseSizeIconLg: 38px !important;
 
   /* Lighter About panel theme */
 .app-about-header-theme {
-  padding: 4px 0;
-  border-bottom: 2px solid;
-  background-color: $accentColor3;
-  border-color:  $accentColor3;  
+  padding: 4px 0 6px 0;
+  background-color: $secondaryColor;
   color: $headerDefaultColor;}
   .app-about-body-theme {
     background-color: white;
@@ -816,15 +841,16 @@ $appFormCloseSizeIconLg: 38px !important;
 .app-about-heading-icon-area {
   margin-right: 10px;}
 .app-about-heading-text {
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 4px;
-  font-size: 110%;}
+  font-size: 115%;}
 .app-about-text-button {
   vertical-align: middle;
   font-size: 80%;}
-.app-about-heading-button {
+.app-about-heading-btn {
   font-weight: normal !important;
-  background-color: rgb(211,211,211);
+  background-color: $primaryColor;
+  color: $textOnPrimary;
   border-radius: .25rem .25rem;
   vertical-align: middle;
   font-size: 80%;}
@@ -845,7 +871,11 @@ $appFormCloseSizeIconLg: 38px !important;
   @media ($lg-screen) {
     .app-about-text-icon-label {
       top: 6px;}}
-.app-about-text-icon-button {
+.app-about-text-icon-btn {
+  padding: 2px 10px 2px 6px;
+  margin-top: 2px;
+  border-radius: .25em;}
+.app-about-text-icon-chip {
   color: $headerDefaultColor;
   margin: 2px 0 0 0;
   padding: 0 6px;
@@ -854,6 +884,9 @@ $appFormCloseSizeIconLg: 38px !important;
   border: 2px solid transparent;
   line-height: 20px;
   min-width: 40px;}
+.app-about-fab-container {
+  display: inline-block;
+  margin-top: 1px;}
 .app-about-fab-icon {
   position: relative;
   font-size: 23px;}
@@ -868,12 +901,14 @@ $appFormCloseSizeIconLg: 38px !important;
   cursor: text !important;
   font-size: 24px;
   max-height: 24px;
-  margin: 0 6px 0 0;}
+  margin: -4px 6px 0 0;}
   @media ($lg-screen) {
     .app-about-icon {
       font-size: 30px;
       max-height: 30px;
-      margin: 0 6px 0 0;}}
+      max-width: 30px;}
+    .app-about-checkbox-icon {
+      font-size: 24px;}}
 .app-about-icon-color {
   color: $helpHeaderColor;}
 .app-about-radio-icon {
@@ -892,7 +927,7 @@ $appFormCloseSizeIconLg: 38px !important;
   max-height: 20px;
   max-width: 20px;
   font-size: 16px;
-  margin: 0 6px 0 2px;
+  margin: -4px 6px 0 2px;
   color: rgba(0,0,0,.6);
   background-color: #ddd; 
   font-weight: 600;
@@ -904,17 +939,17 @@ $appFormCloseSizeIconLg: 38px !important;
   top: 0px;
   z-index: 1110;
   width: 90%;
-   background-color: white; 
+  background-color: white; 
   bottom: 0px;}
-  @media (min-width: 600px) {
+  @media ($sm-screen) {
     .app-about-container {
-      width: 60%;}}
-  @media ($lg-screen) {
+      width: 65%;}}
+  @media ($md-screen) {
     .app-about-container {
       width: 40%;}}
-  @media (min-width: 1200px) {
+  /* @media only screen and ($lg-screen) {
     .app-about-container {
-      width: 33%;}}
+      width: 40%;}} */
 .app-scroll-frame-left {
   width: 100%;
   bottom: 0px;
@@ -929,10 +964,14 @@ $appFormCloseSizeIconLg: 38px !important;
   width: 100%;
   z-index: 1100;
   background-color: transparent;}
-.app-about-text-divider {
-  width: 100%;
-  margin: 2px auto 2px auto;
-  border-bottom: 1px solid rgba(0,0,0,.12);}
+  .app-about-text-divider {
+    width: 100%;
+    margin: 2px auto 2px auto;
+    border-bottom: 1px solid $blackTextDivider;}
+  .app-about-text-divider-sm {
+    width: 75%;
+    margin: 2px auto 2px auto;
+    border-bottom: 1px solid $blackTextDivider;}
 /******************************************/
 /* STYLES MOSTLY RELATED TO: RECIPE ENTRY */
 /******************************************/
@@ -1030,8 +1069,8 @@ $appFormCloseSizeIconLg: 38px !important;
 .app-recipe-image-container {
   padding: 0 0 .5rem;}
 .app-recipe-image {
-  max-width: 100%;
-  max-height: 1000px;}
+  width: 100%;
+  max-height: 2000px;}
 .app-recipes-menu-ul {
   width: 100%;
   min-height: 100%;
@@ -1054,11 +1093,21 @@ $appFormCloseSizeIconLg: 38px !important;
             3px 3px 0px 0 rgba(0,0,0,.12), 
             0 4px 0px 0 rgba(0,0,0,.08);
 overflow: hidden;}
+.app-recipes-print-card {
+  display: block;
+  text-transform: none;
+  padding: 0;
+  background-color: white;
+  color: inherit;
+  margin: 0;
+  width: 98%;
+  border-radius: 3px 3px 3px 3px;
+  overflow: hidden;}
 .app-recipe-menu-item-header {
   width: 100%;}
 .app-recipe-menu-image {
-  max-width: 100%;
-  max-height: 1000px;}
+  width: 100%;
+  max-height: 2000px;}
 .app-recipe-menu-item-title {
   color: firebrick;
   line-height: 1em;
@@ -1077,8 +1126,8 @@ overflow: hidden;}
 .app-recipe-view-main-image {
   float: left;
   margin: -.25rem .5rem 0 -.25rem;
-  max-width: 50%;
-  max-height: 200px;}
+  max-width: 60%;
+  max-height: 250px;}
 .app-recipe-view-categories {
   font-style: normal;}
 .app-recipe-view-origin {
@@ -1092,8 +1141,7 @@ overflow: hidden;}
   font-style: normal;}
 .app-recipe-view-notes-header {
   font-style: normal;
-  font-weight: 500;
-  font-size: .85em;}
+  font-size: 1.25em;}
 .app-recipe-view-recipe-notes {
   font-size: .65em;}
 .app-recipe-view-pics-header {
@@ -1106,33 +1154,34 @@ overflow: hidden;}
   transform: translate3d(-7.5%,0,0) scale(.85);}
 .app-catList-container {
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   z-index: 1110;
   width: 65%;
-  max-height: 95%;
+  max-height: 425px;
   background-color: white;}
   @media ($lg-screen) {
     .app-catList-container {
-      width: 40%;}}
+      max-height: 500px;
+      width: 45%;}}
 .app-catlist-header-theme {
-  padding: 4px 0;
-  border-bottom: 2px solid;
-  background-color: $accentColor2;
-  border-color: $accentColor2;  
+  padding: 4px 0 6px 0;
+  background-color: slategray;
   color: white;}
-  .app-catlist-body-theme {
+    .app-catlist-body-theme {
     background-color: white;
     line-height: 1.15em;
     padding: 0 8px 0;
     color: rgba(0,0,0,.87);}
   .app-catlist-footer-theme {
-    padding: 4px 0;
-    border-top: 2px solid;
-    background-color: $accentColor2;
-    border-color: $accentColor2;  
+    padding: 8px 0 6px 0;
+    line-height: 1em;
+    background-color: slategray;
     color: white;}
-.app-catlist-label {
+    @media ($lg-screen) {
+      .app-catlist-footer-theme {
+        padding: 12px 0 10px 0;}}
+  .app-catlist-label {
   font-weight: 500;}
 .app-recipe-image-controls {
   max-width: 100%;}
@@ -1168,20 +1217,23 @@ overflow: hidden;}
 /* STYLES MOSTLY RELATED TO: UTILITIES */
 /***************************************/
 .app-dialog-container {
-  /* -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
-  overflow-y: auto; */
-}
+border: 1px solid $blackTextDivider;}
 .app-confirm-dialog-content {
   text-align: center;
-  min-height: 30px;}
+  min-height: 80px;}
 .app-dialog-header {
   border: 0;
   padding: 0;
-  border-radius: .3em .3em 0 0;}
+  font-size: 1.25em !important;
+  border-bottom: 1px solid $blackTextDivider;
+  color: $textOnPrimary;
+  background-color: $modalHeaderColor;
+}
 .app-dialog-footer {
-  background-color: $primaryColor;
-  border-radius: 0 0 .3em .3em;}
+  background-color: $modalHeaderColor;
+  color: $textOnPrimary;
+  border-top: 1px solid $blackTextDivider;
+}
 /***************************************/
 /* STYLES MOSTLY RELATED TO: COLORS    */
 /***************************************/
@@ -1189,6 +1241,22 @@ overflow: hidden;}
   cursor: default;}
 .app-cursor-pointer {
   cursor: pointer;}
+.app-black-text-high {
+  color: $blackTextHigh;}
+  .app-black-text-medium {
+    color: $blackTextMedium;}
+    .app-black-text-low {
+      color: $blackTextLow;}
+      .app-divider-black {
+      color: $blackTextDivider;}
+.app-white-text-high {
+  color: $whiteTextHigh;}
+  .app-white-text-medium {
+    color: $whiteTextMedium;}
+    .app-white-text-low {
+      color: $whiteTextLow;}
+.app-bold {
+  font-weight: 500;}
 .app-disabled {
   cursor: default !important;
   color: $disabledTextColor !important;}
@@ -1198,18 +1266,12 @@ overflow: hidden;}
   color: transparent !important;}
 .app-faint-text {
   color: rgba(0,0,0,.09) !important;}
-.app-faint-white-text {
-  color: rgba(255,255,255,.55) !important;}
-.app-recipe-edit-color {
-  color: $recipeEditColor}
-.app-recipe-search-color {
-  color: $recipeSearchColor}
+.app-active-input-icon-color {
+  color: $accentColor1}
 .app-lists-color {
   color: rgba(204,153,102,1);}
 .app-logs-color {
   color: rgba(98,134,95,.9);}
-.app-shared-recipes-color {
-  color: $sharedRecipesColor}
 .app-accounts-color {
   color: rgba(190,66,56,.9);}
 .app-about-color {
@@ -1263,8 +1325,14 @@ overflow: hidden;}
   color: darkslateblue;}
 .app-lightslategray {
   color: lightslategray;}
+.app-darkslategray {
+  color: darkslategray;}
+.app-menu-icon-color {
+color: lightslategray;}
+.app-disabled-icon-color {
+  color: $disabledIconColor;}
 .app-retro-cream {
-  color: #fef7e6;}
+color: #fef7e6;}
 .app-bg-retro-cream {
   background-color: #fef7e6;}
 .app-retro-dark-cream {
@@ -1293,7 +1361,11 @@ overflow: hidden;}
   color: $secondaryColor !important;}
 .app-bg-secondary {
   background-color: $secondaryColor !important;}
-.app-accent1 {
+.app-tertiary {
+  color: $tertiaryColor !important;}
+.app-bg-tertiary {
+  background-color: $tertiaryColor !important;}
+  .app-accent1 {
   color: $accentColor1 !important;}
 .app-checkbox {
   color: $checkboxColor !important;}
@@ -1308,8 +1380,9 @@ overflow: hidden;}
   flex-wrap: wrap;}
 /*modifications for ngb-bootstrap modal*/
 .modal-backdrop.show {
-  opacity: .7;}
+  opacity: .4;}
 .modal-dialog {
+  max-width: 500px !important;
   margin: 25% 2%;}
   @media ($lg-screen) {
     .modal-dialog {
@@ -1320,9 +1393,6 @@ overflow: hidden;}
 .modal-content {   
   background-color: transparent;
   border: 0;}
-.modal-footer {
-  padding: 10px;
-  border-top: 1px solid gray;}
 .app-modal-action-btn {
   cursor: pointer;
   background-color: $modalActionBackground;}
@@ -1333,6 +1403,8 @@ overflow: hidden;}
     outline: none;
     box-shadow: none;} 
 #toast-container > div {
+  opacity: 1;
+  box-shadow: 0 0 12px #000000;
   min-width: 20em !important;}
   @media($lg-screen) {
     #toast-container > div {
@@ -1341,6 +1413,7 @@ overflow: hidden;}
   font-style: italic;}
 /*modifications for ngb-bootstrap tabs*/
 .nav-tabs {
+  border: 0 !important;
   background-color: $secondaryColor;
 }
  .nav-link {
@@ -1360,7 +1433,11 @@ overflow: hidden;}
 .nav-tabs .nav-item {
   margin: .5em .25em .5em .25em;}
 .app-tab-container {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
   visibility: hidden;
+  min-width: 100%;
 }
   .app-tab-container.app-open {
     visibility: visible;

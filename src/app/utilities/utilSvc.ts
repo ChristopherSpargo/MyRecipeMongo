@@ -158,9 +158,35 @@ export class UtilSvc {
       this.displayUserMessages();
     };
 
+    // close open toast message and clear the user messages object
+    closeUserMessage = () => {
+      clearTimeout(this.user.openToastTimer);
+      this.user.openToastTimer = null;
+      this.toasterService.clear(this.user.openToastId);
+      this.user.openToastId = null;
+    }
+
+    // remove the given property from the messages object
+    removeUserMessage = (key: string) => {
+      if(this.user.messages && this.user.messages[key]){
+        delete this.user.messages[key];   //remove this message
+      }
+    }
+
+    // display a toast that indicates Working...
+    displayWorkingMessage = (show: boolean, msg : string = 'Working') => {
+      this.closeUserMessage();                  // close the open message
+      this.removeUserMessage('workingMessage'); // remove working message key from messages object
+      if(show){
+        this.user.messages = null;              // kill any pending messages
+        this.setUserMessage('workingMessage', msg); // place working message into messages object
+      }
+      this.displayUserMessages();               // initiate message display
+    }
+
     //display a toast for each message in user.messages object
     displayUserMessages() : void {
-      if ((this.user.messages !== null) && (!this.user.messageOpen)) {
+      if ((this.user.messages !== null) && (this.user.openToastId === null)) {
         var self = this;
         var msgArray = Object.getOwnPropertyNames(this.user.messages);  //get messages from object to array
         if (msgArray.length) {    //if there are any messages left...
@@ -169,12 +195,33 @@ export class UtilSvc {
           var msgDuration = 2000;
           var key = msgArray[0];  //get next message from messages object
           switch (key) {          //decide which message to display
+
+            // GENERAL messages
+            case 'workingMessage':
+              msgText = this.user.messages[key] + " ...";
+              msgDuration = 5000;
+              break;
+            case 'noWriteAccess':
+              msgText = "This account has no WRITE access.";
+              msgType = 'error';
+              msgDuration = 2500;
+              break;
+            case 'databaseAccessError':
+              msgText = "Database access error";
+              msgType = 'error';
+              break;
+            case 'featureNotAvailable':
+              msgText = "Feature is not available";
+              msgType = 'error';
+              break;
+
+            // SIGN-IN related messages
             case 'signInSuccess':
-              msgText = "You're in!";
+              msgText = "You are now signed in.";
               msgType = 'success';
               break;
             case 'signOutSuccess':
-              msgText = "You're out...";
+              msgText = "You are now signed out.";
               msgType = 'success';
               break;
             case 'noProfile':
@@ -197,49 +244,11 @@ export class UtilSvc {
               msgText = "Please sign in to manage lists.";
               msgDuration = 2500;
               break;
+
+              // ACCOUNT function related messages
             case 'profileUpdated':
               msgText = "Profile successfully updated.";
               msgType = 'success';
-              break;
-            case 'databaseAccessError':
-              msgText = "Database access error";
-              msgType = 'error';
-              break;
-            case 'errorReadingList':
-              msgText = "Error reading "+this.user.messages[key]+" list";
-              msgType = 'error';
-              break;
-            case 'initializingList':
-              msgText = "Initializing "+this.user.messages[key]+" list";
-              msgType = 'error';
-              break;
-            case 'initializingList':
-              msgText = "Error initializing "+this.user.messages[key]+" list";
-              msgType = 'error';
-              break;
-            case 'errorupdatingList':
-              msgText = "Error updating "+this.user.messages[key]+" list";
-              msgType = 'error';
-              break;
-            case 'listItemAdded':
-              msgType = 'success';
-              msgText = this.user.messages[key]+" added to list.";
-              break;
-            case 'listItemUpdated':
-              msgText = this.user.messages[key]+" updated.";
-              msgType = 'success';
-              break;
-            case 'listItemRemoved':
-              msgText = this.user.messages[key]+" removed from list.";
-              msgType = 'success';
-              break;
-            case 'noRecipesFound':
-              msgText = "No recipes match this search.";
-              msgType = 'warning';
-              break;
-            case 'errorReadingRecipesTable':
-              msgText = "Error reading Recipes table.";
-              msgType = 'error';
               break;
             case 'profileUpdateFail':
               msgText = "Profile not updated.";
@@ -281,6 +290,82 @@ export class UtilSvc {
               msgText = "Unable to delete user data.";
               msgType = 'error';
               break;
+            
+            // CATEGORY and ORIGIN list related messages
+            case 'errorReadingList':
+              msgText = "Error reading "+this.user.messages[key]+" list";
+              msgType = 'error';
+              break;
+            case 'initializingList':
+              msgText = "Initializing "+this.user.messages[key]+" list";
+              msgType = 'error';
+              break;
+            case 'errorInitializingList':
+              msgText = "Error initializing "+this.user.messages[key]+" list";
+              msgType = 'error';
+              break;
+            case 'errorupdatingList':
+              msgText = "Error updating "+this.user.messages[key]+" list";
+              msgType = 'error';
+              break;
+            case 'listItemAdded':
+              msgType = 'success';
+              msgText = this.user.messages[key]+" added to list.";
+              break;
+            case 'listItemUpdated':
+              msgText = this.user.messages[key]+" updated.";
+              msgType = 'success';
+              break;
+            case 'listItemRemoved':
+              msgText = this.user.messages[key]+" removed from list.";
+              msgType = 'success';
+              break;
+            case 'errorDeletingOrigins':
+              msgText = "Error deleting origins table.";
+              msgType = 'error';
+              break;
+            case 'errorDeletingCategories':
+              msgText = "Error deleting categories table.";
+              msgType = 'error';
+              break;
+            case 'errorUpdatingOriginList':
+              msgText = "Error updating origin list";
+              msgType = 'error';
+              break;
+            case 'errorUpdatingCategoryList':
+              msgText = "Error updating category list";
+              msgType = 'error';
+              break;
+            case 'errorReadingOriginList':
+              msgText = "Error reading origin list";
+              msgType = 'error';
+              break;
+            case 'errorReadingCategoryList':
+              msgText = "Error reading category list";
+              msgType = 'error';
+              break;
+
+            // RECIPE access related messages
+            case 'noRecipesFound':
+              msgText = "No recipes match this search.";
+              msgType = 'warning';
+              break;
+            case 'errorReadingRecipesForUpdate':
+              msgText = "Error reading recipes for update.";
+              msgType = 'warning';
+              break;
+            case 'errorReadingRecipesForDelete':
+              msgText = "Error reading recipes for delete.";
+              msgType = 'warning';
+              break;
+            case 'errorUpdatingRecipes':
+              msgText = "Error updating affected recipes.";
+              msgType = 'warning';
+              break;
+            case 'errorReadingRecipesTable':
+              msgText = "Error reading Recipes table.";
+              msgType = 'error';
+              break;
             case 'errorReadingRecipe':
               msgText = "Error reading recipe.";
               msgType = 'error';
@@ -297,8 +382,16 @@ export class UtilSvc {
               msgText = "Error compressing picture \'" + this.user.messages[key] + "\'.";
               msgType = 'error';
               break;
+            case 'recipeDeleted':
+              msgText = "Recipe deleted.";
+              msgType = 'success';
+              break;
             case 'errorDeletingRecipe':
               msgText = "Recipe not deleted.";
+              msgType = 'error';
+              break;
+            case 'errorDeletingRecipes':
+              msgText = "Recipes not deleted.";
               msgType = 'error';
               break;
             case 'recipeSaved':
@@ -309,17 +402,20 @@ export class UtilSvc {
               msgText = "Recipe not saved.";
               msgType = 'error';
               break;
-            case 'noWriteAccess':
-              msgText = "This account has no WRITE access.";
-              msgType = 'error';
-              msgDuration = 2500;
-              break;
             case 'recipeShared':
               msgText = "Copy of recipe is now shared";
               msgType = 'success';
               break;
             case 'recipeMadePrivate':
               msgText = "Shared copy of recipe removed";
+              msgType = 'success';
+              break;
+            case 'sharedCopyUpdated':
+              msgText = "Shared copy of recipe updated";
+              msgType = 'success';
+              break;
+            case 'errorUpdatingSharedCopy':
+              msgText = "Error saving Shared copy of recipe";
               msgType = 'success';
               break;
             case 'recipeRestrictionsUpdated':
@@ -334,8 +430,8 @@ export class UtilSvc {
               msgText = "Error making shared copy of recipe";
               msgType = 'error';
               break;
-            case 'errorUpdatingSharedRecipe':
-              msgText = "Error updating private version of recipe";
+            case 'errorUpdatingPersonalRecipe':
+              msgText = "Error updating personal version of recipe";
               msgType = 'error';
               break;
             case 'errorDeletingSharedCopy':
@@ -344,10 +440,6 @@ export class UtilSvc {
               break;
             case 'errorReadingSharedCopy':
               msgText = "Error reading shared copy of recipe";
-              msgType = 'error';
-              break;
-            case 'featureNotAvailable':
-              msgText = "Feature is not available";
               msgType = 'error';
               break;
             default:
@@ -360,12 +452,12 @@ export class UtilSvc {
             // body: "<div class='app-toast-msg'>" + msgText + "</div>",
             // bodyOutputType: BodyOutputType.TrustedHtml
           };
-          this.user.messageOpen = true;
-          this.toasterService.pop(toast);
-          setTimeout(() => {
-            delete this.user.messages[key];   //remove this message
-            this.user.messageOpen = false;
-            this.toasterService.clear();
+          this.user.openToastId = this.toasterService.pop(toast).toastId;
+          this.user.openToastTimer = setTimeout(() => {
+            this.removeUserMessage(key);
+            this.toasterService.clear(this.user.openToastId);
+            this.user.openToastId = null;
+            this.user.openToastTimer = null;
             self.displayUserMessages();     //see if there are any more messages
           }, msgDuration)
         } 

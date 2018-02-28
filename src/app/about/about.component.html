@@ -16,7 +16,7 @@
           <div class="d-flex flex-row justify-content-between align-items-center">
             <div class="d-flex flex-row justify-content-start align-items-center ml-2"> 
               <app-about-text-icon fIcon="{{helpContextIcon()}}" 
-                                   fColor="app-white" fSize="L"></app-about-text-icon>
+                                   fColor="app-white" fSize="XL"></app-about-text-icon>
               <div flex class="ml-2 d-flex app-about-title ">{{helpContextTitle()}}</div> 
             </div>
             <div class="d-flex flex-row justify-content-center align-items-center">
@@ -30,7 +30,7 @@
     </div> 
 
     <!--Section for context specific help information-->
-    <div class="app-about-body-theme app-scroll-frame-left my-2">
+    <div class="app-about-body-theme app-scroll-frame-left py-2">
       <div *ngIf="helpContext() === 'UsingMyRecipeMongo'"   ><app-about-my-recipe-mongo></app-about-my-recipe-mongo></div>
       <div *ngIf="helpContext() === 'ContactUs'"            ><app-about-contact-us></app-about-contact-us></div> 
       <div *ngIf="helpContext() === 'ManageCategories'"     ><app-about-manage-categories></app-about-manage-categories></div>

@@ -93,14 +93,18 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
                             this.currentRecipe.originListName(r.origin), 
                             this.utilSvc.displayOriginDate(r.originDate), 'Delete')
     .then((deleteIt) => {
+      this.utilSvc.displayWorkingMessage(true,'Deleting Recipe');
       this.recipeSvc.deleteRecipe(r._id)
       .then((success) => {
         this.menuRecipeList().splice(index, 1);    //remove item from Recipe array
         this.emit('updateMenuTabLabel');
         if(this.menuRecipeList().length === 0){this.emit('selectSearchTab');} // menu now empty
+        this.utilSvc.setUserMessage("recipeDeleted");
+        this.utilSvc.displayWorkingMessage(false);
       })
       .catch((failure) => {
-        this.utilSvc.displayThisUserMessage("errorDeletingRecipe");
+        this.utilSvc.setUserMessage("errorDeletingRecipe");
+        this.utilSvc.displayWorkingMessage(false);
       });
     })
     .catch((dontDelete) => {}
@@ -118,21 +122,18 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
   }
 
   public setSelectedRecipe = (index : number) => {
-    let filter = <RecipeFilterData>{};
     this.currentRecipe.selectedIndex = index;
     this.currentRecipe.recipe = this.menuRecipeList()[index];
-    if(this.currentRecipe.recipe.data.numExtras && ! this.currentRecipe.recipe.data.extraImages.length){
-      filter.recordId = this.currentRecipe.recipe.data._id;
-      filter.projection = {extraImages: 1};
-      this.recipeSvc.getRecipes(filter)
-      .then((data : RecipeData[]) => {
-        this.currentRecipe.recipe.data.extraImages = data[0].extraImages.map(Recipe.imageToAscii);
+    this.recipeSvc.readExtraImages(this.currentRecipe.recipe.data)
+    .then((data) => {
+      if(data){     // images actually read?
+        this.currentRecipe.recipe.data = data;
         this.emit('extraImagesReady');
-      })
-      .catch((errorReadingExtraImages) => {
-        this.utilSvc.displayThisUserMessage('errorReadingExtraImages');
-      })
-    }
+      }
+    })
+    .catch((errorReadingExtraImages) => {
+      this.utilSvc.displayThisUserMessage('errorReadingExtraImages');
+    })
     this.viewSelectedRecipe();
   }
 
@@ -168,108 +169,48 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
   public makeRecipeShared = (recipe : Recipe) => {
     var rd = recipe.getRecipeData();  //this step converts images back to binary 
     var oldHelpContext : string;
+    var restrictedTo : string[] = this.userInfo.profile.defaultSharedUsers;
 
     oldHelpContext = this.utilSvc.getCurrentHelpContext();
     this.utilSvc.setCurrentHelpContext("MakeRecipeShared");
-    this.utilSvc.openSharedRecipeSettings('Add Shared Recipe', undefined, 
+    this.utilSvc.openSharedRecipeSettings('Add Shared Recipe', restrictedTo, 
             rd.title, this.currentRecipe.originListName(rd.origin), 
             this.utilSvc.displayOriginDate(rd.originDate), 'Create', 'Share')
-    .then((result) => {
+    .then((shareThisRecipe) => {
+      this.utilSvc.displayWorkingMessage(true,'Creating Shared Recipe');
       this.utilSvc.setCurrentHelpContext(oldHelpContext);
-      if(result.create === true){  //are we creating the shared copy?
-        this.addSharedRecipe(rd)
+      if(shareThisRecipe.create === true){  //are we creating the shared copy?
+        this.recipeSvc.addSharedRecipe(rd)
         .then((sharedVersion) => {
-          if(result.list !== undefined){
-            this.setEmailRestrictions(sharedVersion._id, result.list)
+          if(shareThisRecipe.list !== undefined){
+            this.utilSvc.displayWorkingMessage(true,'Setting User Restrictions');
+            this.setEmailRestrictions(sharedVersion._id, shareThisRecipe.list)
             .then((success) => {})
             .catch((failure) => {})
           }
           recipe.data.sharedItem_id = sharedVersion._id;    // save database record id of shared copy 
-          this.recipeSvc.updateRecipe(rd._id, {"sharedItem_id": sharedVersion._id}) // update private version
+          // update private version
+          this.recipeSvc.updateRecipe(rd._id, {"sharedItem_id": sharedVersion._id})
           .then((privateRecipeUpdated) => {
-            this.utilSvc.displayThisUserMessage("recipeShared");   
+            this.utilSvc.setUserMessage("recipeShared");   
+            this.utilSvc.displayWorkingMessage(false);
           })
           .catch((failToUpdatePrivateRecipe) => {
-            this.utilSvc.displayThisUserMessage("errorUpdatingSharedRecipe");
             recipe.data.sharedItem_id = undefined;  
+            this.utilSvc.setUserMessage("errorUpdatingPersonalRecipe");
+            this.utilSvc.displayWorkingMessage(false);
           })   
         })
         .catch((failToAddSharedRecipe) => {
-          this.utilSvc.displayThisUserMessage("errorSharingRecipe");
+          this.utilSvc.setUserMessage(failToAddSharedRecipe);
+          this.utilSvc.setUserMessage("errorSharingRecipe");
+          this.utilSvc.displayWorkingMessage(false);
         })
       }
     })
     .catch((userHitCancel) => {
       this.utilSvc.setCurrentHelpContext(oldHelpContext);
     })
-  }
-
-  // store a copy of the given RecipeData to the database using the SHARED_USER_ID
-  private addSharedRecipe = (rdOrig : RecipeData) : Promise<any>  => {
-    var rd : RecipeData = Recipe.build(rdOrig).getRecipeData();  // copy recipe
-
-    return new Promise((resolve, reject) => {
-      this.recipeSvc.getList(CATEGORY_TABLE_NAME, SHARED_USER_ID)
-      .then((cList) => {
-        // replace the category ids with ones from the SHARED_USER's category list
-        for(let i=0; i<rd.categories.length; i++){
-          rd.categories[i] = this.getSharedListItemId(<ListTable>cList, 
-                                    this.currentRecipe.categoryListName(rd.categories[i]));
-        }
-        this.recipeSvc.getList(ORIGIN_TABLE_NAME, SHARED_USER_ID)
-        .then((oList) => {
-          // replace the origin id with one from the SHARED_USER's origin list
-          rd.origin = this.getSharedListItemId(<ListTable>oList,
-                            this.currentRecipe.originListName(rd.origin));
-          rd.submittedBy = rdOrig.userId;   // note who shared it (the owner)
-          rd.userId = SHARED_USER_ID;       // will be accessable under SHARED_USER_ID
-          rd._id = undefined;               // kill _id so it will get a new one
-          this.recipeSvc.saveRecipe(rd)     // save shared version
-          .then((sharedVersion : RecipeData) => {
-            this.recipeSvc.saveList(cList, CATEGORY_TABLE_NAME) // save updated SHARED categories list
-            .then((categoryListUpdated) => {
-              this.recipeSvc.saveList(oList, ORIGIN_TABLE_NAME) // save SHARED origins list
-              .then((originListUpdated) => {
-                resolve(sharedVersion);            
-              })
-              .catch((failToSaveOriginList) => {
-                reject(failToSaveOriginList);
-              })
-            })
-            .catch((failToSaveCategoryList) => {
-              reject(failToSaveCategoryList);
-            })
-          })
-          .catch((failToSaveSharedRecipe) => {
-            reject(failToSaveSharedRecipe);
-          })
-        })
-        .catch((failToReadOriginList) => {
-          reject(failToReadOriginList);
-        })
-      })
-      .catch((failToReadCategoryList) => {
-        reject(failToReadCategoryList);
-      })
-    })
-  }
-
-  // check list for given name, return id if found otherwise add name to list and use nextId value
-  private getSharedListItemId = (list : ListTable, iName : string) => {
-    var i     : number;
-    var newItem = <ListTableItem>{};
-
-    for(i=0; i<list.items.length; i++){   //see if name already in players list
-      if(iName === list.items[i].name){
-        return list.items[i].id;
-      }
-    }
-    // name not found, add a new entry to SHARED items list
-    newItem.id = list.nextId++;   // use nextId number (multi-user <bug>)
-    newItem.name = iName;
-    list.items.push(newItem);     
-
-    return newItem.id;
   }
 
   // remove the public copy of the selected recipe or set authorized users
@@ -287,24 +228,33 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
       .then((result) => {
         this.utilSvc.setCurrentHelpContext(oldHelpContext);
         if(result.delete === true){  //are we deleting the public copy?
+          this.utilSvc.displayWorkingMessage(true, 'Removing Shared Recipe');
           this.recipeSvc.deleteRecipe(srId)
           .then((success) => {
             r.data.sharedItem_id = undefined;
             this.recipeSvc.updateRecipe(r.data._id, {"sharedItem_id": null})
             .then((success) => {
-              this.utilSvc.displayThisUserMessage("recipeMadePrivate");
+              this.utilSvc.setUserMessage("recipeMadePrivate");
+              this.utilSvc.displayWorkingMessage(false);
             })
             .catch((error) => {
-              this.utilSvc.displayThisUserMessage("errorUpdatingPrivateRecipe");
+              this.utilSvc.setUserMessage("errorUpdatingPrivateRecipe");
+              this.utilSvc.displayWorkingMessage(false);
             })
           })
           .catch((failure) => {
-            this.utilSvc.displayThisUserMessage("errorDeletingSharedCopy");
+            this.utilSvc.setUserMessage("errorDeletingSharedCopy");
+            this.utilSvc.displayWorkingMessage(false);
           })
         } else { // if not deleting, update the authorized users list
+          this.utilSvc.displayWorkingMessage(true, 'Updating User Restrictions');
           this.setEmailRestrictions(srId, result.list)
-          .then((success) => {})
-          .catch((failure) => {})
+          .then((success) => {
+            this.utilSvc.displayWorkingMessage(false);            
+          })
+          .catch((failure) => {
+            this.utilSvc.displayWorkingMessage(false);            
+          })
         }
       })
       .catch((userHitCancel) => {
@@ -320,10 +270,7 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
   setEmailRestrictions = (srId: string, list: string[]) => {
 
     return new Promise((resolve, reject) => {
-      if(list === undefined){
-        resolve(srId)
-      }
-      this.recipeSvc.updateRecipe(srId,{"restrictedTo": list})
+      this.recipeSvc.updateRecipe(srId,{"restrictedTo": list ? list : null})
       .then((success : number) => {
         this.utilSvc.displayThisUserMessage("recipeRestrictionsUpdated");
         resolve(success);

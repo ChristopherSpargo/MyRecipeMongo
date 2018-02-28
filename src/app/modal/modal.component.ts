@@ -49,13 +49,13 @@ export class ModalComponent {
                                                             {size: 'lg', backdrop: 'static'});
     modalRef.componentInstance.mode         = mode;
     modalRef.componentInstance.heading      = heading;
-    modalRef.componentInstance.itemList     = emailList;
+    modalRef.componentInstance.itemList     = emailList || [];
     modalRef.componentInstance.recipeTitle  = recipeTitle;
     modalRef.componentInstance.origin       = origin;
     modalRef.componentInstance.originDate   = originDate;
     modalRef.componentInstance.cancelText   = cancelText || "Cancel";
     modalRef.componentInstance.okText       = okText || "Save";
-    modalRef.componentInstance.deleteText   = deleteText || "Make Private";
+    modalRef.componentInstance.deleteText   = deleteText || "Remove Shared Copy";
     modalRef.componentInstance.toggleAbout  = toggleAbout;
     setTimeout( ()=> {
       modalRef.componentInstance.openModal  = true;

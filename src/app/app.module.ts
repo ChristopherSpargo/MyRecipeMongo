@@ -42,6 +42,7 @@ import { RecipeEntryComponent } from './recipes/recipe.entry.component';
 import { RecipeMenuComponent } from "./recipes/recipe.menu.component";
 import { RecipeSearchComponent } from "./recipes/recipe.search.component";
 import { RecipeViewComponent } from "./recipes/recipe.view.component";
+import { RecipePrintComponent } from "./recipes/recipe.print.component";
 import { AppRecipeSectionComponent } from './directives/app.recipe.section.component';
 import { FormFooterButtonComponent } from "./directives/form.footer.button.component";
 import { loginState, homeState, manageCategoriesState, enterRecipeState,
@@ -80,7 +81,7 @@ const INITIAL_COMPONENTS =  [ AppComponent, HomeComponent, LoginComponent, FormH
   SimpleModalComponentTemplate, RecipeActionModalComponentTemplate, SharedRecipeSettingsModalComponentTemplate,
   ListManagementComponent, ListItemFieldComponent, FormFooterButtonComponent,
   UpdateActionsComponent, DeleteEntryComponent, FormMessagesComponent, AppFabComponent,
-  CheckboxMenuComponent, RecipeEntryComponent, RecipeViewComponent,
+  CheckboxMenuComponent, RecipeEntryComponent, RecipeViewComponent, RecipePrintComponent,
   ListManagementComponent, AccountProfileComponent, AccountEmailComponent, AccountPasswordComponent,
   AccountDeleteComponent, AboutComponent, AboutHeadingComponent, AboutTextIconComponent, 
   AboutMyRecipeMongoComponent,

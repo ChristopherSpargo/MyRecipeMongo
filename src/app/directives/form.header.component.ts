@@ -15,15 +15,16 @@ export class FormHeaderComponent {
   @Input() headerTheme        : string;   // CSS style for header
   @Input() headerTextColor    : string = 'app-white';   // CSS style for header text color
   
-  @Input() closeButtonTheme   : string = 'app-faint-white-text';   // CSS style for close button
+  @Input() closeButtonTheme   : string = 'app-white-text-low';   // CSS style for close button
   @Input() appBarItems        : any[];    // array of menu button objects for title bar
-  @Input() headerType         : string;   // type of form (center or right)
+  @Input() headerType         : string;   // differentiates different header configurations
+  @Input() closeLabel         : string = 'Exit'; // text to use for the close button
   @Input() headerClose        : Function; // link to closeForm function of form's controller
 
   constructor(private aboutStatus: AboutStatus, private utilSvc: UtilSvc) { }
 
   toggleAbout = () => {
-    this.aboutStatus.open = !this.aboutStatus.open;
+    this.aboutStatus.toggle();
   }
 
   appBarItemSelected = (action: string) => {

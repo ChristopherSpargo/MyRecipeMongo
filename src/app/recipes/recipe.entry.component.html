@@ -1,8 +1,7 @@
                 <!--Form used to provide the RECIPE ENTRY feature-->
-<!--<app-waiting-indicator [fOpen]="formOpen && formWasOpen"></app-waiting-indicator>-->
 
 <div
-  class="container app-tab-container app-no-overflow-x px-0 pt-2 app-bg-gwhite"
+  class="app-tab-container px-0 pt-2 app-bg-gwhite"
   [ngClass]="{'app-open': editTabOpen}"
   >
 
@@ -18,7 +17,7 @@
  
     <!-- Instructional messages -->
     <div *ngIf="createNew" class="d-flex flex-row justify-content-center app-flex-1 
-                                  app-darkgrey align-items-center mb-2 app-small-font">
+                                  app-black-text-low app-bold align-items-center mb-2 app-small-font">
       Creating a new recipe document.
     </div>
     <div *ngIf="!createNew" class="d-flex flex-row justify-content-center app-flex-1 
@@ -27,7 +26,7 @@
     </div>
 
     <!-- Start of Form -->
-    <div class="container px-0">
+    <div class="px-0">
       <form #recipeEntryForm = "ngForm" role="form" 
             name='recipeEntryForm' novalidate method="post" enctype="multipart/form-data"
             (ngSubmit)="submitRequest(recipeEntryForm)">
@@ -45,7 +44,7 @@
               fLabel        = "Title:"  
               fIcon         = "title"
               [fRequired]   = "true"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rTitle" 
               [fCapitalize] = "true"
               fPattern      = "^[ /\-'%$#.,()!?\w]*$"
@@ -63,7 +62,7 @@
               fName         = "rDesc" 
               fLabel        = "Description:"  
               fIcon         = "description"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [fRequired]   = "true" 
               [(fValue)]    = "rDescription" 
               fMaxlength    = "10000"
@@ -82,7 +81,7 @@
             </div> 
             <div class="app-icon-input-field-container pt-3">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-input-icon app-recipe-edit-color">assessment</i>
+                <i class="material-icons app-input-icon app-active-input-icon-color">assessment</i>
                 <div class="d-flex flex-row flex-wrap">
                   <div *ngFor="let c of rCategories.cats" 
                           class="d-flex flex-row justify-content-center align-items-center 
@@ -112,6 +111,9 @@
                   <validation-message name="required">
                     At least 1 category is required.
                   </validation-message>
+                  <validation-message name="maxnumber">
+                    10 category maximum exceeded.
+                  </validation-message>
                 </validation-messages>
               </div> 
             </div>
@@ -129,7 +131,7 @@
               [(fValue)]      = "rOrigin"
               fLabel          = "Recipe Origin:" 
               fIcon           = "face" 
-              fColor          = "app-recipe-edit-color "
+              fColor          = "app-active-input-icon-color "
               [fOnFocus]      = "clearRequestStatus"
               [fList]         = "originListItems()"
               [fShowNew]      = "false"
@@ -147,7 +149,7 @@
               fType         = "number" 
               fLabel        = "Origin Date:"  
               fIcon         = "insert_invitation"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rOriginDate" 
               fPattern      = "^\d\d\d\d$"
               fErrors       = "pattern"
@@ -164,7 +166,7 @@
               fName         = "oNotes" 
               fLabel        = "Origin Notes:"  
               fIcon         = "edit"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rOriginNotes" 
               fMaxlength    = "10000"
               fRows         = "15"
@@ -184,7 +186,7 @@
               fList         = "bullets"
               fLabel        = "Ingredients:"  
               fIcon         = "list"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rIngredients" 
               fMaxlength    = "10000"
               fRows         = "15"
@@ -201,7 +203,7 @@
               fLabel        = "Instructions:"  
               fList         = "numbers"
               fIcon         = "assignment"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rInstructions" 
               fMaxlength    = "10000"
               fRows         = "15"
@@ -218,7 +220,7 @@
               fName         = "rNotes" 
               fLabel        = "Recipe Notes:"  
               fIcon         = "edit"
-              fColor        = "app-recipe-edit-color" 
+              fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rNotes" 
               fMaxlength    = "10000"
               fRows         = "15"
@@ -236,7 +238,7 @@
               id="rPicsID" class="app-no-display" accept="image/*"
               (change)="fileSelected('rPicsID')">
             <div class="d-flex flex-row justify-content-between align-items-center pr-1 mt-1">
-              <i class="material-icons app-input-icon app-recipe-edit-color">photo</i>
+              <i class="material-icons app-input-icon app-active-input-icon-color">photo</i>
               <label class="app-icon-input-field-label-sm app-recipe-pics-field-label">
                 Recipe Pictures:
               </label>
@@ -248,7 +250,7 @@
                         fAlignment  = "align-items-end"
                         fLabelCSS   = "app-underlined app-link-active"
                         fIcon       = "add_a_photo"
-                        fIconColor  = "app-recipe-edit-color"
+                        fIconColor  = "app-active-input-icon-color"
                         fIconCSS    = "app-icon-xsm"
                         [fOnClick]  = "clickField"
                         fParam      = "rPicsID"
@@ -280,22 +282,24 @@
           </app-recipe-section>
                             
           <!-- Messages Area -->
-          <app-form-messages 
-            [fWorkingOpen]  ="!haveStatusMessages() && working"
-            [fMessageOpen]  ="haveStatusMessages() && !working"
-            [fMessageObj]   ="requestStatus">
+          <app-form-messages [fMessageOpen] = "haveStatusMessages()">
+            <app-messages [mList]="requestStatus" [mMax]="2">
+              <app-message name="formHasErrors" class="app-error">
+                  Please correct the fields with errors.
+              </app-message>
+            </app-messages>
           </app-form-messages>                    
                             
         </div>
 
         <!-- Actions Area -->
-        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary mt-1 py-1">
+        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary py-2">
           <div class="app-smaller-font mr-4 mb-0">
             <app-fab
                     fType       = "submit"
                     fLabel      = "Save"
                     [fOpen]     = "true"
-                    fButtonCSS  = "app-fab-sm-sq app-white mb-1"
+                    fButtonCSS  = "app-fab-sm-sq app-white"
                     [fDelay]    = "200"
                     fAria       = "add"
                     fIcon       = "check_circle_outline"
@@ -308,7 +312,7 @@
                     fType       = "button"
                     fLabel      = "{{createNew ? 'Clear' : 'Cancel'}}"
                     [fOpen]     = "true"
-                    fButtonCSS  = "app-fab-sm-sq app-white mb-1"
+                    fButtonCSS  = "app-fab-sm-sq app-white"
                     [fDelay]    = "200"
                     [fOnClick]  = "resetForm"
                     [fParam]    = "recipeEntryForm"

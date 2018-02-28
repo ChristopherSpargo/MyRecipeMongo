@@ -1,20 +1,20 @@
 <!--dialog template used for basic NOTICES and CONFIRMATIONS-->
 <div class="app-fade-in app-dialog-container" [class.app-open]="openModal">
-  <div class="modal-header app-dialog-header app-simple-modal-theme">
-    <div class="modal-title d-flex flex-row justify-content-start align-items-center app-all-paddings-8px">
-      <button type="button" class="btn app-form-image-button app-cursor-default ml-0 mr-2" aria-label="delete"> 
+  <div class="modal-header app-dialog-header">
+    <div class="modal-title d-flex flex-row justify-content-start align-items-center px-2 py-0">
+      <button type="button" class="btn app-form-image-button app-cursor-default ml-0 mr-2 app-mb--2" aria-label="delete"> 
         <i class="material-icons app-fab-icon-smm app-white">{{titleIcon}}</i>
       </button>
       <div class="app-form-title">{{title}}</div>
     </div>
   </div>
-  <div class="modal-body app-confirm-dialog-content app-form-theme app-all-paddings-8px">{{content}}</div>
-  <div class="modal-footer d-flex flex-row justify-content-around align-items-center app-dialog-footer">
+  <div class="modal-body d-flex flex-column justify-content-center app-confirm-dialog-content app-form-theme app-all-paddings-8px">{{content}}</div>
+  <div class="modal-footer d-flex flex-row justify-content-around align-items-center app-dialog-footer py-0 px-2">
     <app-fab  *ngIf="!notifyOnly"
           fType       = "button"
           [fLink]     = "cancelText"
           [fOnClick]  = "dismiss"
-          fButtonCSS  = "app-white pb-0"
+          fButtonCSS  = "app-white"
           fLabelCSS   = "app-bigger-font"
           fAria       = "cancel">
     </app-fab> 
@@ -22,7 +22,7 @@
           fType       = "button"
           [fLink]     = "okText"
           [fOnClick]  = "close"
-          fButtonCSS  = "app-white pb-0"
+          fButtonCSS  = "app-white"
           fLabelCSS   = "app-bigger-font"
           fAria       = "Ok">
     </app-fab> 

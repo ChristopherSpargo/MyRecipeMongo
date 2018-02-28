@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 //The cookie for the program contains subitems for the various elements we are tracking.
 //the subitems are delimeted with vertical bar (|)
-const appCookie = "MatchLogCookie";
+const appCookie = "MyRecipeMongoCookie";
 
 @Injectable()
 export class CookieSvc { 

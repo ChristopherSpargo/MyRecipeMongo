@@ -64,6 +64,7 @@ export class IconInputComponent implements OnInit {
 
   valueChange = (evt)=> {
     if(this.fCapitalize){ // capitalize every word?
+      this.fValue = this.fValue.toLowerCase();
       this.fValue = this.fValue.replace(/\b[a-z]/g,
                        (x :string) : string =>{ return x.charAt(0).toUpperCase() + x.substr(1); })
     }

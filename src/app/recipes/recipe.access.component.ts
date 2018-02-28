@@ -6,7 +6,7 @@ import { UserInfo, CurrentRecipe } from '../app.globals';
 import { RecipeService, CATEGORY_TABLE_NAME, ORIGIN_TABLE_NAME, RECIPE_TABLE_NAME,
          ListTable, ListTableItem } from '../model/recipeSvc';
 import { RecipeData, Recipe } from '../model/recipe'
-import { SHARED_USER_ID } from '../constants'
+import { SHARED_USER_ID, UNSET_ORIGIN_NAME, UNSET_ORIGIN_ID } from '../constants'
 
 export const SEARCH_TAB     : number = 0;
 export const SEARCH_TAB_ID  : string = "searchTab";
@@ -45,12 +45,22 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
   currTabId        : string = "";
   eventInfoOpen    : boolean = false;
   tabNames         : string[] = [SEARCH_TAB_ID, MENU_TAB_ID, VIEW_TAB_ID, EDIT_TAB_ID];
+  appBarItems      : any[] = [];
+  viewAppBarItems= [
+    { icon    : "print",
+      action  : "printRecipe",
+      label   : "print recipe",
+      tip     : "Print Recipe"
+    }
+  ];
+  printingRecipe   : boolean = false;
  
 
   constructor(private userInfo : UserInfo, private utilSvc : UtilSvc, private recipeSvc : RecipeService,
               private currentRecipe: CurrentRecipe, private stateService: StateService){};
 
   ngOnInit() {
+    this.setMessageResponders();
     let stateName = this.stateService.current.name;
     let authMsg   = 'signInToAccessRecipes';
     let helpContext = 'RecipeSearch';
@@ -59,7 +69,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     switch(stateName){        
       case 'searchRecipes':
         this.currTabId                = SEARCH_TAB_ID;
-        this.headerTitle              = "Recipe Search";
+        this.headerTitle              = "Search Personal Recipes";
         this.headerIcon               = "search";
         this.currentRecipe.mode       = 'Review';
         break;
@@ -83,7 +93,6 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.currentRecipe.editScrollPosition = 0;
 
       this.constructMenuMessage(0);          
-      this.setMessageResponders();
       this.utilSvc.setCurrentHelpContext(helpContext); //note current context
       this.utilSvc.displayUserMessages();
       this.readListTables()
@@ -115,6 +124,8 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     document.addEventListener("nextTab", this.nextTab);
     document.addEventListener("prevTab", this.prevTab);
     document.addEventListener("closeView", this.closeView);
+    document.addEventListener("printRecipe", this.printStart);
+    document.addEventListener("printEnded", this.printEnd);
   }
 
   //remove all the message responders set in this module
@@ -129,33 +140,21 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     document.removeEventListener("nextTab", this.nextTab);
     document.removeEventListener("prevTab", this.prevTab);
     document.removeEventListener("closeView", this.closeView);
-  }
-
-  handlePopState = (event) =>{
-    if(event.state && event.state.tab){
-      switch(event.state.tab){
-        case "Search":
-          break;
-        case "Menu":
-          this.emit('selectSearchTab');
-          break;
-        case "View":
-          if(this.recipesReady){
-            this.emit('selectMenuTab');
-          } else {
-            this.emit('selectEditTab');
-          }
-          break;
-        case "Edit":
-          this.emit('selectViewTab');
-          break;
-      }
-    }
+    document.removeEventListener("printRecipe", this.printStart);
+    document.removeEventListener("printEnded", this.printEnd);
   }
 
   //emit a custom event with the given name and detail data
   public emit = (name: string, data? : any)  => {
     this.utilSvc.emitEvent(name, data);
+  }
+
+  private printStart = () => {
+    this.printingRecipe = true;
+  }
+
+  private printEnd = () => {
+    this.printingRecipe = false;
   }
 
   readListTables = () : Promise<any> => {
@@ -170,6 +169,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
           this.viewShared ? SHARED_USER_ID : this.userInfo.authData.uid ) //read list of origins
         .then((oList) => {
           this.originList = oList.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});  
+          this.originList.push({name: UNSET_ORIGIN_NAME, id: UNSET_ORIGIN_ID, disabled: true})
           this.currentRecipe.originList = oList;  
           this.currentRecipe.originList.items = this.originList;
           resolve('ok');
@@ -190,7 +190,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
   setViewShared = (evt: CustomEvent) => {
     if(this.viewShared !== evt.detail){
       this.viewShared = evt.detail;
-      this.headerTitle = this.viewShared ? "Shared Recipe Search" : "Recipe Search";
+      this.headerTitle = this.viewShared ? "Search Shared Recipes" : "Search Personal Recipes";
       this.headerIcon = 'search';
       this.currentRecipe.recipe = undefined;
       this.currentRecipe.recipeList = undefined;
@@ -270,8 +270,10 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeMenuTab();
       this.closeEditTab();
       this.currentRecipe.recipe = undefined;
+      this.emit('noRecipeSelection');
       this.utilSvc.setCurrentHelpContext("RecipeSearch");
-      this.headerTitle = this.viewShared ? "Shared Recipe Search" : "Recipe Search";
+      this.appBarItems = [];
+      this.headerTitle = this.viewShared ? "Search Shared Recipes" : "Search Personal Recipes";
       this.headerIcon = 'search';
   }
 
@@ -280,6 +282,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeMenuTab();
       this.closeSearchTab();
       this.utilSvc.setCurrentHelpContext("EnterRecipes");
+      this.appBarItems = [];
       this.headerTitle = this.currentRecipe.recipe ? 'Update Recipe' : 'Add Recipe';
       this.headerIcon = 'edit';
   }
@@ -291,6 +294,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeEditTab();
       this.currentRecipe.recipe = undefined;
       this.emit('noRecipeSelection');
+      this.appBarItems = [];
       this.headerTitle = this.viewShared ? "Shared Recipes" : "Personal Recipes";
       this.headerIcon = 'menu';
       this.utilSvc.setCurrentHelpContext("RecipesMenu");
@@ -302,6 +306,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeSearchTab();
       this.closeMenuTab();
       this.closeEditTab();
+      this.appBarItems = this.viewAppBarItems;
       this.headerTitle = this.viewShared ? "View Shared Recipe" : "View Personal Recipe";
       this.utilSvc.setCurrentHelpContext("ViewRecipe");
       this.headerIcon = 'local_library';
