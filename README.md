@@ -4,11 +4,11 @@
     <b>What is MyRecipeMongo?</b><br/>
     &nbsp;&nbsp;MyRecipeMongo is a website where you can organize and share recipes.<br/>&nbsp;&nbsp;Organize
     recipes by categories, origin, and origin date. Retreive recipies using categories, origin, date or keywords
-    found in the title or ingredients.<br />&nbsp;&nbsp;Share recipes with everyone or just specific users.
+    found in the title or ingredients.<br/>&nbsp;&nbsp;Share recipes with everyone or just specific users.
     &nbsp;&nbsp;Recipes are stored in the cloud and can be accessed at anytime from any device.
   </p>
   <p>
-    <b>Create an Account"></b><br/>
+    <b>Create an Account</b><br/>
     &nbsp;&nbsp;The first thing you'll need to do to start using MyRecipeMongo is create an account.  Since all data
     is stored in the cloud, we need to know which data is yours. MyRecipeMongo accounts are simple, just an
     email address and a password.<br/><br/>
