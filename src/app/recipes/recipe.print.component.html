@@ -28,20 +28,6 @@
         </div>
         <!-- <div *ngIf="recipeReady"> -->
           <div *ngIf="recipeReady" class="px-1 py-1">
-            <!-- Origin and Origin Date -->
-            <div class="d-flex flex-row align-items-center">
-              <div class="app-recipe-view-text app-recipe-view-origin pr-4">
-                Recipe From: {{rOriginName}}
-              </div>
-              <div class="app-recipe-view-text app-recipe-view-origin">
-                Circa: {{rOriginDate}}
-              </div>
-            </div>
-            <div *ngFor="let n of rOriginNotes" 
-                class="app-recipe-view-text app-recipe-view-origin-notes pl-3">
-              {{n}}
-              <br *ngIf="n === ''">
-            </div>
             <!-- Categories -->
             <div class="d-flex flex-row align-items-center pt-1">
               <div class="app-recipe-view-text app-recipe-view-categories pr-2">Categories:</div>
@@ -97,7 +83,7 @@
             </div>
             <div class="d-flex flex-column">
                 <div>
-                  <img [src]="getRecipeImage()" class="app-recipe-menu-image" name="mainpic">
+                  <img [src]="getRecipeImage()" class="app-recipe-view-extra-image" name="mainpic">
                   <div class="app-recipe-view-text app-recipe-view-picture-note mb-2 px-1">
                     {{getRecipeNote()}}
                   </div>
@@ -105,7 +91,7 @@
               <ng-container *ngIf="dataPresent('MorePics')">
                 <div 
                   *ngFor="let p of rMorePics; index as i"> 
-                  <img [src]="p.URL" class="app-recipe-menu-image" name="{{'pic'+i}}">
+                  <img [src]="p.URL" class="app-recipe-view-extra-image" name="{{'pic'+i}}">
                   <div class="app-recipe-view-text app-recipe-view-picture-note mb-2 px-1">
                     {{p.note}}
                   </div>

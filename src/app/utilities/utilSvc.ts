@@ -131,19 +131,6 @@ export class UtilSvc {
       return this.formatSortDate(d).substr(0,6);
     }
 
-    // return yyyyMM or yyyy00 from MM-yyyy or yyyy
-    formatOriginDate(d: string) : string {
-      if(d.length === 4){ return d + '00'; }
-      if(d.length === 6){ return d.substr(2,4) + '0' + d.substr(0,1); }
-      return d.substr(3,4) + d.substr(0,2);
-    }
-
-    // return MM-yyyy or yyyy from yyyyMM or yyyy00
-    displayOriginDate(d: string) : string {
-      if(d.substr(4,2) === '00'){ return d.substr(0,4);}
-      return d.substr(4,2) + '-' + d.substr(0,4);
-    }
-
     //set an item in the user.message object so the corresponding message can be displayed
     setUserMessage(msg: string, text?: string) : void {
       if (this.user.messages === null){
@@ -291,7 +278,7 @@ export class UtilSvc {
               msgType = 'error';
               break;
             
-            // CATEGORY and ORIGIN list related messages
+            // CATEGORY list related messages
             case 'errorReadingList':
               msgText = "Error reading "+this.user.messages[key]+" list";
               msgType = 'error';
@@ -320,24 +307,12 @@ export class UtilSvc {
               msgText = this.user.messages[key]+" removed from list.";
               msgType = 'success';
               break;
-            case 'errorDeletingOrigins':
-              msgText = "Error deleting origins table.";
-              msgType = 'error';
-              break;
             case 'errorDeletingCategories':
               msgText = "Error deleting categories table.";
               msgType = 'error';
               break;
-            case 'errorUpdatingOriginList':
-              msgText = "Error updating origin list";
-              msgType = 'error';
-              break;
             case 'errorUpdatingCategoryList':
               msgText = "Error updating category list";
-              msgType = 'error';
-              break;
-            case 'errorReadingOriginList':
-              msgText = "Error reading origin list";
               msgType = 'error';
               break;
             case 'errorReadingCategoryList':
@@ -490,16 +465,16 @@ export class UtilSvc {
 
     // Issue a confirmation dialog for an action involving a recipe
     // return a Promise
-    confirmRecipeAction(heading: string, recipeTitle: string, origin: string, originDate: string, 
+    confirmRecipeAction(heading: string, recipeTitle: string, 
                        okText: string, cancelText = "Cancel") : Promise<any> {
-      return this.modalSvc.recipeActionOpen(heading, recipeTitle, origin, originDate, cancelText, okText);
+      return this.modalSvc.recipeActionOpen(heading, recipeTitle, cancelText, okText);
     };
 
     // Define a function to issue a confirmation dialog
     // return a Promise
-    openSharedRecipeSettings(heading: string, emailList: string[], recipeTitle: string, origin: string, 
-      originDate: string, mode: string, okText ?: string, deleteText ?: string, cancelText ?:string) : Promise<any> {
-      return this.modalSvc.sharedSettingsOpen(heading, emailList, recipeTitle, origin, originDate, mode,
+    openSharedRecipeSettings(heading: string, emailList: string[], recipeTitle: string,
+       mode: string, okText ?: string, deleteText ?: string, cancelText ?:string) : Promise<any> {
+      return this.modalSvc.sharedSettingsOpen(heading, emailList, recipeTitle, mode,
                                               this.aboutStatus.toggle, okText, deleteText, cancelText);
     };
 

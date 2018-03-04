@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input } from '@angular/core';
 import { NgForm, AbstractControl, FormControl } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe } from '../app.globals';
+import { UserInfo, CurrentRecipe, CatListObj, FormMsgList } from '../app.globals';
 import { RecipeService, ListTable, ListTableItem, CATEGORY_TABLE_NAME,
-         ORIGIN_TABLE_NAME, RecipeFilterData } from '../model/recipeSvc';
+         RecipeFilterData } from '../model/recipeSvc';
 import { Subscription, Observable } from 'rxjs';
 import { RecipePic, RecipeData, Recipe } from '../model/recipe'
-import { APP_DATA_VERSION, UNSET_ORIGIN_ID_STR } from '../constants';
+import { APP_DATA_VERSION } from '../constants';
 import ImageCompressor from '@xkeshi/image-compressor/dist/image-compressor.esm.js'
 
 
@@ -56,15 +56,7 @@ export class RecipeEntryComponent implements OnInit {
     r_id        : string;
     rTitle      : string = '';
     rDescription: string = '';
-    rCategories : {cats: number[], 
-                   errors: { [key: string]: any },
-                   statusChanges: EventEmitter<any> | null,
-                   touched: boolean,
-                   invalid: boolean} = {cats: [], errors: {}, 
-                                        statusChanges: new EventEmitter(), touched: false, invalid: false};
-    rOrigin      : string = UNSET_ORIGIN_ID_STR;
-    rOriginDate  : string = this.thisYear;
-    rOriginNotes : string = '';
+    rCategories = new CatListObj();
     rIngredients : string = '';
     rInstructions: string = '';
     rNotes       : string = '';
@@ -76,10 +68,9 @@ export class RecipeEntryComponent implements OnInit {
     rCreatedOn   : string = this.todaysDate;
 
   selectedPics        : File[] = <File[]>[]; // list of files obtained from the file input element
-  requestStatus       : { [key: string]: any } = {}; // object for messages displayed at bottom of the form
+  requestStatus       = new FormMsgList; // object for messages displayed at bottom of the form
   formOpen            : boolean   = false;
   titleAndTagsOpen    : boolean   = false;  // show-hide toggle for Title and Categories form section
-  originOpen          : boolean   = false;  // show-hide toggle for Origins form section
   specificsOpen       : boolean   = false;  // show-hide toggle for Ingredients and Instructions form section
   picturesOpen        : boolean   = false;  // show-hide toggle for Pictures form section
   createNew           : boolean   = true;   // true if adding a recipe, false if editing an exitsing one
@@ -137,7 +128,7 @@ export class RecipeEntryComponent implements OnInit {
     this.checkAll = true;                 // indicate form has been 'submitted'
     this.clearRequestStatus();
     if(this.checkForProblems(form)){   // can't do anything yet, form still has errors
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return;
     }
     this.utilSvc.displayWorkingMessage(true, 'Saving Recipe'); // show 'working' indicator on screen
@@ -149,9 +140,6 @@ export class RecipeEntryComponent implements OnInit {
     rData.title = this.rTitle;
     if(this.rDescription !== ""){rData.description = this.rDescription;} // don't store empty strings
     rData.categories = this.rCategories.cats;
-    rData.origin = parseInt(this.rOrigin,10);
-    rData.originDate = this.utilSvc.formatOriginDate(this.rOriginDate);
-    if(this.rOriginNotes !== ""){rData.originNotes = this.rOriginNotes;}
     if(this.rIngredients !== ""){rData.ingredients = this.rIngredients;}
     if(this.rInstructions !== ""){rData.instructions = this.rInstructions;}
     if(this.rNotes !== ""){rData.recipeNotes = this.rNotes;}
@@ -254,13 +242,8 @@ export class RecipeEntryComponent implements OnInit {
 
   // check for data input problems before submitting
   checkForProblems = (form: NgForm) : boolean => {
-    this.checkCategoryList();
+    this.rCategories.check();
     return form.invalid || this.rCategories.invalid;
-  }
-
-  // return the list of origin items from the CurrentRecipe service 
-  originListItems = () => {
-    return this.currentRecipe.originListItems();
   }
 
   // open the category selection list
@@ -272,26 +255,6 @@ export class RecipeEntryComponent implements OnInit {
     this.emit('openEntryCategoriesMenu');
   }
 
-  // categories have been added to the recipe
-  categoriesAdded = (touched: boolean) => {
-    this.rCategories.touched = true;
-    this.checkCategoryList();
-  }
-
-  // remove the given category from the categories for this recipe
-  removeCategory = (id: number) => {
-    var i;
-
-    if(id !== undefined){
-      i = this.rCategories.cats.indexOf(id);
-      if(i !== -1){
-        this.rCategories.cats.splice(i,1);      // id found
-        this.rCategories.touched = true;
-        this.checkCategoryList();
-      }
-    }
-  }
-  
   // return the list of category items from the CurrentRecipe service 
   categoryListItems = () => {
     return this.currentRecipe.categoryListItems();
@@ -300,28 +263,6 @@ export class RecipeEntryComponent implements OnInit {
   // return the Category name for the given id
   getCategoryName = (id : number) : string => {
     return this.currentRecipe.categoryListName(id);
-  }
-
-  // return whether any categories have been assigned to this recipe
-  haveCategories = () : boolean => {
-    return this.rCategories.cats.length !== 0;
-  }
-
-  // validation check for categories object
-  checkCategoryList = () => {
-    if(!this.haveCategories()){
-      this.rCategories.errors.required = true;
-      this.rCategories.invalid = true;
-    } else {
-      if(this.rCategories.cats.length > 10){
-        this.rCategories.errors.maxnumber = true;
-        this.rCategories.invalid = true;
-      } else {
-        this.rCategories.errors = {};
-        this.rCategories.invalid = false;
-      }
-    }
-    this.rCategories.statusChanges.emit(); // update observable
   }
 
   // process file selection event and create a URL for the preview image
@@ -408,9 +349,6 @@ export class RecipeEntryComponent implements OnInit {
     if(form){
       form.controls.rTitle.markAsUntouched();
       form.controls.rDesc.markAsUntouched();
-      form.controls.rOrig.markAsUntouched();
-      form.controls.oDate.markAsUntouched();
-      form.controls.oNotes.markAsUntouched();
       form.controls.rIngr.markAsUntouched();
       form.controls.rInst.markAsUntouched();
       form.controls.rNotes.markAsUntouched();
@@ -418,7 +356,7 @@ export class RecipeEntryComponent implements OnInit {
     }
     this.checkAll = false;
     this.setItemFields(this.currentRecipe.recipe ? this.currentRecipe.recipe.data : undefined);
-    this.titleAndTagsOpen  = this.originOpen = this.specificsOpen = this.picturesOpen = false;
+    this.titleAndTagsOpen = this.specificsOpen = this.picturesOpen = false;
     this.utilSvc.scrollToTop();
   }
 
@@ -435,9 +373,6 @@ export class RecipeEntryComponent implements OnInit {
       this.rCategories.errors   = {};
       this.rCategories.invalid  = false;
       this.rCategories.statusChanges.emit();
-      this.rOrigin              = item.origin ? item.origin.toString() : UNSET_ORIGIN_ID_STR;
-      this.rOriginDate          = this.utilSvc.displayOriginDate(item.originDate);
-      this.rOriginNotes         = item.originNotes;
       this.rIngredients         = item.ingredients;
       this.rInstructions        = item.instructions;
       this.rNotes               = item.recipeNotes;
@@ -462,10 +397,6 @@ export class RecipeEntryComponent implements OnInit {
       this.rCategories.errors   = {};
       this.rCategories.invalid  = false;
       this.rCategories.statusChanges.emit();
-      this.rOrigin              = this.userInfo.profile.defaultRecipeOrigin ?
-                                  this.userInfo.profile.defaultRecipeOrigin.toString() : UNSET_ORIGIN_ID_STR;
-      this.rOriginDate          = this.thisYear;
-      this.rOriginNotes         = '';
       this.rIngredients         = '';
       this.rInstructions        = '';
       this.rNotes               = '';
@@ -503,14 +434,23 @@ export class RecipeEntryComponent implements OnInit {
     this.addExtraPictures(this.currentRecipe.recipe.data.extraImages);
   }
 
+  // switch the image at index i with the main image (index 0)
+  makeMainImage = (i: number) => {
+    let temp : PicObj;
+
+    temp = this.rPictures[0];
+    this.rPictures[0] = this.rPictures[i];
+    this.rPictures[i] = temp;
+  }
+
   // clear status messages object
   clearRequestStatus = () => {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () : boolean => {
+    return !this.requestStatus.empty();
   }
 
   // set form closed flag, wait for animation to complete before changing states to 'home'

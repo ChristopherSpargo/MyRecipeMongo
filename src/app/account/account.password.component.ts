@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo } from '../app.globals';
+import { UserInfo, FormMsgList } from '../app.globals';
 import { UserSvc } from '../model/userSvc'
 import { CookieSvc } from '../utilities/cookieSvc';
 import { CrossSvc } from '../app.bank'
@@ -23,7 +23,7 @@ export class AccountPasswordComponent implements OnInit {
   userEmail          : string;
   currPassword       : string = "";
   newPassword        : string = "";
-  requestStatus      : { [key: string]: any } = {};
+  requestStatus      = new FormMsgList();
   rememberLogin      : boolean;
   formOpen           : boolean = false;
 
@@ -58,7 +58,7 @@ export class AccountPasswordComponent implements OnInit {
   submitRequest(form : NgForm) : void {
     this.clearRequestStatus();
     if(form.invalid){
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return;
     }
     this.utilSvc.displayWorkingMessage(true);
@@ -69,27 +69,27 @@ export class AccountPasswordComponent implements OnInit {
     .catch((error) => {
       switch (error) {  //decide which status message to give
         case "INVALID_PASSWORD":
-          this.requestStatus.incorrectCurrentPassword = true;
+          this.requestStatus.addMsg('incorrectCurrentPassword');
           break;
         case "INVALID_USER":
-          this.requestStatus.unrecognizedEmail = true;
+          this.requestStatus.addMsg('unrecognizedEmail');
           break;
         default:
           this.utilSvc.setUserMessage("passwordChangeFailed");
       }
-      this.requestStatus.passwordChangeFail = true;
+      this.requestStatus.addMsg('passwordChangeFail');
       this.utilSvc.displayWorkingMessage(false);
     });
   }
 
   // clear status messages object
   clearRequestStatus = ()=> {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () :boolean => {
+    return !this.requestStatus.empty();
   }
 
   //set form closed flag, wait for animation to complete before changing states to 'home'

@@ -21,7 +21,8 @@
               [class.app-open]="fOpen"
               [disabled]="fDisabled"
               (click)="fabClicked()">
-        <div class="d-flex flex-row justify-content-center {{fAlignment}}">
+        <div class="d-flex justify-content-center {{fAlignment}}"
+             [ngClass]="{'flex-row': !fVertical, 'flex-column': fVertical}">
           <div *ngIf="fReverse" class="mx-1 {{fLabelCSS}}">{{fLabel}}</div>
           <i class="material-icons app-fab-icon-sm {{fIconCSS}} {{fIconColor}}">{{fIcon}}</i> 
           <div *ngIf="!fReverse" class="mx-1 {{fLabelCSS}}">{{fLabel}}</div>

@@ -13,12 +13,6 @@
   <div class="modal-body app-form-theme app-all-paddings-8px">
     <div class="d-flex flex-row justify-content-center align-items-center app-recipe-action-title">
       {{recipeTitle}}</div>
-    <div class="d-flex flex-row justify-content-center align-items-end">
-      <div class="app-small-font pr-1">Origin:</div>
-      <div class="app-recipe-action-origin">{{origin}}</div>
-      <div class="app-small-font pl-4 pr-1">Circa:</div>
-      <div class="app-recipe-action-origin-date">{{originDate}}</div>
-    </div>
     <div class="app-lightslategray app-divider-90"></div>
     <form #listForm = "ngForm" role="form" novalidate
           (ngSubmit)="submitRequest(listForm)">
@@ -37,7 +31,7 @@
         <div *ngIf="mode === 'Create'" class="d-flex flex-row align-items-center mt-1">
           <i class="material-icons app-input-icon app-active-input-icon-color">add_circle_outline</i>
           <label class="mb-0">
-            Sharing this Recipe
+            Sharing this Recipe with {{sharingWith()}}
           </label>
         </div>
 
@@ -56,7 +50,7 @@
                 fName           = "itemName"
                 fRef            = "iName"
                 [(fValue)]      = "selectedItem"
-                fLabel          = "Authorized User" 
+                fLabel          = "Authorized Users" 
                 fIcon           = "mail_outline" 
                 fColor          = "app-active-input-icon-color"
                 [fRequired]     = "false"
@@ -70,6 +64,7 @@
                 fNewTest        = ""
                 fNewName        = "newIName"
                 fNewRef         = "nIName"
+                fNewLabel       = "Authorized User" 
                 [(fNewValue)]   = "newItemName">
             </app-list-item-field>            
           </div>
@@ -107,22 +102,22 @@
       </div>
     </form>
   </div>
-  <div class="modal-footer d-flex flex-row app-flex-1 justify-content-around align-items-center 
-              app-dialog-footer px-2 py-1">
+  <div class="d-flex flex-row justify-content-around align-items-center 
+              app-dialog-footer app-pos-relative pt-1 pb-2">
+    <app-help-button>
+    </app-help-button>
     <app-fab
           fType       = "button"
           [fLink]     = "cancelText"
           [fOnClick]  = "dismiss"
-          fButtonCSS  = "app-white"
-          fLabelCSS   = "app-bigger-font"
+          fButtonCSS  = "app-fab-sm-sq app-white"
           fAria       = "cancel">
     </app-fab> 
     <app-fab 
           fType       = "button"
           [fLink]     = "!deleteRecipe ? okText : deleteText"
           [fOnClick]  = "close"
-          fButtonCSS  = "app-white"
-          fLabelCSS   = "app-bigger-font"
+          fButtonCSS  = "app-fab-sm-sq app-white"
           fAria       = "Ok">
     </app-fab> 
   </div>

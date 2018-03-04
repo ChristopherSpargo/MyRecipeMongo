@@ -1,4 +1,6 @@
-import { Component, DoCheck, ContentChildren, QueryList, Input } from '@angular/core';
+import { Component, AfterContentInit, ContentChildren, QueryList, Input, OnDestroy } from '@angular/core';
+import { FormMsgList } from '../app.globals'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: '<app-message>',
@@ -21,27 +23,36 @@ export class AppMessageComponent {
   selector: '<app-messages>',
   template: '<ng-content></ng-content>'
 })
-export class AppMessagesComponent implements DoCheck {
+export class AppMessagesComponent implements AfterContentInit, OnDestroy {
   
-  @Input() mList  : { [key: string]: any }; // list of message keys and message texts
+  @Input() mList  : FormMsgList;            // list of message keys and message texts
   @Input() mMax   : number = 1;             // maximum number of messages to show at one time
 
   // pick up the list of message components
   @ContentChildren(AppMessageComponent) messageComponents: QueryList<AppMessageComponent>;
 
-  ngDoCheck() {
-    if(this.messageComponents !== undefined){
-      const mKeys = Object.keys(this.mList);  // get the keys of messages to show
-      let showMore = this.mMax;               // only show mMax messages
-      this.messageComponents.forEach(component => {
-        if( !component.nameInList(mKeys) || !showMore ){
-          component.show = false;             // name of this component not in given key list or mMax shown
-        } else {
-          component.show = true;              // name in list, display the components content (message)
-          showMore--;
-        }
-      });
+  private messageChangeSub: Subscription;
+
+  // subscribe to the messageChange event of the given FormMsgList
+  ngAfterContentInit() {
+    if(this.messageComponents !== undefined && this.mList.messageChange){
+      this.messageChangeSub = this.mList.messageChange.subscribe( () => {
+        const mKeys = Object.keys(this.mList.msgs);  // get the keys of messages to show
+        let showMore = this.mMax;               // only show mMax messages
+        this.messageComponents.forEach(component => {
+          if( !component.nameInList(mKeys) || !showMore ){
+            component.show = false;             // name of this component not in given key list or mMax shown
+          } else {
+            component.show = true;              // name in list, display the components content (message)
+            showMore--;
+          }
+        });
+      })
     }
+  }
+
+  ngOnDestroy() {
+    if(this.messageChangeSub) { this.messageChangeSub.unsubscribe(); }
   }
 }
 

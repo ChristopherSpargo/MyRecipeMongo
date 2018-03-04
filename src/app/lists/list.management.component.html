@@ -41,7 +41,7 @@
               fName           = "itemName"
               fRef            = "iName"
               [(fValue)]      = "selectedItem"
-              fLabel          = "{{listName}} Name" 
+              fLabel          = "{{listName}} Names" 
               [fIcon]         = "listIcon" 
               fColor          = "app-active-input-icon-color"
               [fOnDelete]     = "deleteSelectedItem"
@@ -55,6 +55,7 @@
               fNewTest        = ""
               fNewName        = "newIName"
               fNewRef         = "nIName"
+              fNewLabel       = "{{listName}} Name" 
               [(fNewValue)]   = "newItemName"
           >
           </app-list-item-field>
@@ -70,7 +71,19 @@
               </app-message>
             </app-messages>
           </app-form-messages>                    
-                            
+
+        </div>
+            <!-- Actions Area -->
+        <div class="d-flex flex-row justify-content-center align-items-center 
+            app-pos-relative app-bg-primary pb-2" id="actions">
+          <app-help-button></app-help-button>
+          <app-fab
+              fType       = "button"
+              fLink       = "Done"
+              [fOnClick]  = "closeForm"
+              fButtonCSS  = "app-fab-sm-sq app-white"
+              fAria       = "done">
+          </app-fab> 
         </div>
       </form>
     </div>

@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { UtilSvc } from '../utilities/utilSvc';
 import { UserInfo, CurrentRecipe } from '../app.globals';
 import { SHARED_USER_ID } from '../constants';
-import { RecipeService, CATEGORY_TABLE_NAME, ORIGIN_TABLE_NAME, 
+import { RecipeService, CATEGORY_TABLE_NAME, 
          ListTable, ListTableItem, RecipeFilterData } from '../model/recipeSvc';
 import { Recipe, RecipeData, RecipePic } from '../model/recipe';
 
@@ -14,8 +14,8 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
 
   @Input() menuOpen    : boolean;    // indicates this panel should open
   @Input() viewShared      : boolean = false;  // indicates user is viewing shared recipes
-  @Input() manageShared    : boolean = false;  // indicates manage shared recipes feature being used
   @Input() constructMenuMessage  : Function;  // function to format menuMessage
+  @Input() columns     : number;    // indicates number of columns in the menu display
 
   sharedFilter        : string = "Either" // select for which recipes are shown in search results
   recipeSelectFlags   : boolean[] = [];
@@ -67,16 +67,6 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
     return 'assets/images/cards2.jpg';
   }
 
-  // return the Origin name for the given Recipe
-  getOriginName = (r : Recipe) : string => {
-    return this.currentRecipe.originListName(r.data.origin);
-  }
-
-  // return the Origin date for the given Recipe
-  getOriginDate = (r : Recipe) : string => {
-    return this.utilSvc.displayOriginDate(r.data.originDate);
-  }
-
   // return the Description text (first 200 chars) for the given Recipe
   getDescription = (r : Recipe) : string => {
     if(r.data.description.length <= 200){
@@ -89,9 +79,7 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
   public deleteMenuItem = (index : number) => {
     var r : RecipeData = this.menuRecipeList()[index].data;
 
-    this.utilSvc.confirmRecipeAction('Delete Recipe', r.title, 
-                            this.currentRecipe.originListName(r.origin), 
-                            this.utilSvc.displayOriginDate(r.originDate), 'Delete')
+    this.utilSvc.confirmRecipeAction('Delete Recipe', r.title, 'Delete')
     .then((deleteIt) => {
       this.utilSvc.displayWorkingMessage(true,'Deleting Recipe');
       this.recipeSvc.deleteRecipe(r._id)
@@ -174,8 +162,7 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
     oldHelpContext = this.utilSvc.getCurrentHelpContext();
     this.utilSvc.setCurrentHelpContext("MakeRecipeShared");
     this.utilSvc.openSharedRecipeSettings('Add Shared Recipe', restrictedTo, 
-            rd.title, this.currentRecipe.originListName(rd.origin), 
-            this.utilSvc.displayOriginDate(rd.originDate), 'Create', 'Share')
+            rd.title, 'Create', 'Share')
     .then((shareThisRecipe) => {
       this.utilSvc.displayWorkingMessage(true,'Creating Shared Recipe');
       this.utilSvc.setCurrentHelpContext(oldHelpContext);
@@ -223,8 +210,7 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
       oldHelpContext = this.utilSvc.getCurrentHelpContext();
       this.utilSvc.setCurrentHelpContext("ManageSharedSettings");
       this.utilSvc.openSharedRecipeSettings('Shared Recipe Settings', sharedRecipe.restrictedTo, 
-                      r.data.title, this.currentRecipe.originListName(r.data.origin),
-                      this.utilSvc.displayOriginDate(r.data.originDate), 'Edit')
+                      r.data.title, 'Edit')
       .then((result) => {
         this.utilSvc.setCurrentHelpContext(oldHelpContext);
         if(result.delete === true){  //are we deleting the public copy?

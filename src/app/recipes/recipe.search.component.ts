@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe  } from '../app.globals';
+import { UserInfo, CurrentRecipe, CatListObj, FormMsgList  } from '../app.globals';
 import { SHARED_USER_ID } from '../constants'
 import { UserSvc } from '../model/userSvc';
 import { MENU_TAB, MENU_TAB_ID } from '../recipes/recipe.access.component'
@@ -15,17 +15,14 @@ import { RecipeService, ListTable, ListTableItem, RecipeFilterData } from '../mo
 export class RecipeSearchComponent implements OnInit, OnDestroy {
 @Input() searchTabOpen    : boolean;
 @Input() viewShared       : boolean = false;  // indicates user is viewing shared recipes
+@Input() dataSet          : string = 'Personal';
 
   checkAll    : boolean   = false; //true if form fields to be checked for errors (touched or not)
-  dataSet     : string = 'Personal';
-  origin      : string = '';
-  categories  : number[] = [];
+  catList     = new CatListObj();
   keywords    : string = '';
-  startDate   : number;
-  endDate     : number;
   sortOrder   : string = 'D';
   recipeList  : Recipe[];
-  requestStatus    : { [key: string]: any } = {};
+  requestStatus    = new FormMsgList();
   selectedItems    : boolean[] = [];
   recipeViewOpen   : boolean = false;
 
@@ -59,18 +56,11 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.checkAll = true;
     this.clearRequestStatus();
     if(this.checkForProblems(form)){return;}
-    if(this.startDate){
-      request.startDate = this.utilSvc.formatOriginDate(this.startDate.toString());
-    }
-    if(this.endDate){
-      request.endDate = this.utilSvc.formatOriginDate(this.endDate.toString());
-    }
-    if(this.checkForProblems(form, request.startDate, request.endDate)){return;}
+    if(this.checkForProblems(form)){return;}
     this.utilSvc.displayWorkingMessage(true, 'Searching');
 
     request.collectionOwnerId = this.viewShared ? SHARED_USER_ID : this.userInfo.authData.uid;
-    if(this.origin && this.origin !== '0'){request.origin = parseInt(<string>this.origin,10);} 
-    if(this.categories.length){ request.categories = this.categories; }
+    if(this.catList.haveCats()){ request.categories = this.catList.cats; }
     if(this.keywords) {  // clean up any wierd leading/trailing commas or comma-space combos
       this.keywords = this.keywords.replace(/( , | ,|, )/g,',').replace(/(^,|,$)/,'');
       request.keywords = this.keywords
@@ -106,47 +96,28 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.utilSvc.scrollToTop();
   }
 
-  // clear part of the date of the date range parameter
-  clearDateRange = (part : string) => {
-    switch(part){
-      case 'start':
-        this.startDate = undefined;
-        break;
-      case 'end':
-        this.endDate = undefined;
-        break;
-      default:
-    }
-  }
-  
   // clear status messages object
   public clearRequestStatus = () => {
-    this.requestStatus = {}; 
+    this.requestStatus.clearMsgs(); 
   }
 
   //add an item to the status messages object
   private setStatusMessage(item : string) : void {
-    this.requestStatus[item] = true; 
+    this.requestStatus.addMsg(item); 
   }
 
   //indicate whether there are any status messages
-  public haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  public haveStatusMessages = () : boolean => {
+    return !this.requestStatus.empty();
   }
 
   // respond to change of dataSet if necessary (Personal/Shared)
   dataSetChange = () : void => {
     if((this.dataSet === 'Shared') !== this.viewShared){
-      this.categories = [];   // categories list will change
-      this.origin = '';       // origins list will change
+      this.catList.clear();   // categories list will change
       this.emit('setViewShared', this.dataSet === 'Shared');
       this.emit('resetSharedFilter');
     }
-  }
-
-  // return the list of origin items from the CurrentRecipe service 
-    originListItems = () => {
-    return this.currentRecipe.originListItems();
   }
 
   // return the list of category items from the CurrentRecipe service 
@@ -166,26 +137,12 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.emit('openSearchCategoriesMenu');
   }
 
-  // remove the given category from the categories for this recipe
-  removeCategory = (id: number) => {
-    var i;
-
-    if(id !== undefined){
-      i = this.categories.indexOf(id);
-      if(i !== -1){
-        this.categories.splice(i,1);      // id found
-      }
-    }
-  }
-  
+ 
   // check the filter form responses for problems
-  private checkForProblems(form? : NgForm, startDate? : string, endDate? : string) : boolean {
+  private checkForProblems(form? : NgForm) : boolean {
     if(form){
       if(form.invalid){
         this.setStatusMessage("formHasErrors");
-      }
-      if((endDate && startDate) && ( endDate < startDate)){
-        this.setStatusMessage("dateConflict");
       }
       return this.haveStatusMessages();
     }

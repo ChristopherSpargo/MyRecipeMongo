@@ -1,17 +1,19 @@
     <!-- Template used to show the appropriate action buttons at the bottom of a form. 
          Used with <app-update-actions> COMPONENT -->
-    <div id="actions" class="d-flex flex-row justify-content-center align-items-center app-bg-primary pb-2">
+    <div id="actions" class="d-flex flex-row justify-content-center align-items-center app-bg-primary 
+                    app-pos-relative pb-2">
+      <app-help-button *ngIf="fHelpBtn"></app-help-button>
       <app-fab *ngIf="!fDeleteCheck || (fOnDelete !== undefined)" fAria="fAddCheck ? fALabel : fSLabel" 
-               [fDisabled]="fDisabled"
-               [fLabel]="fLabels ? (fAddCheck ? fALable : fSLabel) : ''" 
-               fButtonCSS="app-fab-sm-sq fDeleteCheck ? 'mr-4' : ''"
-               fIconColor="app-white" fLabelCSS="app-white"
-               fIcon="{{fAddCheck ? 'add_circle_outline' : 'check_circle_outline'}}">
+              [fDisabled]="fDisabled"
+              [fLabel]="fLabels ? (fAddCheck ? fALable : fSLabel) : ''" 
+              fButtonCSS="app-fab-sm-sq fDeleteCheck ? 'mr-4' : ''"
+              fIconColor="app-white" fLabelCSS="app-white"
+              fIcon="{{fAddCheck ? 'add_circle_outline' : 'check_circle_outline'}}">
       </app-fab>
       <app-fab *ngIf="fDeleteCheck" fAria="remove" [fDisabled]="fDisabled" 
-               fType="(fOnDelete === undefined) ? 'submit' : 'button'"
-               fButtonCSS="app-fab-sm-sq" fLabelCSS="app-white"
-               [fLabel]="fLabels ? fRLabel : ''" [fOnClick]="fOnDelete" [fParam]="fForm"
-               fIcon="remove_circle_outline" fIconColor="app-white">
+              fType="(fOnDelete === undefined) ? 'submit' : 'button'"
+              fButtonCSS="app-fab-sm-sq" fLabelCSS="app-white"
+              [fLabel]="fLabels ? fRLabel : ''" [fOnClick]="fOnDelete" [fParam]="fForm"
+              fIcon="remove_circle_outline" fIconColor="app-white">
       </app-fab>
     </div>

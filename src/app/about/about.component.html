@@ -5,7 +5,7 @@
     <!-- About (Help) Panel -->
     <!-- The appropriate help component based on the current helpContext-->
 
-  <div class="d-flex flex-column app-about-container app-slide-right 
+  <div id="about-panel" class="d-flex flex-column app-about-container app-slide-right 
               app-whiteframe-2dp app-card-corners mb-1"
        [class.app-open]="aboutOpen()">
 
@@ -30,11 +30,10 @@
     </div> 
 
     <!--Section for context specific help information-->
-    <div class="app-about-body-theme app-scroll-frame-left py-2">
+    <div id="about-text" class="app-about-body-theme app-scroll-frame-left py-2">
       <div *ngIf="helpContext() === 'UsingMyRecipeMongo'"   ><app-about-my-recipe-mongo></app-about-my-recipe-mongo></div>
       <div *ngIf="helpContext() === 'ContactUs'"            ><app-about-contact-us></app-about-contact-us></div> 
       <div *ngIf="helpContext() === 'ManageCategories'"     ><app-about-manage-categories></app-about-manage-categories></div>
-      <div *ngIf="helpContext() === 'ManageOrigins'"        ><app-about-manage-origins></app-about-manage-origins></div> 
       <div *ngIf="helpContext() === 'RecipeSearch'"         ><app-about-recipe-search></app-about-recipe-search></div>
       <div *ngIf="helpContext() === 'RecipesMenu'"          ><app-about-recipe-menu></app-about-recipe-menu></div>
       <div *ngIf="helpContext() === 'EnterRecipes'"         ><app-about-enter-recipes></app-about-enter-recipes></div>

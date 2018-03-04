@@ -23,6 +23,7 @@ export class AppFabComponent  {
   @Input() fDelay       : number = 300;             // delay before calling OnClick function
   @Input() fParam       : any = null;               // param to pass to OnClick function
   @Input() fDisabled    : boolean = false;          // true if button is disabled
+  @Input() fVertical    : boolean = false;          // true if label is above or below icon
 
   constructor() {
   };

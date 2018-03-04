@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { IMAGE_DIRECTORY, FORM_HEADER_ICON  } from '../constants'
 import { UtilSvc } from '../utilities/utilSvc';
+import { FormMsgList } from '../app.globals'
 
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -16,8 +17,6 @@ export class SharedRecipeSettingsModalComponentTemplate {
   @Input() heading      : string;
   @Input() itemList     : string[] = [];
   @Input() recipeTitle  : string;
-  @Input() origin       : string;
-  @Input() originDate   : string;
   @Input() okText       : string;
   @Input() deleteText   : string;
   @Input() cancelText   : string;
@@ -30,7 +29,7 @@ export class SharedRecipeSettingsModalComponentTemplate {
   selectedItem        : string    = "";
   newItemName         : string    = "";
   deleteItem          : boolean   = false;
-  requestStatus       : { [key: string]: any }  = {};
+  requestStatus       = new FormMsgList();
 
   constructor(public activeModal: NgbActiveModal) {}
 
@@ -45,7 +44,7 @@ export class SharedRecipeSettingsModalComponentTemplate {
   clearItemList = () => {
     this.itemList = [];
     this.clearRequestStatus();
-    this.requestStatus.itemListCleared = true;
+    this.requestStatus.addMsg('itemListCleared');
   }
 
   // prepare and send request to database service
@@ -89,7 +88,7 @@ export class SharedRecipeSettingsModalComponentTemplate {
         this.itemList.push(this.itemName);         // Add entry          
       break;
     }
-    this.requestStatus[msgId] = true;
+    this.requestStatus.addMsg(msgId);
     this.resetForm(form);
   }
 
@@ -126,30 +125,47 @@ export class SharedRecipeSettingsModalComponentTemplate {
   }
 
   // return whether the selecteditem value is a valid id number
-  canDeleteItem = () => {
+  canDeleteItem = () : boolean => {
     return ((this.selectedItem != "") && (this.selectedItem != "999"));
   } 
 
+  // return true if there is a restricted users list
+  sharingWith = () : string => {
+    let msg : string;
+
+    switch(this.itemList.length){
+      case 0:
+        msg = 'All Users';
+        break;
+      case 1:
+        msg = '1 User';
+        break;
+      default:
+        msg = this.itemList.length + ' Users';
+    }
+    return msg;
+  }
+
   // clear status messages object
   clearRequestStatus = () => {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () : boolean => {
+    return !this.requestStatus.empty();
   }
 
   // return true if there is something wrong with the form input
   checkForProblems(form: NgForm) : boolean {
     if(form.invalid){
-       this.requestStatus.formHasErrors = true;
+       this.requestStatus.addMsg('formHasErrors');
       return true;
     }
     if(this.selectedItem == "999"){  // user specify new item name?
       if(this.getListItemIndexByName(this.newItemName) !== -1){
-        this.requestStatus.itemAlreadyInList = true;
-        return;
+        this.requestStatus.addMsg('itemAlreadyInList');
+        return true;
       }
     }
     return this.selectedItem == "";

@@ -5,7 +5,7 @@
  <div class="app-container"> 
   <div  id="mainToolbarSm"
         class=" nav app-toolbar-theme app-main-short-toolbar hidden-md-up 
-               d-flex flex-row justify-content-between align-items-center">
+               d-flex flex-row justify-content-around align-items-center">
 
             <!-- Display the Logo Text -->
     <div class="app-logo-text-container app-cursor-pointer" (click)="toggleAbout()"
@@ -15,7 +15,7 @@
                 <!-- Now some feature buttons -->
     <button type="button" class="btn app-bar-feature-button "  
             data-toggle="tooltip" data-placement="top" title="Search Recipes" data-delay="200"
-                (click)="menuItemSelected('searchRecipes')">
+                (click)="menuItemSelected('searchMyRecipes')">
       <i class="material-icons app-bar-feature-icon align-self-end" aria-label="search recipes">search</i>
     </button>
     <button type="button" class="btn app-bar-feature-button "  
@@ -73,10 +73,19 @@
               <ul class="app-slide-menu-ul">
                 <li>
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
-                          (click)="menuItemSelected('searchRecipes')">
+                          (click)="menuItemSelected('searchMyRecipes')">
                     <div class="d-flex flex-row align-items-center">
                       <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
-                      Recipe Search
+                      Search My Recipes
+                    </div>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
+                          (click)="menuItemSelected('searchSharedRecipes')">
+                    <div class="d-flex flex-row align-items-center">
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
+                      Search Shared Recipes
                     </div>
                   </button>
                 </li>
@@ -93,14 +102,14 @@
             </div>
           </li>
           <li id="listsMenu">
-            <button type="button" class="btn app-slide-menu-listitem" (click)="toggleListsMenu()">
+            <button type="button" class="btn app-slide-menu-listitem" 
+                                    (click)="menuItemSelected('manageCategories')">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-menu-icon-color app-menu-item-icon ">list</i>
-                Lists
-                <i class="material-icons app-form-theme-text ml-1">{{!listsMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon ">description</i>
+                Categories
               </div>
             </button>
-            <div class="app-slidenav-submenu" [class.app-open]="listsMenuOpen()">
+            <!-- <div class="app-slidenav-submenu" [class.app-open]="listsMenuOpen()">
               <ul class=" app-slide-menu-ul ">
                 <li>
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
@@ -111,17 +120,8 @@
                     </div>
                   </button>
                 </li>
-                <li>
-                  <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
-                          (click)="menuItemSelected('manageOrigins')">
-                    <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">face</i>
-                      Manage Origins
-                    </div>
-                  </button>
-                </li>
               </ul>
-            </div>
+            </div> -->
           </li>
           <li id="accountMenu">
             <button type="button" class="btn app-slide-menu-listitem" (click)="toggleAccountMenu()">
@@ -261,18 +261,14 @@
         <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" 
            href="#" role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="searchRecipes">Recipe Search</a>
+          <a role="button" class="dropdown-item app-dropdown-text" uiSref="searchMyRecipes">Search My Recipes</a>
+          <a role="button" class="dropdown-item app-dropdown-text" uiSref="searchSharedRecipes">Search Shared Recipes</a>
           <a role="button" class="dropdown-item app-dropdown-text" uiSref="enterRecipe">Add a Recipie</a>
         </div>
       </li>
-                <!-- Dropdown menu for list management features -->
-      <li id="listsMenu" ngbDropdown class="nav-item dropdown  mx-2">
-        <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" href="#" 
-           role="button" aria-haspopup="true" aria-expanded="false">Lists</a>
-        <div class="dropdown-menu app-toolbar-submenu-theme">
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="manageCategories">Manage Categories</a>
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="manageOrigins">Manage Origins</a>
-        </div>
+                <!-- Category management feature -->
+      <li id="categoriesBtn" class="nav-item mx-2">
+        <a role="button" class="nav-link app-toolbar-text" uiSref="manageCategories">Categories</a>
       </li>
                 <!-- Dropdown menu for account management features -->
       <li id="accountMenu" ngbDropdown class="nav-item dropdown mx-2">
@@ -304,14 +300,19 @@
       <li id="signOutBtn" *ngIf="loggedIn()" class="nav-item mx-2">
         <a role="button" class="nav-link app-toolbar-text" (click)="closeSlidenav(); logout($event)">Sign Out</a>
       </li>
-    </ul>  
                 <!-- Icon for signed in/out status -->
-    <div id="authStatus" class="mr-4 d-flex flex-row align-items-center">
-      <i *ngIf="!loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
-          data-toggle="tooltip" data-placement="top" title="Sign In" data-delay="200"
-          (click)="closeSlidenav()" uiSref="login">person_outline</i>
-      <i *ngIf="loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
-          data-toggle="tooltip" data-placement="top" title="Sign Out" data-delay="200"
-          (click)="closeSlidenav(); logout($event)">person</i>
+      <li id="authStatus" class="ml-2 d-flex flex-row align-items-center">
+        <i *ngIf="!loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
+            data-toggle="tooltip" data-placement="top" title="Sign In" data-delay="200"
+            (click)="closeSlidenav()" uiSref="login">person_outline</i>
+        <i *ngIf="loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
+            data-toggle="tooltip" data-placement="top" title="Sign Out" data-delay="200"
+            (click)="closeSlidenav(); logout($event)">person</i>
+      </li>
+    </ul>  
+    <div class="mr-4 d-flex flex-column align-items-center">
+      <app-help-button
+        fPosition  = "relative">
+      </app-help-button>
     </div>
  </div>

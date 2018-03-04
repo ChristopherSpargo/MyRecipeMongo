@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { StateService } from "@uirouter/angular";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo } from '../app.globals';
-import { RecipeService, CATEGORY_TABLE_NAME, ORIGIN_TABLE_NAME, 
+import { UserInfo, FormMsgList } from '../app.globals';
+import { RecipeService, CATEGORY_TABLE_NAME, 
          ListTableItem, ListTable, RecipeFilterData } from '../model/recipeSvc'
 import { RecipeData } from '../model/recipe';
-import { UNSET_ORIGIN_ID } from '../constants'
 
     // COMPONENT for MANAGE CATEGORIES feature
 
@@ -27,7 +26,7 @@ export class ListManagementComponent implements OnInit {
   newItemName         : string    = "";
   deleteItem          : boolean   = false;
   itemList            : ListTableItem[]  = undefined;
-  requestStatus       : { [key: string]: any }  = {};
+  requestStatus       = new FormMsgList();
   listName            : string;
   listIcon            : string;
   itemReference       : string;
@@ -42,24 +41,12 @@ export class ListManagementComponent implements OnInit {
       this.utilSvc.returnToHomeMsg("signInToAccessLists"); // let user know they need to log in
     } 
     else {
-      switch(this.stateService.current.name){
-        case 'manageCategories':
-          this.tableName      = CATEGORY_TABLE_NAME;
-          this.listName       = 'Category';
-          this.listIcon       = 'assessment';
-          this.itemReference  = 'a';
-          this.formTitle      = 'Recipe Categories';
-          this.helpContext    = 'ManageCategories';
-          break;
-        case 'manageOrigins':
-          this.tableName      = ORIGIN_TABLE_NAME;
-          this.listName       = 'Origin';
-          this.listIcon       = 'face';
-          this.itemReference  = 'an';
-          this.formTitle      = 'Recipe Origins'; 
-          this.helpContext    = 'ManageOrigins';
-          break;
-      }
+      this.tableName      = CATEGORY_TABLE_NAME;
+      this.listName       = 'Category';
+      this.listIcon       = 'assessment';
+      this.itemReference  = 'a';
+      this.formTitle      = 'Recipe Categories';
+      this.helpContext    = 'ManageCategories';
       // update the current help context and open the List Management form
       this.utilSvc.setCurrentHelpContext(this.helpContext); // note current state
       this.utilSvc.displayUserMessages();;
@@ -105,10 +92,6 @@ export class ListManagementComponent implements OnInit {
     msg = this.listName + " '" + this.listItem.name + "'";
     // now set the action to perform and the status message for the user
     if(this.selectedItem == "999"){  // user specify new item name?
-      if(this.getListItemIndexByName(this.newItemName) !== -1){
-        this.requestStatus.itemAlreadyInList = true;
-        return;
-      }
       msgId = "listItemAdded";
       action = "Add";
     } 
@@ -156,26 +139,16 @@ export class ListManagementComponent implements OnInit {
          resolve('Ok');
       } else {
         // read the necessary data from the affected recipes
-        if(this.tableName === CATEGORY_TABLE_NAME){
-          query.categories = [id];
-          query.projection = {'_id': 1, 'categories': 1}; // read categories list if Removed category
-        } else {
-          query.origin = id;
-          query.projection = {'_id': 1};      // just get object ids if Removed origin
-        }
+        query.categories = [id];
+        query.projection = {'_id': 1, 'categories': 1}; // read categories list if Removed category
         this.recipeSvc.getRecipes(query)
         .then((data : RecipeData[]) => {
           data.forEach((r) => {
             let updateObj;
-            if(this.tableName === CATEGORY_TABLE_NAME){
-              // remove category from the recipe's categories list
-              let i = r.categories.indexOf(id);
-              r.categories.splice(i,1);
-              updateObj = {"categories": r.categories};
-            } else {
-              // replace the origin with UNSET_ORIGIN
-              updateObj = {"origin": UNSET_ORIGIN_ID};
-            }
+            // remove category from the recipe's categories list
+            let i = r.categories.indexOf(id);
+            r.categories.splice(i,1);
+            updateObj = {"categories": r.categories};
             // update each recipe and save a promise for each update request
             promises.push(this.recipeSvc.updateRecipe(r._id, updateObj));
           });
@@ -224,7 +197,8 @@ export class ListManagementComponent implements OnInit {
   // get the form ready for another operation
   resetForm(form : NgForm) : void {
     if(form){
-      form.resetForm();
+      form.controls.itemName.markAsUntouched();
+      form.controls.newIName.markAsUntouched();
     }
     this.checkAll     = false;
     this.selectedItem = "";
@@ -240,19 +214,25 @@ export class ListManagementComponent implements OnInit {
 
   // clear status messages object
   clearRequestStatus = () => {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
   haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+    return !this.requestStatus.empty();
   }
 
   // return true if there is something wrong with the form input
   checkForProblems(form: NgForm) : boolean {
     if(form.invalid){
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return true;
+    }
+    if(this.selectedItem == "999"){  // user specify new item name?
+      if(this.getListItemIndexByName(this.newItemName) !== -1){
+        this.requestStatus.addMsg('itemAlreadyInList');
+        return true;
+      }
     }
     return this.selectedItem == "";
  }

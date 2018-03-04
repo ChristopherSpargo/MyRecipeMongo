@@ -23,21 +23,6 @@
             (ngSubmit)="userListAction(profileForm)">
         <div class="d-flex flex-column px-2">
 
-             <!-- Default Origin field -->
-          <app-list-item-field 
-              [fForm]         = "profileForm"
-              [fCheckAll]     = "checkAll"
-              fName           = "origin"
-              fRef            = "rO"
-              [(fValue)]      = "defaultRecipeOrigin"
-              fLabel          = "Usual recipe origin:"
-              fIcon           = "face" 
-              fColor          = "app-accent1"
-              [fOnFocus]      = "clearRequestStatus"
-              [fList]         = "originList"
-              fListValue      = "idName"
-              [fAllowNew]     = "false">
-          </app-list-item-field>
 
           <div class="d-flex flex-row justify-content-start app-flex-1 align-items-center 
                       app-black-text-low app-bold  mt-3 app-smaller-font">
@@ -47,13 +32,13 @@
           <!-- Default Shared Recipe Users field -->
           <div class="d-flex flex-row justify-content-start align-items-center">
             <div class="app-width-90">
-              <app-list-item-field 
+              <app-list-item-field  
                 [fForm]         = "profileForm"
                 [fCheckAll]     = "checkAll"
                 fName           = "itemName"
                 fRef            = "iName"
                 [(fValue)]      = "selectedItem"
-                fLabel          = "Authorized User" 
+                fLabel          = "Authorized Users" 
                 fIcon           = "mail_outline" 
                 fColor          = "app-accent1"
                 [fRequired]     = "false"
@@ -66,6 +51,7 @@
                 fNewTest        = ""
                 fNewName        = "newIName"
                 fNewRef         = "nIName"
+                fNewLabel       = "Authorized User" 
                 [(fNewValue)]   = "newItemName">
               </app-list-item-field>
             </div>
@@ -82,31 +68,36 @@
               <app-message name="formHasErrors" class="app-error">
                 Please correct the fields with errors.
               </app-message>
-                  <app-message name="listItemAdded" class="app-success">
+              <app-message name="listItemAdded" class="app-success">
                 List item added.
               </app-message>
               <app-message name="listItemRemoved" class="app-success">
                 List item removed.
               </app-message>
               <app-message name="itemListCleared" class="app-success">
-                  Item list cleared.
+                Item list cleared.
               </app-message>
               <app-message name="listItemUpdated" class="app-success">
                 List item updated.
               </app-message>
-            </app-messages>
+              <app-message name="itemAlreadyInList" class="app-error">
+                Item already in list.
+            </app-message>
+          </app-messages>
           </app-form-messages>                    
 
         </div>
                             
           <!-- Actions Area -->
-          <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary pb-2"> 
-            <app-fab 
+          <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary 
+                      app-pos-relative pb-2"> 
+                  <app-help-button></app-help-button>
+                  <app-fab 
                     fType       = "button"
                     fLabel      = "Update"
                     fLabelCSS   = "app-white"
                     [fOpen]     = "true"
-                    fButtonCSS  = "app-fab-sm-sq app-bg-primary mb-1"
+                    fButtonCSS  = "app-fab-sm-sq app-bg-primary mt-1"
                     [fDelay]    = "200"
                     [fOnClick]  = "submitUpdate"
                     [fParam]    = "profileForm"

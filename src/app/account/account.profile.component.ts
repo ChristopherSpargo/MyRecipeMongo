@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo } from '../app.globals';
+import { UserInfo, FormMsgList } from '../app.globals';
 import { UserSvc } from '../model/userSvc'
-import { RecipeService, ORIGIN_TABLE_NAME, ListTableItem } from '../model/recipeSvc';
+import { RecipeService, ListTableItem } from '../model/recipeSvc';
 
     // COMPONENT for PROFILE UPDATE feature
 
@@ -18,14 +18,12 @@ export class AccountProfileComponent implements OnInit {
     // COMPONENT for PROFILE UPDATE feature
 
   checkAll           : boolean   = false; //true if form fields to be checked for errors (touched or not)
-  defaultRecipeOrigin : string    ='';
   itemName            : string    = "";
   itemList            : string[]  = [];
   selectedItem        : string    = "";
   newItemName         : string    = "";
   deleteItem          : boolean   = false;
-  originList         : ListTableItem[] = [];
-  requestStatus      : { [key: string]: any } = {};
+  requestStatus      = new FormMsgList();
   formOpen           : boolean = false;
 
   ngOnInit(){
@@ -34,22 +32,12 @@ export class AccountProfileComponent implements OnInit {
     }
     else{
       // set initial values for form fields
-      this.defaultRecipeOrigin =
-       this.userInfo.profile.defaultRecipeOrigin ? this.userInfo.profile.defaultRecipeOrigin.toString() : '';
       this.itemList =
        this.userInfo.profile.defaultSharedUsers ? this.userInfo.profile.defaultSharedUsers : [];
-      this.recipeSvc.getList(ORIGIN_TABLE_NAME, this.userInfo.authData.uid ) //read list of origins
-      .then((oList) => {
-        this.originList = oList.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});  
-        //the next line will call open<id>Tab from the (tabChange) handler of the TABS element
-        this.formOpen = true;
-      })
-      .catch((error) => {
-        this.utilSvc.returnToHomeMsg("errorReadingList", 400, 'Origins');
-      })
 
       // update the current help context and open the Profile Update form
       this.utilSvc.setCurrentHelpContext("ProfileUpdate"); //note current state
+      this.formOpen = true;
     }
   }
 
@@ -57,7 +45,7 @@ export class AccountProfileComponent implements OnInit {
   clearItemList = () => {
     this.itemList = [];
     this.clearRequestStatus();
-    this.requestStatus.itemListCleared = true;
+    this.requestStatus.addMsg('itemListCleared');
   }
 
 
@@ -66,11 +54,9 @@ export class AccountProfileComponent implements OnInit {
     this.checkAll = true;
     this.clearRequestStatus();
     if(form.invalid){
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return;
     }
-    this.userInfo.profile.defaultRecipeOrigin = 
-    this.defaultRecipeOrigin === '' ? 0 : parseInt(this.defaultRecipeOrigin,10);
     this.userInfo.profile.defaultSharedUsers = this.itemList;
     this.utilSvc.displayWorkingMessage(true);
     this.userSvc.updateUserProfile(this.userInfo)
@@ -134,7 +120,7 @@ export class AccountProfileComponent implements OnInit {
         this.itemList.push(this.itemName);         // Add entry          
       break;
     }
-    this.requestStatus[msgId] = true;
+    this.requestStatus.addMsg(msgId);
     this.resetForm(form);
   }
 
@@ -153,9 +139,9 @@ export class AccountProfileComponent implements OnInit {
   // get the form ready for another operation
   resetForm(form : NgForm) : void {
     if(form){
-      // form.controls.origin.markAsUntouched();
-      form.controls.itemName.markAsUntouched();
-   }
+      form.controls['itemName'].markAsUntouched();
+      form.controls['newIName'].markAsUntouched();
+    }
     this.checkAll = false;
     this.selectedItem = "";
     this.deleteItem   = false;
@@ -167,11 +153,26 @@ export class AccountProfileComponent implements OnInit {
     return ((this.selectedItem != "") && (this.selectedItem != "999"));
   } 
 
+  // return the list index position for the item with the given name
+  getListItemIndexByName = (n : string) : number => {
+    for(let i=0; i<this.itemList.length; i++){
+      if(this.itemList[i].toLowerCase() === n.toLowerCase() ){ return i;}
+    }
+    return -1;    //not found
+  }
+
+
   // return true if there is something wrong with the form input
   checkForProblems(form: NgForm) : boolean {
     if(form.invalid){
-       this.requestStatus.formHasErrors = true;
+       this.requestStatus.addMsg('formHasErrors');
       return true;
+    }
+    if(this.selectedItem == "999"){  // user specify new item name?
+      if(this.getListItemIndexByName(this.newItemName) !== -1){
+        this.requestStatus.addMsg('itemAlreadyInList');
+        return true;
+      }
     }
     return this.selectedItem == "";
   }
@@ -179,12 +180,12 @@ export class AccountProfileComponent implements OnInit {
 
   // clear status messages object
   clearRequestStatus = () => {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () : boolean => {
+    return !this.requestStatus.empty();
   }
 
   // set form closed flag, wait for animation to complete before changing states to 'home'

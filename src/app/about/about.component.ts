@@ -10,7 +10,6 @@ export const HelpContextTitles = {
       ViewRecipe          : ['search','Viewing Recipes'],
       EnterRecipes        : ['edit','Entering Recipe Information'],
       ManageCategories    : ['vpn_key','Managing Recipe Categories'],
-      ManageOrigins       : ['face','Managing Recipe Origins'],
       MakeRecipeShared    : ['add_circle_outline','Adding a Shared Recipe'],
       ManageSharedSettings: ['settings_applications','Managing Shared Settings'],
       ProfileUpdate       : ['folder_open','Updating Your Profile'],

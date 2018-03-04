@@ -10,7 +10,6 @@ export class FormMessagesComponent  {
 
   @Input() fHaveMessage       : boolean = true;           // true if message area should be open
   @Input() fMessageOpen       : boolean;                  // true if "Messages" display open
-  @Input() fMessageObj        : { [key: string]: any };   // object containing message keys
 
   constructor() {
   };

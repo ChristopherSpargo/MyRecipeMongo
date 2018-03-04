@@ -28,6 +28,7 @@
         <ng-template ngbTabContent>
           <!-- Component to display the recipe search form -->
            <app-recipe-search
+            [dataSet]       = "dataSet"
             [viewShared]    = "viewShared"
             [searchTabOpen] = "searchTabOpen">
           </app-recipe-search> 
@@ -46,7 +47,7 @@
           <!-- Component to display the menu of recipes from search -->
            <app-recipe-menu
             [viewShared]             = "viewShared"
-            [manageShared]           = "manageShared"
+            [columns]                = "menuColumns"
             [menuOpen]               = "menuTabOpen"
             [constructMenuMessage]   = "constructMenuMessage">
           </app-recipe-menu> 

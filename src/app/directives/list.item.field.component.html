@@ -14,7 +14,7 @@
             [class.has-value]="hasValue()" 
             [class.has-focus]="focused" 
             [class.app-show-required]="fRequired && !hasValue()">
-            {{fLabel}}</label>
+            {{currentLabel()}}</label>
       <div class="d-flex flex-row">
         <i class="material-icons app-input-icon {{fColor}}">{{fIcon}}</i>
         <select name="{{fName}}" ngModel
@@ -25,7 +25,7 @@
                 (focus)="showFocused()" (blur)="showNotFocused()" (change)="valueChange()">
             <option disabled class="app-no-display"></option>
             <ng-container *ngIf="fAllowNew || fShowNew">
-              <option  value="999" class="app-form-theme-select-menu-lg">New {{fLabel}}</option>
+              <option  value="999" class="app-form-theme-select-menu-lg">New {{fNewLabel}}</option>
             </ng-container>
             <ng-container *ngIf="fAllowAny">
               <option value="0"class="app-form-theme-select-menu-lg">Any {{fLabel}}</option>
@@ -73,14 +73,14 @@
           [fDisabled]   = "fDisabled"
           [fCapitalize] = "fCapitalize"
           fType         = "text" 
-          fPattern      = "^[ @.#,!?'$\-\w]+$"
+          fPattern      = "^[ /@.#,!?'$\-\w]+$"
           fMaxlength    = "30"
-          fLabel        = "{{fValue == '999' ? 'New' : 'Edit'}} {{fLabel}}"  
+          fLabel        = "{{fValue == '999' ? 'New' : 'Edit'}} {{fNewLabel}}"  
           fIcon         = "{{fValue == '999' ? 'add_circle_outline' : 'edit'}}"
           fColor        = "{{fColor}}" 
           [(fValue)]    = "fNewValue" 
           fErrors       = "required|pattern"
-          fErrorMsgs    = "New {{fLabel}} is required.|Invalid character or format for {{fLabel}}."
+          fErrorMsgs    = "New {{fNewLabel}} is required.|Invalid character or format for {{fNewLabel}}."
           fExtraCSS     = "mb-2"
           [fOnInput]    = "newValueChange"
           [fFocusFn]    = "fOnFocus">

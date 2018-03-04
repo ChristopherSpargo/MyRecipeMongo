@@ -20,7 +20,6 @@ import { AboutContactUsComponent } from './about/about.contact.us.component';
 import { AboutLoginComponent } from './about/about.login.component';
 import { AboutEnterRecipesComponent } from './about/about.enter.recipes.component';
 import { AboutManageCategoriesComponent } from './about/about.manage.categories.component';
-import { AboutManageOriginsComponent } from './about/about.manage.origins.component';
 import { AboutAccountProfileComponent } from './about/about.account.profile.component';
 import { AboutAccountEmailComponent } from './about/about.account.email.component';
 import { AboutAccountPasswordComponent } from './about/about.account.password.component';
@@ -46,8 +45,8 @@ import { RecipePrintComponent } from "./recipes/recipe.print.component";
 import { AppRecipeSectionComponent } from './directives/app.recipe.section.component';
 import { FormFooterButtonComponent } from "./directives/form.footer.button.component";
 import { loginState, homeState, manageCategoriesState, enterRecipeState,
-         manageOriginsState, accountProfileState, accountEmailState, accountPasswordState,
-         accountDeleteState, recipeSearchState } from "./states";
+         accountProfileState, accountEmailState, accountPasswordState,
+         accountDeleteState, myRecipeSearchState, sharedRecipeSearchState } from "./states";
 import { ModalComponent } from './modal/modal.component';
 import { SimpleModalComponentTemplate } from './modal/simple.modal.component.template';
 import { RecipeActionModalComponentTemplate } from './modal/recipe.action.modal.component.template';
@@ -71,13 +70,14 @@ import { AppFabComponent } from './directives/app.fab.component';
 import { RadioGroupComponent } from './directives/radio.group.component';
 import { CheckboxMenuComponent } from './directives/checkbox.menu.component';
 import { CrossSvc } from './app.bank'
+import { HelpButtonComponent } from './directives/help.button.component'
 
 const INITIAL_STATES =  [ homeState, loginState, manageCategoriesState, enterRecipeState,
-    manageOriginsState, accountProfileState, accountEmailState, accountPasswordState, accountDeleteState,
-    recipeSearchState ];
+    accountProfileState, accountEmailState, accountPasswordState, accountDeleteState,
+    myRecipeSearchState, sharedRecipeSearchState ];
 const INITIAL_COMPONENTS =  [ AppComponent, HomeComponent, LoginComponent, FormHeaderComponent, IconInputComponent,
   ValidationMessageComponent, ValidationMessagesComponent, RegisterFormControlDirective, AppMessagesComponent,
-  IconTextareaComponent, AppMessageComponent, ModalComponent, 
+  IconTextareaComponent, AppMessageComponent, ModalComponent, HelpButtonComponent,
   SimpleModalComponentTemplate, RecipeActionModalComponentTemplate, SharedRecipeSettingsModalComponentTemplate,
   ListManagementComponent, ListItemFieldComponent, FormFooterButtonComponent,
   UpdateActionsComponent, DeleteEntryComponent, FormMessagesComponent, AppFabComponent,
@@ -86,7 +86,7 @@ const INITIAL_COMPONENTS =  [ AppComponent, HomeComponent, LoginComponent, FormH
   AccountDeleteComponent, AboutComponent, AboutHeadingComponent, AboutTextIconComponent, 
   AboutMyRecipeMongoComponent,
   AboutLoginComponent, AboutEnterRecipesComponent, AboutManageCategoriesComponent,
-  AboutManageOriginsComponent, AboutContactUsComponent, AboutAccountProfileComponent, AboutAccountEmailComponent,
+   AboutContactUsComponent, AboutAccountProfileComponent, AboutAccountEmailComponent,
   AboutAccountPasswordComponent, AboutAccountDeleteComponent, RecipeAccessComponent, RecipeMenuComponent,
   RecipeSearchComponent, AppRecipeSectionComponent, RadioGroupComponent, 
   AboutRecipeSearchComponent, AboutRecipeMenuComponent,

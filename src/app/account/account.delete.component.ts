@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo } from '../app.globals';
+import { UserInfo, FormMsgList } from '../app.globals';
 import { UserSvc } from '../model/userSvc'
 import { CookieSvc } from '../utilities/cookieSvc';
 import { RecipeService } from '../model/recipeSvc'
@@ -20,7 +20,7 @@ export class AccountDeleteComponent implements OnInit {
   checkAll           : boolean   = false; //true if form fields to be checked for errors (touched or not)
   userEmail          : string;
   password           : string = "";
-  requestStatus      : { [key: string]: any } = {};
+  requestStatus      = new FormMsgList();
   formOpen           : boolean = false;
 
   ngOnInit() {
@@ -41,7 +41,7 @@ export class AccountDeleteComponent implements OnInit {
     this.clearRequestStatus();
     this.checkAll = true;
     if(form.invalid){
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return;
     }
     // Double check with user that they really want to do this
@@ -65,15 +65,15 @@ export class AccountDeleteComponent implements OnInit {
         .catch((accountDeleteFailed) => {
           switch (accountDeleteFailed) {  // decide which status message to give
             case "INVALID_PASSWORD":
-              this.requestStatus.incorrectPassword = true;
+              this.requestStatus.addMsg('incorrectPassword');
               break;
             case "INVALID_USER":
-              this.requestStatus.unrecognizedEmail = true;
+              this.requestStatus.addMsg('unrecognizedEmail');
               break;
             default:
               this.utilSvc.setUserMessage("accountDeleteFailed");
           }
-          this.requestStatus.deleteFail = true;
+          this.requestStatus.addMsg('deleteFail');
           this.utilSvc.displayWorkingMessage(false);
         });
       })
@@ -114,12 +114,12 @@ export class AccountDeleteComponent implements OnInit {
 
   // clear status messages object
   clearRequestStatus = ()=> {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () : boolean => {
+    return !this.requestStatus.empty();
   }
 
   //set form closed flag, wait for animation to complete before changing states to 'home'

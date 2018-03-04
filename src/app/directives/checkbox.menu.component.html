@@ -3,19 +3,16 @@
       (click)="closeMenu()"></div>
         
   <!-- container for menu -->
-  <div class="d-flex flex-column app-catList-container app-fade-in
-              app-whiteframe-2dp app-card-corners mb-1"
+  <div class="d-flex flex-column app-catList-container app-fade-in mb-1"
       [ngClass]="{'app-open': menuOpen,
-                  'app-z--5': !menuOpen}">
-
+                  'app-z--5': menuHidden}">
+        
   <!-- menu header area -->
-    <div class="app-card-top-corners">
-      <div class="app-catlist-header-theme app-card-top-corners">
-          <div class="d-flex flex-row justify-content-around align-items-center">
-            {{fTitle}}
-          </div>
-      </div>
-    </div> 
+    <div class="app-catlist-header-theme ">
+        <div class="d-flex flex-row justify-content-around align-items-center">
+          {{fTitle}}
+        </div>
+    </div>
 
     <!-- list of menu items -->
     <div class="app-catlist-body-theme app-scroll-frame-left my-2">
@@ -33,7 +30,7 @@
 
     <!-- footer with action buttons -->
     <div class="d-flex flex-row app-flex-1 justify-content-around align-items-center 
-                app-catlist-footer-theme app-card-bottom-corners">
+                app-catlist-footer-theme">
       <app-fab 
             fType       = "button"
             fLink       = "Cancel"

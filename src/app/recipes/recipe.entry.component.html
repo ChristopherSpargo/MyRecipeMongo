@@ -10,9 +10,8 @@
             fTitle       = "Recipe Categories"
             fMessage     = "Select all that apply:"
             fOpenMsg     = "openEntryCategoriesMenu"
-            [fOnSave]    = "categoriesAdded"
             [fItems]     = "categoryListItems()"
-            [(fSelected)] = "rCategories.cats">
+            [(fCatList)] = "rCategories">
     </app-checkbox-menu>
  
     <!-- Instructional messages -->
@@ -63,19 +62,16 @@
               fLabel        = "Description:"  
               fIcon         = "description"
               fColor        = "app-active-input-icon-color" 
-              [fRequired]   = "true" 
               [(fValue)]    = "rDescription" 
               fMaxlength    = "10000"
               fRows         = "15"
-              fErrors       = "required"
-              fErrorMsgs    = "A Description is required."
               [fFocusFn]    = "clearRequestStatus">
             </app-icon-textarea> 
 
               <!-- Category selection field -->
             <div class="d-flex flex-row justify-content-end align-items-center pr-1 pt-3">
               <label class="app-icon-input-field-label-sm app-recipe-pics-field-label pl-1"
-                    [ngClass]="{'app-show-required': !haveCategories()}">
+                    [ngClass]="{'app-show-required': !rCategories.haveCats()}">
                 Categories:
               </label>
             </div> 
@@ -88,7 +84,7 @@
                                 app-recipe-category-button app-category-button-theme mb-1">
                     {{getCategoryName(c)}}
                     <i class="material-icons app-category-delete-icon app-warn ml-1" 
-                      (click)="removeCategory(c)">close</i>
+                      (click)="rCategories.removeCat(c)">close</i>
                   </div> 
                   <!-- display a button at the end of the list to activate the selection menu -->
             <app-fab
@@ -106,7 +102,9 @@
               </div>
 
               <div class="app-field-messages" 
-                    [style.visibility]="(rCategories.touched || checkAll) ? 'visible' : 'hidden'">
+                   [ngClass]="{'app-visible': (rCategories.touched || checkAll),
+                               'app-invisible': !(rCategories.touched || checkAll)}">
+                    <!-- [style.visibility]="(rCategories.touched || checkAll) ? 'visible' : 'hidden'"> -->
                 <validation-messages [vField]="rCategories">
                   <validation-message name="required">
                     At least 1 category is required.
@@ -117,62 +115,6 @@
                 </validation-messages>
               </div> 
             </div>
-          </app-recipe-section>
-
-          <app-recipe-section fLabel="Origins" [(fOpenFlag)]="originOpen" [fTextOnly]="true"
-            fExtraCSS="px-1">
-              <!-- Origin selection field -->
-            <app-list-item-field 
-              [fForm]         = "recipeEntryForm"
-              [(fCheckAll)]   = "checkAll"
-              fName           = "rOrig"
-              fRef            = "rO"
-              [fRequired]     = "false" 
-              [(fValue)]      = "rOrigin"
-              fLabel          = "Recipe Origin:" 
-              fIcon           = "face" 
-              fColor          = "app-active-input-icon-color "
-              [fOnFocus]      = "clearRequestStatus"
-              [fList]         = "originListItems()"
-              [fShowNew]      = "false"
-              [fAllowNew]     = "false"
-              fListValue      = "idName">
-            </app-list-item-field> 
-  
-            <!-- Origin Date Field -->
-
-            <app-icon-input
-              [fForm]       = "recipeEntryForm" 
-              [(fCheckAll)] = "checkAll"
-              fRef          = "oD" 
-              fName         = "oDate" 
-              fType         = "number" 
-              fLabel        = "Origin Date:"  
-              fIcon         = "insert_invitation"
-              fColor        = "app-active-input-icon-color" 
-              [(fValue)]    = "rOriginDate" 
-              fPattern      = "^\d\d\d\d$"
-              fErrors       = "pattern"
-              fErrorMsgs    = "Format is: yyyy"
-              fExtraCSS     = "mb-0"
-              [fFocusFn]    = "clearRequestStatus">
-            </app-icon-input>
-  
-            <!-- Origin Notes field -->
-            <app-icon-textarea
-              [fForm]       = "recipeEntryForm" 
-              [(fCheckAll)] = "checkAll"
-              fRef          = "oN" 
-              fName         = "oNotes" 
-              fLabel        = "Origin Notes:"  
-              fIcon         = "edit"
-              fColor        = "app-active-input-icon-color" 
-              [(fValue)]    = "rOriginNotes" 
-              fMaxlength    = "10000"
-              fRows         = "15"
-              fTextSize     = "app-recipe-edit-text"
-              [fFocusFn]    = "clearRequestStatus">
-            </app-icon-textarea> 
           </app-recipe-section>
 
           <app-recipe-section fLabel="Ingredients and Instructions" [(fOpenFlag)]="specificsOpen" [fTextOnly]="true"
@@ -260,10 +202,18 @@
             </div> 
             <div class="app-icon-input-field-container app-recipe-image-container pt-3">
               <div class="d-flex flex-column">
-                <div *ngFor="let p of rPictures; index as i"> 
-                  <div class="d-flex flex-row justify-content-end align-items-center 
-                              app-recipe-image-controls px-1">
+                <div *ngFor="let p of rPictures; index as i" class="app-whiteframe-2dp mb-2"> 
+                  <div class="d-flex flex-row justify-content-between align-items-center 
+                              app-recipe-image-controls app-bg-gwhite px-1">
+                    <i *ngIf="i === 0" class="material-icons app-category-delete-icon
+                                            app-black-text-medium app-cursor-default" 
+                        data-toggle="tooltip" data-placement="top" title="Main Picture" data-delay="200"
+                    >check</i>
+                    <i *ngIf="i !== 0" class="material-icons app-category-delete-icon app-primary" 
+                        data-toggle="tooltip" data-placement="top" title="Make Main Picture" data-delay="200"
+                      (click)="makeMainImage(i)">arrow_upward</i>
                     <i class="material-icons app-category-delete-icon app-warn" 
+                        data-toggle="tooltip" data-placement="top" title="Delete Picture" data-delay="200"
                       (click)="removePicture(i)">close</i>
                   </div>
                   <img [src]="p.picURL" class="app-recipe-image" name="{{'pic'+i}}">
@@ -293,21 +243,20 @@
         </div>
 
         <!-- Actions Area -->
-        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary py-2">
-          <div class="app-smaller-font mr-4 mb-0">
+        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary 
+                    app-pos-relative pb-2">
+          <app-help-button></app-help-button>
             <app-fab
                     fType       = "submit"
                     fLabel      = "Save"
                     [fOpen]     = "true"
-                    fButtonCSS  = "app-fab-sm-sq app-white"
+                    fButtonCSS  = "app-fab-sm-sq app-white mr-4"
                     [fDelay]    = "200"
                     fAria       = "add"
                     fIcon       = "check_circle_outline"
                     fIconCSS    = "app-fab-icon-sm"
                     fIconColor  = "app-white">
             </app-fab>
-          </div>
-          <div class="app-smaller-font mb-0">
             <app-fab 
                     fType       = "button"
                     fLabel      = "{{createNew ? 'Clear' : 'Cancel'}}"
@@ -321,7 +270,6 @@
                     fIconCSS    = "app-fab-icon-sm"
                     fIconColor  = "app-white">
             </app-fab>
-          </div>
         </div>
       </form>
     </div> 

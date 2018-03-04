@@ -95,7 +95,7 @@
           </div>
 
           <!-- Remember Me field -->
-          <div *ngIf="!requestStatus.incorrectPassword">
+          <div *ngIf="!wrongPassword()">
             <label>
               <input type="checkbox" class="app-input-icon-area" name="memberMe" [(ngModel)]="rememberLogin">
               Remember me
@@ -150,18 +150,20 @@
         </div>
 
         <!-- Actions Area -->
-        <div class="d-flex flex-row justify-content-center align-items-center app-bg-primary pt-1 pb-2" id="actions">
-          <app-fab *ngIf="!newAccount && !requestStatus.incorrectPassword"
-                    fAria="sign in"
-                    fButtonCSS="app-fab-sm-sq app-white" fIconColor="app-white"
-                    fLabel="{{createAccount ? 'Create Account' : 'Sign In'}}"
-                    fIcon="{{createAccount ? 'add_circle_outline' : 'check_circle_outline'}}">
+        <div class="d-flex flex-row justify-content-center align-items-center 
+                    app-pos-relative app-bg-primary pb-2" id="actions">
+          <app-help-button></app-help-button>
+          <app-fab *ngIf="!newAccount && !wrongPassword()"
+                fAria="sign in"
+                fButtonCSS="app-fab-sm-sq app-white" fIconColor="app-white"
+                fLabel="{{createAccount ? 'Create Account' : 'Sign In'}}"
+                fIcon="{{createAccount ? 'add_circle_outline' : 'check_circle_outline'}}">
           </app-fab>
           <app-fab *ngIf="newAccount" fAria="sign in" fLabel="Continue to Sign In"
                     fButtonCSS="app-fab-sm-sq app-white"
                     fIcon="arrow_forward" fIconColor="app-white">
           </app-fab>
-          <app-fab *ngIf="requestStatus.incorrectPassword"  fAria="forgot password"
+          <app-fab *ngIf="wrongPassword()"  fAria="forgot password"
                     fLabel="Reset Password"
                     fButtonCSS="app-fab-sm-sq app-white"
                     fIcon="sentiment_dissatisfied" fIconColor="app-white"

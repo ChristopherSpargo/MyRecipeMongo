@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo } from '../app.globals';
+import { UserInfo, FormMsgList } from '../app.globals';
 import { UserSvc } from '../model/userSvc'
 import { CookieSvc } from '../utilities/cookieSvc';
 import { CrossSvc } from '../app.bank'
@@ -23,7 +23,7 @@ export class AccountEmailComponent implements OnInit {
   currEmail          : string = this.user.userEmail;
   password           : string = "";
   newEmail           : string = "";
-  requestStatus      : { [key: string]: any } = {};
+  requestStatus      = new FormMsgList();
   rememberLogin      : boolean = (this.currEmail == this.cookieSvc.getCookieItem('userEmail'));
   formOpen           : boolean = false;
 
@@ -64,7 +64,7 @@ export class AccountEmailComponent implements OnInit {
     this.checkAll = true;
     this.clearRequestStatus();
     if(form.invalid){
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return;
     }
     this.utilSvc.displayWorkingMessage(true);
@@ -75,33 +75,33 @@ export class AccountEmailComponent implements OnInit {
     .catch((error) => {
       switch (error) {  //decide which status message to give
         case "EMAIL_TAKEN":
-          this.requestStatus.newEmailInUse = true;
+          this.requestStatus.addMsg('newEmailInUse');
           break;
         case "INVALID_EMAIL":
-          this.requestStatus.newEmailInvalid = true;
+          this.requestStatus.addMsg('newEmailInvalid');
           break;
         case "INVALID_PASSWORD":
-          this.requestStatus.incorrectPassword = true;
+          this.requestStatus.addMsg('incorrectPassword');
           break;
         case "INVALID_USER":
-          this.requestStatus.unrecognizedEmail = true;
+          this.requestStatus.addMsg('unrecognizedEmail');
           break;
         default:
           this.utilSvc.setUserMessage("emailChangeFailed");
       }
-      this.requestStatus.emailChangeFail = true;
+      this.requestStatus.addMsg('emailChangeFail');
       this.utilSvc.displayWorkingMessage(false);
     });
   }
 
   // clear status messages object
   clearRequestStatus= ()=> {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () :boolean => {
+    return !this.requestStatus.empty();
   }
 
   //set form closed flag, wait for animation to complete before changing states to 'home'

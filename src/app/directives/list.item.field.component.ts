@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 
 @Component({
   selector: '<app-list-item-field>',
   templateUrl : 'list.item.field.component.html'
 })
-export class ListItemFieldComponent  {
+export class ListItemFieldComponent implements OnInit  {
   focused: boolean = false;
 
   @Input() fForm        : NgForm;   // name of form this input belongs to
@@ -33,6 +33,7 @@ export class ListItemFieldComponent  {
                                     // use fEqual="false" and fNewTest="" if all items can be edited
   @Input() fNewValue    : string;   // location to store new item value
   @Input() fCapitalize  : boolean = false; // true if capitalize each word in new value
+  @Input() fNewLabel    : string;   // new item label
   @Input() fNewName     : string;   // unique name for new item field
   @Input() fNewRef      : string;   // unique name for TRV for new item field
   @Input() fNewItemCheck: string;   // when to show text input errors
@@ -45,7 +46,15 @@ export class ListItemFieldComponent  {
 
   constructor() {
   };
+
+  ngOnInit() {
+    if(this.fNewLabel === undefined) { this.fNewLabel = this.fLabel;}
+  }
   
+  currentLabel = () : string => {
+    return this.fLabel + ' (' + (this.fList && this.fList.length ? this.fList.length : 'empty') + ')';
+  }
+
   showFocused = ()=> {
     this.focused = true;
     if(this.fOnFocus){ this.fOnFocus(); }

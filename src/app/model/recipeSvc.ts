@@ -8,7 +8,6 @@ import { Profile, RESTRICTION_WRITE } from './profile';
 import { SHARED_USER_ID } from '../constants';
 
 export const CATEGORY_TABLE_NAME = 'categories';
-export const ORIGIN_TABLE_NAME   =    'origins';
 export const RECIPE_TABLE_NAME   =    'recipes';
 
 // define structure of list table items
@@ -31,11 +30,8 @@ export interface RecipeFilterData {
   recordId          ?: string;
   collectionOwnerId ?: string,
   title             ?: string,
-  origin            ?: number,
   categories        ?: number[],
   keywords          ?: string,
-  startDate         ?: string,
-  endDate           ?: string,
   sortOrder         ?: string,
   checkEmail        ?: string,
   projection        ?: {}
@@ -66,10 +62,6 @@ export class RecipeService {
             break;
           case 'title':
           break;
-          case 'origin':
-            queryStr += queryStr.length ? '&' : '?';
-            queryStr += 'o=' + filter.origin;
-            break;
           case 'categories':
             queryStr += queryStr.length ? '&' : '?';
             if(filter.categories.length){
@@ -79,14 +71,6 @@ export class RecipeService {
           case 'keywords':
             queryStr += queryStr.length ? '&' : '?';
             queryStr += 'k=' + filter.keywords;
-            break;
-          case 'startDate':
-            queryStr += queryStr.length ? '&' : '?';
-            queryStr += 'sd=' + filter.startDate;
-            break;
-          case 'endDate':
-            queryStr += queryStr.length ? '&' : '?';
-            queryStr += 'ed=' + filter.endDate;
             break;
           case 'checkEmail':
             queryStr += queryStr.length ? '&' : '?';
@@ -237,10 +221,6 @@ export class RecipeService {
             filter.categories = [item.id];
             tableType = 'Category';
             break;
-          case ORIGIN_TABLE_NAME:
-            filter.origin = [item.id];
-            tableType = 'Origin';
-            break;
         }
       }
       return new Promise<any>((resolve, reject) => {
@@ -309,14 +289,6 @@ export class RecipeService {
                   {id: 21, name:'Drinks'},{id: 22, name:'Gluten Free'}]
               };
           break;
-        case ORIGIN_TABLE_NAME:
-          iList =
-              { userId: uid,
-                nextId: 5,
-                items: [{id: 1, name:'Unknown'}, {id: 2, name:'TV'},{id: 3, name:'Internet'},
-                        {id: 4, name:'Magazine'}]
-              };
-          break;
       }
       return this.saveList(iList, tableName);
     }
@@ -328,37 +300,26 @@ export class RecipeService {
 
     return new Promise((resolve, reject) => {
 
-      // first, delete the categories and origins lists for this user
+      // first, delete the categories list for this user
       this.getList(CATEGORY_TABLE_NAME, id)
       .then((cList: ListTable) => {
         this.deleteList(CATEGORY_TABLE_NAME,cList._id)
         .then((cListDeleted) =>{
-          this.getList(ORIGIN_TABLE_NAME, id)
-          .then((oList: ListTable) => {
-            this.deleteList(ORIGIN_TABLE_NAME,oList._id)
-            .then((oListDeleted) =>{
-              
-              // now read all this user's recipes but only retreive the object ids
-              this.getRecipes({collectionOwnerId: id, projection: {_id: 1}})
-              .then((data : RecipeData[]) => {
-                data.forEach((r) => {
-                  // save a promise for each deleteRecipe request
-                  promises.push(this.deleteRecipe(r._id));
-                });
-                Promise.all(promises)       // wait till all are done (or 1 fails)
-                .then((success) => {        //.finally would be nice because either way we're done
-                  resolve("Ok");})
-                .catch((error) => {
-                  reject("errorDeletingRecipes");})
-              })
-              .catch((error) => {
-                reject("errorReadingRecipesForDelete");})
-            })
+          // now read all this user's recipes but only retreive the object ids
+          this.getRecipes({collectionOwnerId: id, projection: {_id: 1}})
+          .then((data : RecipeData[]) => {
+            data.forEach((r) => {
+              // save a promise for each deleteRecipe request
+              promises.push(this.deleteRecipe(r._id));
+            });
+            Promise.all(promises)       // wait till all are done (or 1 fails)
+            .then((success) => {        //.finally would be nice because either way we're done
+              resolve("Ok");})
             .catch((error) => {
-              reject("errorDeletingOrigins");})
+              reject("errorDeletingRecipes");})
           })
           .catch((error) => {
-            reject("errorReadingOrigins");})
+            reject("errorReadingRecipes");})
         })
         .catch((error) => {
           reject("errorDeletingCategories");})
@@ -385,41 +346,26 @@ export class RecipeService {
             rd.categories[i] = this.getSharedListItemId(<ListTable>cList, 
                                       this.currentRecipe.categoryListName(rd.categories[i]));
           }
-          this.getList(ORIGIN_TABLE_NAME, SHARED_USER_ID)
-          .then((oList) => {
-            // replace the origin id with one from the SHARED_USER's origin list
-            rd.origin = this.getSharedListItemId(<ListTable>oList,
-                              this.currentRecipe.originListName(rd.origin));
 
-            rd.submittedBy = rdOrig.userId;   // note who shared it (the owner)
-            rd.userId = SHARED_USER_ID;       // will be accessable under SHARED_USER_ID collection
-            rd._id = rdOrig.sharedItem_id ? rdOrig.sharedItem_id : undefined;    // so it works if this is an update of shared copy
-            rd.sharedItem_id = undefined;     // shared copies don't have this property
-            if(restrictedTo){
-              rd.restrictedTo = restrictedTo; // set authorized users list if update
-            }
-            this.saveRecipe(rd)     // save shared version
-            .then((sharedVersion : RecipeData) => {
-              this.saveList(cList, CATEGORY_TABLE_NAME) // save updated SHARED categories list
-              .then((categoryListUpdated) => {
-                this.saveList(oList, ORIGIN_TABLE_NAME) // save SHARED origins list
-                .then((originListUpdated) => {
-                  resolve(sharedVersion);            
-                })
-                .catch((failToSaveOriginList) => {
-                  reject('errorUpdatingOriginList');
-                })
-              })
-              .catch((failToSaveCategoryList) => {
-                reject('errorUpdatingCategoryList');
-              })
+          rd.submittedBy = rdOrig.userId;   // note who shared it (the owner)
+          rd.userId = SHARED_USER_ID;       // will be accessable under SHARED_USER_ID collection
+          rd._id = rdOrig.sharedItem_id ? rdOrig.sharedItem_id : undefined;    // so it works if this is an update of shared copy
+          rd.sharedItem_id = undefined;     // shared copies don't have this property
+          if(restrictedTo){
+            rd.restrictedTo = restrictedTo; // set authorized users list if update
+          }
+          this.saveRecipe(rd)     // save shared version
+          .then((sharedVersion : RecipeData) => {
+            this.saveList(cList, CATEGORY_TABLE_NAME) // save updated SHARED categories list
+            .then((categoryListUpdated) => {
+              resolve(sharedVersion);            
             })
-            .catch((failToSaveSharedRecipe) => {
-              reject('errorUpdatingSharedCopy');
+            .catch((failToSaveCategoryList) => {
+              reject('errorUpdatingCategoryList');
             })
           })
-          .catch((failToReadOriginList) => {
-            reject('errorReadingOriginList');
+          .catch((failToSaveSharedRecipe) => {
+            reject('errorUpdatingSharedCopy');
           })
         })
         .catch((failToReadCategoryList) => {

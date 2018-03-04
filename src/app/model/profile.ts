@@ -4,7 +4,6 @@ export class ProfileData {
   id                      : string;
   email                   : string;
   createdOn               : string;
-  defaultRecipeOrigin     : number;
   defaultSharedUsers      : string[];
   restrictions            ?: string;
   restrictionsArray       ?: string[];
@@ -28,7 +27,6 @@ export class Profile extends ProfileData {
     this.id                     = data.id || "";
     this.email                  = data.email || "";
     this.createdOn              = data.createdOn || (new Date()).toLocaleDateString();
-    this.defaultRecipeOrigin    = data.defaultRecipeOrigin || 0;
     this.defaultSharedUsers     = data.defaultSharedUsers || [];
     if(data.restrictions){
       this.restrictionsArray    = data.restrictions.split(',');
@@ -43,7 +41,6 @@ export class Profile extends ProfileData {
       id:                     this.id,
       email:                  this.email,
       createdOn:              this.createdOn,
-      defaultRecipeOrigin:    this.defaultRecipeOrigin,
       defaultSharedUsers:     this.defaultSharedUsers,
       restrictions:           this.restrictionsArray.join()
     };

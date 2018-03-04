@@ -133,9 +133,9 @@ export class IconTextareaComponent implements OnInit {
 
   // change certain instruction things to make them more consistent and concise
   makeInstReplacements = (l : string) : string => {
-    let res = l.replace(/(\-| )degree[s]*/ig, String.fromCharCode(176));
+    let res = l.replace(/(\-| )degree[s]? ?/ig, String.fromCharCode(176));
     res = res.replace(/ deg$/ig, String.fromCharCode(176));
-    res = res.replace(/ deg /ig, String.fromCharCode(176)+' ');
+    res = res.replace(/ deg[s]? ?/ig, String.fromCharCode(176)+' ');
     return res;
   }
 

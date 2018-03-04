@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChildren, QueryList, Input, OnDestroy } from '@angular/core';
+import { Component, AfterContentInit, ContentChildren, QueryList, Input, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -19,14 +19,14 @@ export class ValidationMessageComponent {
   selector: '<validation-messages>',
   template: '<ng-content></ng-content>'
 })
-export class ValidationMessagesComponent implements OnInit, OnDestroy {
+export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
   @Input() vField: any;
   @Input() vMultiple: string = "false";
   @ContentChildren(ValidationMessageComponent) messageComponents: QueryList<ValidationMessageComponent>;
 
   private statusChangesSubscription: Subscription;
 
-  ngOnInit() {
+  ngAfterContentInit() {
     if(this.vField.statusChanges){
       this.statusChangesSubscription = this.vField.statusChanges.subscribe(x => {
         this.messageComponents.forEach(messageComponent => messageComponent.show = false);

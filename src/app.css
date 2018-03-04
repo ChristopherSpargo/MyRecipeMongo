@@ -22,6 +22,7 @@ $xl-screen: (min-width: 1200px);
 $lg-screen: (min-width: 992px);
 $md-screen: (min-width: 768px);
 $sm-screen: (min-width: 576px);
+$xs-screen: (max-width: 576px);
 $modalActionBackground: transparent;
 $courtGreenLight: rgb(109, 149, 106);
 $helpHeaderColor: #5bc0de;
@@ -198,6 +199,37 @@ body {
   font-size: 28px;
   position: relative;
   left: -2px;}
+.app-help-btn {
+  transform: scale(.8);}
+  .app-help-btn-icon {
+    color: $whiteTextMedium;}
+  .app-help-btn-label {
+    color: $whiteTextMedium;}
+.app-help-btn-absolute {
+  transform: scale(.8);
+  position: absolute;
+  left: 0;
+  top: -5px;}
+  @media ($md-screen){
+    .app-help-btn-absolute {
+      top: -2px;}}
+.app-menu-button {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  text-transform: none;
+  color: inherit;}
+  .app-menu-button:focus {
+  outline: none;
+  box-shadow: none;}
+.app-menu-item-icon {
+  font-size: 30px;
+  margin-right: .25em;}
+.app-menu-item-icon-sm {
+  height: 18px;
+  width: 18px;
+  font-size: 24px;
+  margin: 0 .5em .25em 0;}
+  
 /*this needs to be applied to things with -webkit-box-shadow due to ios8 bug */      
 .app-border-radius-hack { 
   border-radius: 1px;}
@@ -213,6 +245,16 @@ body {
   visibility: visible;}
 .app-no-display {
   display: none !important;}
+.app-absolute-0 {
+  position: absolute !important;
+  left: 0;
+  top: 0;}
+.app-top--2 {
+  top: -2px;}
+.app-top--6 {
+  top: -6px;}
+.app-pos-relative {
+  position: relative !important;}
 .app-underlined, .app-underlined:hover, .app-underlined:focus {
   text-decoration: underline;}
 .app-lt-border-right {
@@ -247,10 +289,22 @@ body {
   flex: 1 1 15%;
   max-width: 15%;
   width: 15%;}
+.app-width-33 {
+  flex: 1 1 33%;
+  max-width: 33%;
+  width: 33%;}
 .app-width-35 {
   flex: 1 1 35%;
   max-width: 35%;
   width: 35%;}
+.app-width-45 {
+  flex: 1 1 45%;
+  max-width: 45%;
+  width: 45%;}
+.app-width-50 {
+]  flex: 1 1 50%;
+  max-width: 50%;
+  width: 50%;}
 .app-width-75 {
   flex: 1 1 75%;
   max-width: 75%;
@@ -326,8 +380,7 @@ border-top: 1px solid gray;}
   z-index: inherit;
   background-color: transparent;
   padding: 0px !important;
-  margin-right: 2%;
-  margin-left: auto;
+  margin-left: 3%;
   cursor: pointer;
   height: $appBarIconSize;
   width: $appBarIconSize;
@@ -370,7 +423,7 @@ border-top: 1px solid gray;}
     max-height: 200px;
     opacity: 1;}
 .app-fade-in {
-  transition: opacity .4s, z-index .5s ease-in-out;
+  transition: opacity .4s ease-in-out;
   opacity: 0;}
   .app-fade-in.app-open {
     opacity: 1;}
@@ -413,6 +466,7 @@ border-top: 1px solid gray;}
   font-style: italic;
   font-size: 1.2em;
   padding-left: 5%;
+  padding-right: 3%;
   margin-top: 0;
   margin-bottom: 0;}
 .app-main-short-toolbar {
@@ -537,7 +591,7 @@ border-top: 1px solid gray;}
     color: rgba(0,0,0,.87) !important;}
   .app-form-theme-select-menu {
     background-color: gray!important;
-    font-size: .6em;
+    font-size: .7em;
     color: white!important;}
   .app-form-theme-select-menu-lg {
     background-color: gray!important;
@@ -790,11 +844,6 @@ $appFormCloseIconSizeLg: 38px !important;
       width: 50%;}
     .app-central-container {
       width: 70%;}}
-  @media ($xl-screen) {
-    .app-central-container-sm {
-      width: 40%;}
-    .app-central-container {
-      width: 60%;}}
 .app-whiteframe-2dp {
   box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
               -1px 0px 0px 0 rgba(0,0,0,.2),
@@ -1033,7 +1082,6 @@ $appFormCloseIconSizeLg: 38px !important;
   /* border-top: 1px solid rgba(0,0,0,.08); */
   border-bottom: 1px solid rgba(0,0,0,.6);
   margin-bottom: .5rem!important;
-  padding-bottom: .5rem!important;
   box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
               -1px 0px 0px 0 rgba(0,0,0,.2),
               2px 2px 0px 0 rgba(0,0,0,.14),
@@ -1049,7 +1097,6 @@ $appFormCloseIconSizeLg: 38px !important;
   transition: max-height .3s, opacity .5s, padding-bottom .5s ease-out;}
   .app-category-container.app-open {
     opacity: 1;
-    padding-bottom: .5rem;
     max-height: 5000px;}
 .app-recipe-category-button {
   border: 2px solid transparent;
@@ -1064,19 +1111,27 @@ $appFormCloseIconSizeLg: 38px !important;
   border-radius: 3px;
   background-color: lightgray !important;}
 .app-category-delete-icon {
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;}
 .app-recipe-image-container {
-  padding: 0 0 .5rem;}
+  padding: 0;}
+.app-entry-image-container {
+  box-shadow: 0 4px 12px #000;
+}
 .app-recipe-image {
   width: 100%;
   max-height: 2000px;}
-.app-recipes-menu-ul {
-  width: 100%;
+.app-recipes-menu {
+  width: 98%;
   min-height: 100%;
   list-style: none;
   padding: 0 !important;
-  margin: 0 !important;}
+  margin: 0 auto 0 auto !important;}
+.app-recipe-list-item {
+  max-width: 50%;}
+  @media ($md-screen){
+    .app-recipe-list-item {
+      max-width: 33.33%;}}
 .app-recipes-menu-card {
   display: block;
   text-transform: none;
@@ -1084,6 +1139,22 @@ $appFormCloseIconSizeLg: 38px !important;
   background-color: white;
   color: inherit;
   margin: 0;
+  width: 100%;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
+            -1px 0px 0px 0 rgba(0,0,0,.2),
+            0px -1px 2px 0 rgba(0,0,0,.05),
+            2px 2px 0px 0 rgba(0,0,0,.14),
+            3px 3px 0px 0 rgba(0,0,0,.12), 
+            0 4px 0px 0 rgba(0,0,0,.08);
+overflow: hidden;}
+.app-recipes-view-card {
+  display: block;
+  text-transform: none;
+  padding: 0;
+  background-color: white;
+  color: inherit;
+  margin: 0 auto 0 auto;
   width: 98%;
   border-radius: 3px 3px 3px 3px;
   box-shadow: 1px 1px 0px 0 rgba(0,0,0,.2),
@@ -1099,13 +1170,15 @@ overflow: hidden;}
   padding: 0;
   background-color: white;
   color: inherit;
-  margin: 0;
+  margin: 0 auto 0 auto;
   width: 98%;
   border-radius: 3px 3px 3px 3px;
   overflow: hidden;}
 .app-recipe-menu-item-header {
   width: 100%;}
 .app-recipe-menu-image {
+  max-width: 100%;}
+.app-recipe-view-extra-image {
   width: 100%;
   max-height: 2000px;}
 .app-recipe-menu-item-title {
@@ -1125,15 +1198,10 @@ overflow: hidden;}
   font-size: .7em;}
 .app-recipe-view-main-image {
   float: left;
-  margin: -.25rem .5rem 0 -.25rem;
-  max-width: 60%;
-  max-height: 250px;}
+  margin: -.25rem .5rem 0 -.25rem; 
+  max-width: 55%;}
 .app-recipe-view-categories {
   font-style: normal;}
-.app-recipe-view-origin {
-  font-style: normal;}
-.app-recipe-view-origin-notes {
-  font-size: .65em;}
 .app-recipe-view-ingredients-header {
   font-style: normal;
   font-size: 1.25em;}
@@ -1154,19 +1222,23 @@ overflow: hidden;}
   transform: translate3d(-7.5%,0,0) scale(.85);}
 .app-catList-container {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 6px;
+  top: -8px;
   z-index: 1110;
   width: 65%;
   max-height: 425px;
+  box-shadow: 0 0 12px #000000;
   background-color: white;}
-  @media ($lg-screen) {
+  @media only screen and ($sm-screen) and (max-width: 758px) and (orientation: landscape) {
+    .app-catList-container {
+      max-height: 220px;}}
+  @media ($md-screen) {
     .app-catList-container {
       max-height: 500px;
       width: 45%;}}
 .app-catlist-header-theme {
   padding: 4px 0 6px 0;
-  background-color: slategray;
+  background-color: $tertiaryColor;
   color: white;}
     .app-catlist-body-theme {
     background-color: white;
@@ -1176,7 +1248,7 @@ overflow: hidden;}
   .app-catlist-footer-theme {
     padding: 8px 0 6px 0;
     line-height: 1em;
-    background-color: slategray;
+    background-color: $tertiaryColor;
     color: white;}
     @media ($lg-screen) {
       .app-catlist-footer-theme {
@@ -1209,10 +1281,6 @@ overflow: hidden;}
 .app-recipe-action-title {
   color: firebrick;
   font-size: 1.1em;}
-.app-recipe-action-origin {
-  line-height: 1.35;}
-.app-recipe-action-origin-date {
-  line-height: 1.35;}
 /***************************************/
 /* STYLES MOSTLY RELATED TO: UTILITIES */
 /***************************************/
@@ -1451,7 +1519,6 @@ ngb-tabset {
   width: 100%;}
 ngb-tabset > ul{
   background-color: white;
-  padding-top: .15rem; 
   position: sticky;
   top: 0;
   z-index: 1000; }
@@ -1461,7 +1528,7 @@ ngb-tabset > ul{
               0 3px 0px 0 rgba(0,0,0,.12), 
               0 4px 0px 0 rgba(0,0,0,.08);
   border-radius: 0 0 4px 4px;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   background-color: white;}
 b, strong {
   font-weight: bold;}

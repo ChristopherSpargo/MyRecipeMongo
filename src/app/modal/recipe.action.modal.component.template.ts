@@ -8,9 +8,7 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 export class RecipeActionModalComponentTemplate {
   @Input() heading      : string;
-  @Input() originDate   : string;
   @Input() recipeTitle  : string;
-  @Input() origin       : string;
   @Input() okText       : string;
   @Input() cancelText   : string;
   @Input() notifyOnly   : boolean;

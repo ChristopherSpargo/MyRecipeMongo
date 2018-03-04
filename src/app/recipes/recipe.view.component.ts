@@ -25,9 +25,6 @@ export class RecipeViewComponent implements OnInit {
     rTitle       : string = '';
     rDescription : string = '';
     rCategories  : number[] = []; 
-    rOriginName  : string = '';
-    rOriginDate  : string;
-    rOriginNotes : string[];
     rIngredients : string[];
     rInstructions: string[];
     rNotes       : string[];
@@ -88,9 +85,6 @@ export class RecipeViewComponent implements OnInit {
     this.rCategories     = [];
     item.categories.forEach((c) => {
       this.rCategories.push(c);});
-    this.rOriginName     = item.origin ? this.getOriginName(item.origin) : 'Unknown';
-    this.rOriginDate     = this.utilSvc.displayOriginDate(item.originDate);
-    this.rOriginNotes    = item.originNotes ? item.originNotes.split('\n') : undefined;
     this.rIngredients    = item.ingredients ? item.ingredients.split('\n') : undefined;
     this.rInstructions   = item.instructions ? item.instructions.split('\n') : undefined;
     this.rNotes          = item.recipeNotes ? item.recipeNotes.split('\n') : undefined;
@@ -146,16 +140,6 @@ export class RecipeViewComponent implements OnInit {
   getRecipeNote = () : string => {
     if(this.rMainPic){ return this.rMainPic.note}
     return 'Main Image';
-  }
-
-  // return the list of origin items from the CurrentRecipe service 
-  originListItems = () => {
-    return this.currentRecipe.originListItems();
-  }
-
-  // return the Origin name for the given id
-  getOriginName = (id : number) : string => {
-    return this.currentRecipe.originListName(id);
   }
 
   // return the list of category items from the CurrentRecipe service 

@@ -3,10 +3,10 @@ import { StateService } from "@uirouter/angular";
 import { NgbTabChangeEvent, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { UtilSvc } from '../utilities/utilSvc';
 import { UserInfo, CurrentRecipe } from '../app.globals';
-import { RecipeService, CATEGORY_TABLE_NAME, ORIGIN_TABLE_NAME, RECIPE_TABLE_NAME,
+import { RecipeService, CATEGORY_TABLE_NAME, RECIPE_TABLE_NAME,
          ListTable, ListTableItem } from '../model/recipeSvc';
 import { RecipeData, Recipe } from '../model/recipe'
-import { SHARED_USER_ID, UNSET_ORIGIN_NAME, UNSET_ORIGIN_ID } from '../constants'
+import { SHARED_USER_ID } from '../constants'
 
 export const SEARCH_TAB     : number = 0;
 export const SEARCH_TAB_ID  : string = "searchTab";
@@ -39,7 +39,6 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
   viewShared       : boolean = false;
   menuMessage      : string = "";
   categoryList     : ListTableItem[] = [];
-  originList       : ListTableItem[] = [];
   headerTitle      : string;
   headerIcon       : string = 'search';
   currTabId        : string = "";
@@ -54,6 +53,8 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     }
   ];
   printingRecipe   : boolean = false;
+  dataSet          : string = 'Personal';
+  menuColumns      : number = 2;
  
 
   constructor(private userInfo : UserInfo, private utilSvc : UtilSvc, private recipeSvc : RecipeService,
@@ -67,11 +68,19 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
 
     // now check how we got here
     switch(stateName){        
-      case 'searchRecipes':
+      case 'searchMyRecipes':
         this.currTabId                = SEARCH_TAB_ID;
         this.headerTitle              = "Search Personal Recipes";
         this.headerIcon               = "search";
         this.currentRecipe.mode       = 'Review';
+        this.dataSet                  = 'Personal';
+        break;
+      case 'searchSharedRecipes':
+        this.currTabId                = SEARCH_TAB_ID;
+        this.headerTitle              = "Search Shared Recipes";
+        this.headerIcon               = "search";
+        this.currentRecipe.mode       = 'Review';
+        this.dataSet                  = 'Shared';
         break;
       case 'enterRecipe':
         this.currTabId                = EDIT_TAB_ID;
@@ -126,6 +135,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     document.addEventListener("closeView", this.closeView);
     document.addEventListener("printRecipe", this.printStart);
     document.addEventListener("printEnded", this.printEnd);
+    window.addEventListener("resize", this.checkScreenSize);
   }
 
   //remove all the message responders set in this module
@@ -142,11 +152,21 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     document.removeEventListener("closeView", this.closeView);
     document.removeEventListener("printRecipe", this.printStart);
     document.removeEventListener("printEnded", this.printEnd);
+    window.removeEventListener("resize", this.checkScreenSize);
   }
 
   //emit a custom event with the given name and detail data
   public emit = (name: string, data? : any)  => {
     this.utilSvc.emitEvent(name, data);
+  }
+
+  // check the size of the screen and set the number of columns for the recipes menu
+  checkScreenSize = () => {
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      this.menuColumns = 3;
+    } else{
+      this.menuColumns = 2;
+    }
   }
 
   private printStart = () => {
@@ -165,19 +185,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
         this.categoryList = cList.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});
         this.currentRecipe.categoryList = cList;
         this.currentRecipe.categoryList.items = this.categoryList;
-        this.recipeSvc.getList(ORIGIN_TABLE_NAME, 
-          this.viewShared ? SHARED_USER_ID : this.userInfo.authData.uid ) //read list of origins
-        .then((oList) => {
-          this.originList = oList.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});  
-          this.originList.push({name: UNSET_ORIGIN_NAME, id: UNSET_ORIGIN_ID, disabled: true})
-          this.currentRecipe.originList = oList;  
-          this.currentRecipe.originList.items = this.originList;
-          resolve('ok');
-        })
-        .catch((error) => {
-          this.utilSvc.returnToHomeMsg("errorReadingList", 400, 'Origins');
-          reject(error)
-        })
+        resolve('ok');
       })
       .catch((error) => {
         this.utilSvc.returnToHomeMsg("errorReadingList", 400, 'Categories');
@@ -219,6 +227,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     else{
       this.working = false;
       if(this.recipesReady){
+        this.checkScreenSize();
         this.currentRecipe.menuScrollPosition = 0;
         setTimeout( () => {
           this.selectMenuTab();
@@ -364,10 +373,6 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       }
     }
     return 'Unknown';
-  }
-
-  public originName = (id) : string => {
-    return this.listItemName(this.currentRecipe.originList.items, id);
   }
 
   public tabChange = (evt: NgbTabChangeEvent) => {

@@ -18,9 +18,6 @@ export interface RecipeData {
   title           ?: string;   // (Country Chicken And Potatoes)
   categories      ?: number[]; // (Dinner, Dessert)
   description     ?: string;   // This sauce is rich and delicious
-  origin          ?: number;   // (Mom, Internet, TV(1,2,3))
-  originDate      ?: string;   // stored as YYYYMM, MM is currently always 00
-  originNotes     ?: string;   // Notes about the origin of this document
   ingredients     ?: string;   // (any free-form text )
   instructions    ?: string;   // (any free-form text )
   recipeNotes     ?: string;   // (any free-form text )
@@ -83,9 +80,6 @@ export class Recipe {
     this.data.title =          rData.title || '';
     this.data.description =    rData.description || '';
     this.data.categories =     [];
-    this.data.origin =         rData.origin;
-    this.data.originDate =     rData.originDate;
-    this.data.originNotes =    rData.originNotes || '';
     this.data.ingredients =    rData.ingredients || '';
     this.data.instructions =   rData.instructions || '';
     this.data.recipeNotes =    rData.recipeNotes || '';
@@ -120,9 +114,6 @@ export class Recipe {
       title:          this.data.title,
       description:    this.data.description,
       categories:     this.data.categories.map((c) : number => {return c;}), // 'copy' categories array
-      origin:         this.data.origin,
-      originDate:     this.data.originDate,
-      originNotes:    this.data.originNotes,
       ingredients:    this.data.ingredients,
       instructions:   this.data.instructions,
       recipeNotes:    this.data.recipeNotes,

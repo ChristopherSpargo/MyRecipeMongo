@@ -16,6 +16,7 @@ export class UpdateActionsComponent  {
   @Input() fALabel      : string = 'Add';   // text to put in the label of an Add button if labels in use
   @Input() fSLabel      : string = 'Save';  // text to put in the label of a Save button if labels in use
   @Input() fRLabel      : string = 'Remove';// text to put in the label of a Remove button if labels in use
+  @Input() fHelpBtn     : boolean = true;   // true if show a help button at left of area
 
   constructor() {
   };

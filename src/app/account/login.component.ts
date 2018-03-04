@@ -3,10 +3,10 @@ import { NgForm } from "@angular/forms";
 import {UIROUTER_DIRECTIVES} from '@uirouter/angular';
 import { UtilSvc } from '../utilities/utilSvc';
 import { CookieSvc } from '../utilities/cookieSvc';
-import { UserInfo } from '../app.globals';
+import { UserInfo, FormMsgList, AboutStatus } from '../app.globals';
 import { Profile } from '../model/profile'
 import { UserSvc } from '../model/userSvc'
-import { RecipeService, CATEGORY_TABLE_NAME, ORIGIN_TABLE_NAME } from '../model/recipeSvc'
+import { RecipeService, CATEGORY_TABLE_NAME } from '../model/recipeSvc'
 import { CrossSvc } from '../app.bank'
 
 @Component({
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   userEmail             : string = '';
   userPassword          : string = '';
   passwordConfirm       : string = '';
-  requestStatus         : { [key: string]: any } = {};
+  requestStatus         = new FormMsgList();
   createAccount         : boolean = false;
   newAccount            : boolean = false;
   rememberLogin         : boolean = true;
@@ -80,13 +80,7 @@ export class LoginComponent implements OnInit {
       .then((profile) => {
         this.user.profile = <Profile>profile;
         this.recipeSvc.initializeTable(CATEGORY_TABLE_NAME, authData.uid) //initialize Categories List
-        .then((success) => {
-          this.recipeSvc.initializeTable(ORIGIN_TABLE_NAME, authData.uid)  //initialize Origins List
-          .then((success) => {})
-          .catch((error) => {
-            this.utilSvc.setUserMessage("errorInitializingOriginsList");
-          })
-        })
+        .then((success) => {})
         .catch((error) => {
             this.utilSvc.setUserMessage("errorInitializingCategoriesList");
         })
@@ -104,29 +98,29 @@ export class LoginComponent implements OnInit {
     this.checkAll = true;
     this.clearRequestStatus();
     if(form.invalid){
-      this.requestStatus.formHasErrors = true;
+      this.requestStatus.addMsg('formHasErrors');
       return;
     }
     if (this.createAccount && !this.newAccount) {  // creating new account
       this.utilSvc.displayWorkingMessage(true, 'Creating New Account');
       this.userSvc.createAccount(this.userEmail, this.userPassword)
       .then((success) => {
-        this.requestStatus.createSuccess = true;
-        this.requestStatus.accountCreated = true;
+        this.requestStatus.addMsg('createSuccess');
+        this.requestStatus.addMsg('accountCreated');
         this.newAccount = true;
         this.utilSvc.displayWorkingMessage(false);
       })
       .catch((failure) => {
-        this.requestStatus.createFail = true;
+        this.requestStatus.addMsg('createFail');
         switch (failure) {
           case "EMAIL_TAKEN":
-            this.requestStatus.emailInUse = true;
+            this.requestStatus.addMsg('emailInUse');
             break;
           case "INVALID_EMAIL":
-            this.requestStatus.emailInvalid = true;
+            this.requestStatus.addMsg('emailInvalid');
             break;
           default:
-            this.requestStatus.weirdProblem = true;
+            this.requestStatus.addMsg('weirdProblem');
         }
         this.utilSvc.displayWorkingMessage(false);
       })
@@ -140,18 +134,18 @@ export class LoginComponent implements OnInit {
       .catch((error) => {
         switch (error) {  // decide which message to give
           case "INVALID_USER":
-            this.requestStatus.unrecognizedEmail = true;
+            this.requestStatus.addMsg('unrecognizedEmail');
             break;
           case "INVALID_EMAIL":
-            this.requestStatus.emailInvalid = true;
+            this.requestStatus.addMsg('emailInvalid');
             break;
           case "INVALID_PASSWORD":
-            this.requestStatus.incorrectPassword = true;
+            this.requestStatus.addMsg('incorrectPassword');
             break;
           default:
-            this.requestStatus.weirdProblem = true;
+            this.requestStatus.addMsg('weirdProblem');
         }
-        this.requestStatus.authFail = true;
+        this.requestStatus.addMsg('authFail');
         this.user.authData = null;
         this.utilSvc.displayWorkingMessage(false);
       })
@@ -190,7 +184,7 @@ export class LoginComponent implements OnInit {
 
   // clear status messages object
   clearRequestStatus = () => {
-    this.requestStatus = {};
+    this.requestStatus.clearMsgs();
   }
 
   // determine if fields for new account should be showing in Login form
@@ -205,8 +199,13 @@ export class LoginComponent implements OnInit {
   }
 
   //indicate whether there are any status messages
-  haveStatusMessages = () => {
-    return Object.keys(this.requestStatus).length !== 0;
+  haveStatusMessages = () :boolean => {
+    return !this.requestStatus.empty();
+  }
+
+  // indicated if the password has been found to be incorrect
+  wrongPassword = () : boolean => {
+    return this.requestStatus.hasMsg('incorrectPassword');
   }
 
   //set form closed flag, wait for animation to complete before changing states

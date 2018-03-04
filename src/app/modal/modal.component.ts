@@ -27,13 +27,11 @@ export class ModalComponent {
     return modalRef.result;
   }
 
-  recipeActionOpen(heading: string, recipeTitle: string, origin: string, originDate: string, 
+  recipeActionOpen(heading: string, recipeTitle: string, 
                   cancelText: string, okText: string) : Promise<any> {
     const modalRef = this.modalService.open(RecipeActionModalComponentTemplate, {size: 'lg'});
     modalRef.componentInstance.heading      = heading;
     modalRef.componentInstance.recipeTitle  = recipeTitle;
-    modalRef.componentInstance.origin       = origin;
-    modalRef.componentInstance.originDate   = originDate;
     modalRef.componentInstance.cancelText   = cancelText;
     modalRef.componentInstance.okText       = okText;
     modalRef.componentInstance.notifyOnly   = cancelText == "";
@@ -43,16 +41,14 @@ export class ModalComponent {
     return modalRef.result;
   }
 
-  sharedSettingsOpen(heading: string, emailList: string[], recipeTitle: string, origin: string,
-     originDate: string, mode: string, toggleAbout: Function, okText ?: string, deleteText ?: string, cancelText ?: string) : Promise<any> {
+  sharedSettingsOpen(heading: string, emailList: string[], recipeTitle: string,
+    mode: string, toggleAbout: Function, okText ?: string, deleteText ?: string, cancelText ?: string) : Promise<any> {
     const modalRef = this.modalService.open(SharedRecipeSettingsModalComponentTemplate, 
                                                             {size: 'lg', backdrop: 'static'});
     modalRef.componentInstance.mode         = mode;
     modalRef.componentInstance.heading      = heading;
     modalRef.componentInstance.itemList     = emailList || [];
     modalRef.componentInstance.recipeTitle  = recipeTitle;
-    modalRef.componentInstance.origin       = origin;
-    modalRef.componentInstance.originDate   = originDate;
     modalRef.componentInstance.cancelText   = cancelText || "Cancel";
     modalRef.componentInstance.okText       = okText || "Save";
     modalRef.componentInstance.deleteText   = deleteText || "Remove Shared Copy";

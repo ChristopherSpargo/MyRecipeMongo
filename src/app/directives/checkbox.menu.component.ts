@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { CatListObj } from '../app.globals'
 
 @Component({
   selector: '<app-checkbox-menu>',
@@ -11,15 +12,16 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
   @Input() fOnChange    : Function  // function to execute when any checkbox changes
   @Input() fOnSave      : Function; // function to execute on SAVE button
   @Input() fItems       : any[];    // list of all items {id: number, name: string}
-  @Input() fSelected    : number[]; // list of currently selected item ids
+  @Input() fCatList     : CatListObj; // CatListObj to use for this menu
   @Input() fOpenMsg     : string;   // message to listen for to open the menu
 
   
-  @Output() fSelectedChange = new EventEmitter<any[]>();
+  @Output() fCatListChange = new EventEmitter<CatListObj>();
 
   selectedItems : boolean[] = [];
   selectList : any[] = [];
   menuOpen : boolean = false;
+  menuHidden : boolean = true;
 
   constructor() {
   };
@@ -34,31 +36,35 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
 
   // open the category selection list
   openMenu = () => {
-    this.filterCategoryList();    // creates selectList from fItems - fSelected
+    this.filterCategoryList();    // creates selectList from fItems - fCatList.cats
     this.selectedItems.length = this.selectList.length; // allow a flag for each category
     this.selectedItems.fill(false); // set 'selected' flags to false
 
     // turn off scrolling on the body while the menu is open so the menu can scroll but not the body
     document.body.style.overflowY = 'hidden';
     this.menuOpen = true;
+    this.menuHidden = false;
   }
 
   // close the category selection list
   closeMenu = () => {
     document.body.style.overflowY = '';  // enable body scrolling
     this.menuOpen = false;
+    setTimeout(() => { // wait for fade-out before changing z-index
+      this.menuHidden = true;
+    },500);
   }
 
-  // add the selected items to the fSelected list
+  // add the selected items to the category list
   addSelections = () => {
     let added = false;
     for(let i=0; i<this.selectedItems.length; i++){
       if(this.selectedItems[i]){
-        this.fSelected.push(this.selectList[i].id);     // add selection to list
+        this.fCatList.addCat(this.selectList[i].id);     // add selection to list
         added = true;                                   // note something was added
       }
     }
-    if(added){ this.fSelectedChange.emit(this.fSelected); }  // send update message if necessary
+    if(added){ this.fCatListChange.emit(this.fCatList); }  // send update message if necessary
     this.closeMenu();
     if(this.fOnSave) {this.fOnSave(added);}
   }
@@ -70,7 +76,7 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
 
   // use this filter to create a menu of categories that doesn't include the ones already selected
   private categoryFilter = (value) : boolean => {
-    return (this.fSelected.indexOf(value.id) === -1);
+    return (this.fCatList.cats.indexOf(value.id) === -1);
   }
 
   //use this as the categoryList sort compare function to sort ascending by name
