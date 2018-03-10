@@ -3,9 +3,9 @@ import { RecipeData, Recipe } from './recipe';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe } from '../app.globals';
+import { CurrentRecipe } from '../utilities/current.recipe.svc';
 import { Profile, RESTRICTION_WRITE } from './profile';
-import { SHARED_USER_ID } from '../constants';
+import { UserInfo, SHARED_USER_ID } from '../utilities/user.info.service';
 
 export const CATEGORY_TABLE_NAME = 'categories';
 export const RECIPE_TABLE_NAME   =    'recipes';

@@ -14,43 +14,51 @@
     <app-about-heading fIcon="assessment" fText="Categories" fIconColor="app-active-input-icon-color"></app-about-heading>
     &nbsp;&nbsp;Here you assign categories to the recipe. Categories are one of the main ways to
     organize recipes. You can create as many different categories as you like (see help when using the 
-    <b>Manage Categories</b> feature).<br/>
+    <b>Categories</b> feature).<br/>
     &nbsp;&nbsp;Click the <app-about-text-icon fIcon="add_circle" [fFab]="true" 
-    fColor="app-primary"></app-about-text-icon> button to display a menu of categories.  Add categories to
-    the recipe by checking any you want to apply and click <app-about-text-icon fLabel="Ok" 
-    fSize="S" fColor="app-white" fLabelCSS="app-white" fExtraCSS="app-bg-primary" 
-    [fBtn]="true"></app-about-text-icon>.  Selected categories will appear in the categories field as labeled
-    chips.<br/>
-    &nbsp;&nbsp;To remove a selection click the <app-about-text-icon fIcon="close" fSize="S" 
+    fColor="app-primary"></app-about-text-icon> button to display a menu of categories. A <b>new category</b>
+    can be added to the menu by entering it into the <i>new category</i> field at the top of the menu.
+    <br/>&nbsp;&nbsp;Assign categories to
+    the recipe by checking any you want to apply and click <b>Ok</b>.
+    Selected categories will appear in the categories field as labeled chips.<br/>
+    To remove a selection click the <app-about-text-icon fIcon="close" fSize="S" 
     fColor="app-warn"></app-about-text-icon> on the chip with that category label.
 
     <app-about-heading fIcon="list" fText="Ingredients" fIconColor="app-active-input-icon-color app-mb--4"></app-about-heading>
     &nbsp;&nbsp;Enter the list of ingredients for the recipe. Type in each ingredient 
     followed by the enter key.  The program will automatically bullet each ingredient when you hit the
-    enter key.  You can enter subtitles like 'FOR THE SAUCE:' by ending the line with a semicolon. 
+    enter key. Blank lines (lines that start with the enter key) will not be bulleted.
+    <br/>&nbsp;&nbsp;You can enter subtitles like 'FOR THE SAUCE:' by ending the line with a semicolon. 
     The program will display subtitles in all caps. 
-    Blank lines (lines that start with the enter key) will be maintained.
+    
     <br/>&nbsp;Words/phrases in the ingredients can be searched for using the <b>Keywords</b> field of 
     the <b>SEARCH</b> tab.
 
     <app-about-heading fIcon="assignment" fText="Instructions" fIconColor="app-active-input-icon-color"></app-about-heading>
     &nbsp;&nbsp;Enter the list of instructions for the recipe. Type in each instruction
     followed by the enter key.  The program will automatically number each instruction when you hit the
-    enter key.  You can enter subtitles like 'FOR THE SAUCE:' by ending the line with a semicolon. 
-    The program will display subtitles in all caps. Step numbers start over after a subtitle.
-    Blank lines (lines that start with the enter key) will be maintained.
+    enter key. Blank lines (lines that start with the enter key) will not be numbered.
+    <br/>&nbsp;&nbsp;You can enter subtitles like 'FOR THE SAUCE:' by ending the line with a semicolon. 
+    The program will display subtitles in all caps. Step numbers start over after a subtitle.<br/>
+    
 
     <app-about-heading fIcon="edit" fText="Recipe Notes" fIconColor="app-active-input-icon-color"></app-about-heading>
     &nbsp;&nbsp;Enter any special considerations regarding ingredients or 
     preparation of the recipe.
 
     <app-about-heading fIcon="photo" fText="Pictures" fIconColor="app-active-input-icon-color"></app-about-heading>
-    &nbsp;&nbsp;This field is for adding pictures to the recipe. The first picture entered will
-    be the one displayed on a search results menu. Tap the 
-    <app-about-text-icon fIcon="add_a_photo" fLabel="Add" 
+    &nbsp;&nbsp;This field is for adding pictures to the recipe. The first picture in the pictures list will
+    be the one displayed on a search results menu. You can change which picture is first by clicking the 
+    <app-about-text-icon fIcon="arrow_upward" fSize="S" fColor="app-primary"></app-about-text-icon>
+    icon above the picture.<br/>
+    &nbsp;&nbsp;Click the <app-about-text-icon fIcon="add_a_photo" fLabel="Add" 
     fSize="S" fColor="app-active-input-icon-color" fLabelCSS="app-link-active app-underlined">
     </app-about-text-icon>
-    button to browse for pictures and/or to use the camera on a mobile device.
+    button to browse for pictures and/or to use the camera on a mobile device.<br/>
+    &nbsp;&nbsp;To remove a picture click the 
+    <app-about-text-icon fIcon="close" fSize="S" fColor="app-warn"></app-about-text-icon>
+    icon above the picture.<br/>
+
 
     <app-about-heading fIcon="check_circle_outline" fButton="Save"></app-about-heading>
     &nbsp;&nbsp;Press this button to save the recipe to the database and update the VIEW tab.

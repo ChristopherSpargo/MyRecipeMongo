@@ -1,17 +1,20 @@
                 <!--Form used to provide the RECIPE ENTRY feature-->
 
-<div
+<div  
   class="app-tab-container px-0 pt-2 app-bg-gwhite"
   [ngClass]="{'app-open': editTabOpen}"
   >
 
     <!-- define a component to add recipe categoreis -->
-    <app-checkbox-menu 
+    <app-checkbox-menu
             fTitle       = "Recipe Categories"
             fMessage     = "Select all that apply:"
             fOpenMsg     = "openEntryCategoriesMenu"
             [fItems]     = "categoryListItems()"
-            [(fCatList)] = "rCategories">
+            [(fCatList)] = "rCategories"
+            [fAllowNew]  = "true"
+            [fUpdateFn]  = "updateCategoriesList"
+            >
     </app-checkbox-menu>
  
     <!-- Instructional messages -->
@@ -50,7 +53,8 @@
               fMaxlength    = "200"
               fErrors       = "required|pattern"
               fErrorMsgs    = "A Title is required.|Invalid character in Title."
-              [fFocusFn]    = "clearRequestStatus">
+              [fFocusFn]    = "clearRequestStatus"
+              >
             </app-icon-input>
   
             <!-- Dish Description field -->
@@ -87,7 +91,7 @@
                       (click)="rCategories.removeCat(c)">close</i>
                   </div> 
                   <!-- display a button at the end of the list to activate the selection menu -->
-            <app-fab
+                  <app-fab
                     fType       = "button"
                     [fOpen]     = "true"
                     fButtonCSS  = "ml-2 d-flex app-fab-button-sm app-bg-white app-accent1 app-fab-raised"
@@ -97,7 +101,7 @@
                     fIconCSS    = "app-fab-icon-btn-sm"
                     [fOnClick]  = "openCatList"
                     fIconColor  = "app-primary">
-            </app-fab>
+                  </app-fab>
                 </div>
               </div>
 
@@ -219,7 +223,7 @@
                   <img [src]="p.picURL" class="app-recipe-image" name="{{'pic'+i}}">
                   <div class="app-picture-note mb-2 px-1">
                     <input type="text" name="{{'picNote'+i}}" id="{{'picNoteID'+i}}"
-                            class="app-form-input app-picture-note-input"
+                            class="app-form-input  app-cursor-pointer app-picture-note-input"
                             placeholder="{{p.picSize}}"
                             maxlength="200"
                             [(ngModel)]="p.noteText"

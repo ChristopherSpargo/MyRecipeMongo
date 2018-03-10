@@ -10,7 +10,8 @@ import { ToasterModule, ToasterService } from 'angular2-toaster';
 // import { AppHammerConfig } from './app.hammer.config';
 
 import { AppComponent } from './app.component';
-import { SlideoutStatus, UserInfo, AboutStatus, CurrentRecipe } from './app.globals';
+import { CurrentRecipe } from './utilities/current.recipe.svc';
+import { AboutStatus } from './utilities/about.status.service';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { AboutHeadingComponent } from './directives/about.heading.component';
@@ -43,19 +44,21 @@ import { RecipeSearchComponent } from "./recipes/recipe.search.component";
 import { RecipeViewComponent } from "./recipes/recipe.view.component";
 import { RecipePrintComponent } from "./recipes/recipe.print.component";
 import { AppRecipeSectionComponent } from './directives/app.recipe.section.component';
-import { FormFooterButtonComponent } from "./directives/form.footer.button.component";
-import { loginState, homeState, manageCategoriesState, enterRecipeState,
-         accountProfileState, accountEmailState, accountPasswordState,
-         accountDeleteState, myRecipeSearchState, sharedRecipeSearchState } from "./states";
+import { loginState, homeState, manageCategoriesState, recipeAccessState,
+         recipeEntryState, recipeViewState,
+         recipeMenuState, accountProfileState, accountEmailState, accountPasswordState,
+         accountDeleteState, recipeSearchMyState, recipeSearchSharedState } from "./states";
 import { ModalComponent } from './modal/modal.component';
 import { SimpleModalComponentTemplate } from './modal/simple.modal.component.template';
 import { RecipeActionModalComponentTemplate } from './modal/recipe.action.modal.component.template';
 import { SharedRecipeSettingsModalComponentTemplate } from './modal/shared.recipe.settings.modal.component.template';
 import { UtilSvc } from './utilities/utilSvc';
 import { UserSvc } from './model/userSvc';
+import { UserInfo } from './utilities/user.info.service';
 import { CookieSvc } from './utilities/cookieSvc';
 import { FireBaseSvc } from './utilities/fireBaseSvc';
 import { RecipeService } from './model/recipeSvc';
+import { SlideNavSvc } from './home/slideNavSvc';
 import { FormHeaderComponent } from './directives/form.header.component';
 import { IconInputComponent } from './directives/icon.input.component';
 import { IconTextareaComponent } from './directives/icon.textarea.component';
@@ -72,14 +75,14 @@ import { CheckboxMenuComponent } from './directives/checkbox.menu.component';
 import { CrossSvc } from './app.bank'
 import { HelpButtonComponent } from './directives/help.button.component'
 
-const INITIAL_STATES =  [ homeState, loginState, manageCategoriesState, enterRecipeState,
-    accountProfileState, accountEmailState, accountPasswordState, accountDeleteState,
-    myRecipeSearchState, sharedRecipeSearchState ];
+const INITIAL_STATES =  [ homeState, loginState, manageCategoriesState, recipeEntryState,
+    accountProfileState, accountEmailState, accountPasswordState, accountDeleteState, recipeAccessState,
+    recipeSearchMyState, recipeSearchSharedState, recipeMenuState, recipeViewState ];
 const INITIAL_COMPONENTS =  [ AppComponent, HomeComponent, LoginComponent, FormHeaderComponent, IconInputComponent,
   ValidationMessageComponent, ValidationMessagesComponent, RegisterFormControlDirective, AppMessagesComponent,
   IconTextareaComponent, AppMessageComponent, ModalComponent, HelpButtonComponent,
   SimpleModalComponentTemplate, RecipeActionModalComponentTemplate, SharedRecipeSettingsModalComponentTemplate,
-  ListManagementComponent, ListItemFieldComponent, FormFooterButtonComponent,
+  ListManagementComponent, ListItemFieldComponent,
   UpdateActionsComponent, DeleteEntryComponent, FormMessagesComponent, AppFabComponent,
   CheckboxMenuComponent, RecipeEntryComponent, RecipeViewComponent, RecipePrintComponent,
   ListManagementComponent, AccountProfileComponent, AccountEmailComponent, AccountPasswordComponent,
@@ -106,8 +109,8 @@ const INITIAL_COMPONENTS =  [ AppComponent, HomeComponent, LoginComponent, FormH
   ],
   entryComponents: [SimpleModalComponentTemplate, RecipeActionModalComponentTemplate,
                     SharedRecipeSettingsModalComponentTemplate],
-  providers: [SlideoutStatus, UserInfo, ModalComponent, UtilSvc, UserSvc, ToasterService, RecipeService,
-              CookieSvc, FireBaseSvc, AboutStatus, CrossSvc, CurrentRecipe],
+  providers: [UserInfo, ModalComponent, UtilSvc, UserSvc, ToasterService, RecipeService,
+              CookieSvc, FireBaseSvc, AboutStatus, CrossSvc, CurrentRecipe, SlideNavSvc],
       //  {provide: HAMMER_GESTURE_CONFIG, useClass: AppHammerConfig}],
   bootstrap: [AppComponent]
 })

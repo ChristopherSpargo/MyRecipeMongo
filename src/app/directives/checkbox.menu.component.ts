@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { CatListObj } from '../app.globals'
+import { CatListObj } from './cat.list.obj'
 
 @Component({
   selector: '<app-checkbox-menu>',
@@ -14,14 +14,19 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
   @Input() fItems       : any[];    // list of all items {id: number, name: string}
   @Input() fCatList     : CatListObj; // CatListObj to use for this menu
   @Input() fOpenMsg     : string;   // message to listen for to open the menu
+  @Input() fAllowNew    : boolean = false; // true if user can add item to menu
+  @Input() fUpdateFn    : Function; // function to call to update the cat list (add new cat)
 
   
   @Output() fCatListChange = new EventEmitter<CatListObj>();
 
   selectedItems : boolean[] = [];
-  selectList : any[] = [];
-  menuOpen : boolean = false;
-  menuHidden : boolean = true;
+  selectList    : any[]     = [];
+  menuOpen      : boolean   = false;
+  menuHidden    : boolean   = true;
+  newCat        : string    = "";
+  newCatNew     : boolean   = false;
+  newCatSelected: boolean   = false;
 
   constructor() {
   };
@@ -49,15 +54,38 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
   // close the category selection list
   closeMenu = () => {
     document.body.style.overflowY = '';  // enable body scrolling
+    this.newCat = '';
+    this.newCatSelected = false;
+    this.clearItemInListError();
     this.menuOpen = false;
     setTimeout(() => { // wait for fade-out before changing z-index
       this.menuHidden = true;
     },500);
   }
 
-  // add the selected items to the category list
+  // add the selected items to the category selections
   addSelections = () => {
     let added = false;
+    if(this.newCatOk()){
+      <Promise<number>>this.fUpdateFn(this.newCat) // update categories list and return id for new category
+      .then((id) => {
+        if(this.newCatSelected){
+          this.fCatList.addCat(id);       // add new category selection to list
+          this.finishAdd(true);
+        } else{
+          this.finishAdd(false);
+        }       
+      })
+      .catch((error) => {
+        this.finishAdd(false);
+      });
+    } else{
+      this.finishAdd(false);
+    }
+  }
+
+  // finish adding items to category selections
+  finishAdd = (added : boolean) => {
     for(let i=0; i<this.selectedItems.length; i++){
       if(this.selectedItems[i]){
         this.fCatList.addCat(this.selectList[i].id);     // add selection to list
@@ -82,5 +110,41 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
   //use this as the categoryList sort compare function to sort ascending by name
   private categorySort = (a,b) : number => {return a.name < b.name ? -1 : 1;}
 
+  checkNewCat = () => {
+    this.newCat = this.newCat.toLowerCase();
+    this.newCat = this.newCat.replace(/\b[a-z]/g,
+                     (x :string) : string =>{ return x.charAt(0).toUpperCase() + x.substr(1); })
 
+    // report an error if new category is already in the categories list
+    if(this.catInList(this.newCat)){
+      this.fCatList.errors.itemInList = true;
+      this.fCatList.touched = true;
+      this.fCatList.invalid = true;
+      this.fCatList.statusChanges.emit(); // cause error to be shown
+      this.newCatNew = false;
+    } else{
+      this.clearItemInListError();
+      this.newCatNew = true;
+    }
+  }
+
+  clearItemInListError = () => {
+    if(this.fCatList.errors && this.fCatList.errors['itemInList']){
+      delete this.fCatList.errors['itemInList'];   //remove this message
+    }
+    this.fCatList.touched = true;
+    this.fCatList.invalid = Object.getOwnPropertyNames(this.fCatList.errors).length !== 0;
+    this.fCatList.statusChanges.emit(); // cause error to be shown
+  }
+
+  catInList = (cat: string) : boolean => {
+    for(let i=0; i<this.fItems.length; i++){
+      if(this.fItems[i].name === cat){ return true;}
+    }
+    return false;    //not found
+  }
+
+  newCatOk = () => {
+    return this.newCat !== '' && this.newCatNew;
+  }
 }

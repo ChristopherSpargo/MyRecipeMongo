@@ -5,7 +5,7 @@
  <div class="app-container"> 
   <div  id="mainToolbarSm"
         class=" nav app-toolbar-theme app-main-short-toolbar hidden-md-up 
-               d-flex flex-row justify-content-around align-items-center">
+               d-flex flex-row justify-content-around align-items-center ">
 
             <!-- Display the Logo Text -->
     <div class="app-logo-text-container app-cursor-pointer" (click)="toggleAbout()"
@@ -15,12 +15,12 @@
                 <!-- Now some feature buttons -->
     <button type="button" class="btn app-bar-feature-button "  
             data-toggle="tooltip" data-placement="top" title="Search Recipes" data-delay="200"
-                (click)="menuItemSelected('searchMyRecipes')">
+                (click)="menuItemSelected('recipeAccess.recipeSearchMy')">
       <i class="material-icons app-bar-feature-icon align-self-end" aria-label="search recipes">search</i>
     </button>
     <button type="button" class="btn app-bar-feature-button "  
             data-toggle="tooltip" data-placement="top" title="Add Recipe" data-delay="200"
-                (click)="menuItemSelected('enterRecipe')">
+                (click)="menuItemSelected('recipeAccess.recipeEntry')">
       <i class="material-icons app-bar-feature-icon" aria-label="add recipe">edit</i>
     </button>
                 <!-- Show different icon for Sign In .vs. Sign Out -->
@@ -41,39 +41,39 @@
                   (click)="toggleSlidenav()"
                   [disabled]="aboutOpen()">
         <i class="material-icons app-slidedown-menu-icon app-slide-open-icon app-font-normal" 
-                  [class.app-visible]="!slidenavOpen()"
+                  [class.app-visible]="!slideNavOpen()"
                   aria-label="open menu">more_vert</i>
         <i class="material-icons app-slidedown-menu-icon app-slide-close-icon app-font-normal" 
-                  [class.app-visible]="slidenavOpen()"
+                  [class.app-visible]="slideNavOpen()"
                   aria-label="close menu">arrow_upward</i>
       </button>
     </div>
   </div>
 
   <!--define a backdrop container for click-outside-to-close functionality for the slide-down menu-->
-    <div *ngIf="slidenavOpen()" class="app-click-to-close-slidenav" 
+    <div *ngIf="slideNavOpen()" class="app-click-to-close-slidenav" 
        (click)="closeSlidenav()"></div> 
         
                               <!-- Main SideDown Menu -->
 
   <div id="slideDownMenu"
        class="hidden-md-up app-slide-menu app-slide-down" 
-       [class.app-open]="slidenavOpen()">
+       [class.app-open]="slideNavOpen()">
     <div class="d-flex flex-column justify-content-start align-items-start app-whiteframe-2dp app-frame app-scrollable">
         <ul class="d-flex flex-column app-slide-menu-ul app-form-theme">
-          <li id="myLogsMenu">
-            <button type="button" class="btn app-slide-menu-listitem" (click)="toggleLogsMenu()">
+          <li id="myRecipesMenu">
+            <button type="button" class="btn app-slide-menu-listitem" (click)="toggleRecipesMenu()">
               <div class="d-flex flex-row align-items-center">
                 <i class="material-icons app-menu-icon-color app-menu-item-icon">local_dining</i>
                 Recipes
-                <i class="material-icons app-form-theme-text ml-1">{{!logsMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
+                <i class="material-icons app-form-theme-text ml-1">{{!recipesMenuOpen ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
             </button>
-            <div class="app-slidenav-submenu" [class.app-open]="logsMenuOpen()">
+            <div class="app-slidenav-submenu" [class.app-open]="recipesMenuOpen()">
               <ul class="app-slide-menu-ul">
                 <li>
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
-                          (click)="menuItemSelected('searchMyRecipes')">
+                          (click)="menuItemSelected('recipeAccess.recipeSearchMy')">
                     <div class="d-flex flex-row align-items-center">
                       <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
                       Search My Recipes
@@ -82,7 +82,7 @@
                 </li>
                 <li>
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
-                          (click)="menuItemSelected('searchSharedRecipes')">
+                          (click)="menuItemSelected('recipeAccess.recipeSearchShared')">
                     <div class="d-flex flex-row align-items-center">
                       <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
                       Search Shared Recipes
@@ -91,7 +91,7 @@
                 </li>
                 <li>
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
-                          (click)="menuItemSelected('enterRecipe')">
+                          (click)="menuItemSelected('recipeAccess.recipeEntry')">
                     <div class="d-flex flex-row align-items-center">
                       <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">edit</i>
                       Add a Recipe
@@ -103,32 +103,19 @@
           </li>
           <li id="listsMenu">
             <button type="button" class="btn app-slide-menu-listitem" 
-                                    (click)="menuItemSelected('manageCategories')">
+                                    (click)="closeSubmenus(); menuItemSelected('manageCategories')">
               <div class="d-flex flex-row align-items-center">
                 <i class="material-icons app-menu-icon-color app-menu-item-icon ">description</i>
                 Categories
               </div>
             </button>
-            <!-- <div class="app-slidenav-submenu" [class.app-open]="listsMenuOpen()">
-              <ul class=" app-slide-menu-ul ">
-                <li>
-                  <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
-                          (click)="menuItemSelected('manageCategories')">
-                    <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">description</i>
-                      Manage Categories
-                    </div>
-                  </button>
-                </li>
-              </ul>
-            </div> -->
           </li>
           <li id="accountMenu">
             <button type="button" class="btn app-slide-menu-listitem" (click)="toggleAccountMenu()">
               <div class="d-flex flex-row align-items-center">
                 <i class="material-icons app-menu-icon-color app-menu-item-icon ">folder_open</i>
                 Account
-                <i class="material-icons app-form-theme-text ml-1">{{!accountMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
+                <i class="material-icons app-form-theme-text ml-1">{{!accountMenuOpen ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
             </button>
             <div class="app-slidenav-submenu" [class.app-open]="accountMenuOpen()">
@@ -177,7 +164,7 @@
               <div class="d-flex flex-row align-items-center">
                 <i class="material-icons app-menu-icon-color app-menu-item-icon ">info_outline</i>
                 About
-                <i class="material-icons app-form-theme-text ml-1">{{!aboutMenuOpen() ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
+                <i class="material-icons app-form-theme-text ml-1">{{!aboutMenuOpen ? 'arrow_drop_down' : 'arrow_drop_up'}}</i>
               </div>
             </button>
             <div class="app-slidenav-submenu" [class.app-open]="aboutMenuOpen()">
@@ -222,7 +209,8 @@
           </li>
           <li *ngIf="!loggedIn()">
             <button id="signInBtn" type="button" aria-label="sign in"
-                       class="btn app-slide-menu-listitem " (click)="menuItemSelected('login')">
+                       class="btn app-slide-menu-listitem " 
+                       (click)="closeSubmenus(); menuItemSelected('login')">
               <div class="d-flex flex-row align-items-center">
                 <i class="material-icons app-menu-icon-color app-menu-item-icon">person_outline</i>
                 Sign In
@@ -231,7 +219,8 @@
           </li>
           <li *ngIf="loggedIn()">
             <button id="signOutBtn" type="button" aria-label="sign out"
-                       class="btn app-slide-menu-listitem " (click)="closeSlidenav(); logout($event)">
+                       class="btn app-slide-menu-listitem " 
+                       (click)="closeSubmenus(); closeSlidenav(); logout($event)">
               <div class="d-flex flex-row align-items-center">
                 <i class="material-icons app-menu-icon-color app-menu-item-icon">person</i>
                 Sign Out
@@ -257,13 +246,16 @@
     </div>
     <ul id="mainMenu" class="nav app-white app-inherit-z">
                 <!-- Dropdown menu for recipe features -->
-      <li id="myLogsMenu" ngbDropdown class="nav-item dropdown mx-2">
+      <li id="myRecipesMenu" ngbDropdown class="nav-item dropdown mx-2">
         <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" 
            href="#" role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="searchMyRecipes">Search My Recipes</a>
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="searchSharedRecipes">Search Shared Recipes</a>
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="enterRecipe">Add a Recipie</a>
+          <a role="button" class="dropdown-item app-dropdown-text" 
+          uiSref="recipeAccess.recipeSearchMy">Search My Recipes</a>
+          <a role="button" class="dropdown-item app-dropdown-text" 
+          uiSref="recipeAccess.recipeSearchShared">Search Shared Recipes</a>
+          <a role="button" class="dropdown-item app-dropdown-text" 
+          uiSref="recipeAccess.recipeEntry">Add a Recipie</a>
         </div>
       </li>
                 <!-- Category management feature -->

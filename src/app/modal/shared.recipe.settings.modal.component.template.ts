@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { IMAGE_DIRECTORY, FORM_HEADER_ICON  } from '../constants'
 import { UtilSvc } from '../utilities/utilSvc';
-import { FormMsgList } from '../app.globals'
+import { FormMsgList } from '../directives/form.msg.list';
 
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -135,13 +135,13 @@ export class SharedRecipeSettingsModalComponentTemplate {
 
     switch(this.itemList.length){
       case 0:
-        msg = 'All Users';
+        msg = 'everyone';
         break;
       case 1:
-        msg = '1 User';
+        msg = '1 other user';
         break;
       default:
-        msg = this.itemList.length + ' Users';
+        msg = this.itemList.length + ' other users';
     }
     return msg;
   }

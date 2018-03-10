@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe, CatListObj, FormMsgList  } from '../app.globals';
-import { SHARED_USER_ID } from '../constants'
+import { CurrentRecipe } from '../utilities/current.recipe.svc';
+import { FormMsgList } from '../directives/form.msg.list';
+import { CatListObj } from '../directives/cat.list.obj'
+import { UserInfo, SHARED_USER_ID } from '../utilities/user.info.service';
 import { UserSvc } from '../model/userSvc';
 import { MENU_TAB, MENU_TAB_ID } from '../recipes/recipe.access.component'
 import { Recipe, RecipeData, } from '../model/recipe'

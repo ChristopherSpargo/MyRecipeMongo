@@ -1,5 +1,4 @@
-<div id="app-view-top"
-     class="d-flex flex-column app-central-container app-fade-in"
+<div class="d-flex flex-column app-central-container app-pos-relative app-fade-in"
      [ngClass]="{'app-open': viewOpen,
                  'app-no-display': printingRecipe}">
 
@@ -14,10 +13,11 @@
                     
   </app-form-header>
 
+  <div class="app-tabset-background"></div>
   <!-- Tab set for Recipe Access -->
   <div class="app-form-theme-transparent app-flex-1" >
     <ngb-tabset #viewTabs="ngbTabset" (tabChange)="tabChange($event)" 
-                [destroyOnHide]="false" justify="around">
+                [destroyOnHide]="false" activeId="menuTab" justify="around">
       <ngb-tab id="searchTab">
         <ng-template ngbTabTitle>
           <div class="d-flex flex-row justify-content-center align-items-center">
@@ -27,7 +27,9 @@
         </ng-template>
         <ng-template ngbTabContent>
           <!-- Component to display the recipe search form -->
-           <app-recipe-search
+          <!-- <ui-view>
+          </ui-view>   -->
+          <app-recipe-search
             [dataSet]       = "dataSet"
             [viewShared]    = "viewShared"
             [searchTabOpen] = "searchTabOpen">
@@ -45,7 +47,10 @@
         </ng-template>
         <ng-template ngbTabContent>
           <!-- Component to display the menu of recipes from search -->
-           <app-recipe-menu
+          <!-- <ui-view
+            name="menu">
+          </ui-view>   -->
+          <app-recipe-menu
             [viewShared]             = "viewShared"
             [columns]                = "menuColumns"
             [menuOpen]               = "menuTabOpen"
@@ -64,7 +69,10 @@
         </ng-template>
         <ng-template ngbTabContent>
           <!-- Component to display the selected recipe -->
-           <app-recipe-view
+          <!-- <ui-view
+            name="view">
+          </ui-view>   -->
+          <app-recipe-view
             [viewTabOpen]             = "viewTabOpen">
           </app-recipe-view> 
         </ng-template>
@@ -72,14 +80,16 @@
       <ngb-tab *ngIf="!viewShared" id="editTab">
         <ng-template ngbTabTitle>
           <div class="d-flex flex-row justify-content-center align-items-center">
-            <i class="material-icons app-form-text-theme app-tab-item-icon" 
-              (click)="toggleEventInfo()">edit</i>
+            <i class="material-icons app-form-text-theme app-tab-item-icon">edit</i>
             <div class="app-tab-title mx-1">{{recipeSelected() ? 'EDIT' : 'NEW'}}</div>
           </div>
         </ng-template>
         <ng-template ngbTabContent>
           <!-- Component to edit the selected recipe -->
-           <app-recipe-edit
+          <!-- <ui-view
+            name="entry">
+          </ui-view>   -->
+          <app-recipe-edit
             [editTabOpen]             = "editTabOpen">
           </app-recipe-edit> 
         </ng-template>

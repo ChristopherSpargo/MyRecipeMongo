@@ -7,9 +7,10 @@
                  app-form-theme-text">
       <ng-container *ngFor="let v of aValues; index as i; last as l">
         <div class="d-inline-flex flex-row align-items-center">
-          <label for="{{fName+i}}" class="mb-0 {{!l ? 'mr-4' : ''}}" [class.app-disabled-text]="fDisabled">          
+          <label for="{{fName+i}}" class="app-cursor-pointer mb-0 {{!l ? 'mr-4' : ''}}" [class.app-disabled-text]="fDisabled">          
             <input type="radio" id="{{fName+i}}" value="{{v}}" name="{{fName}}" 
             class="app-inline-flex"
+            [ngClass]="{'app-cursor-pointer': !fDisabled}" 
             [disabled]=fDisabled
             [(ngModel)]="fModel" (change)="valueChange()" (focus)="onFocus()">
             {{aLabels[i]}}

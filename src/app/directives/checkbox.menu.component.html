@@ -3,21 +3,46 @@
       (click)="closeMenu()"></div>
         
   <!-- container for menu -->
-  <div class="d-flex flex-column app-catList-container app-fade-in mb-1"
+  <div class="d-flex flex-column app-catList-container app-fade-in
+              app-whiteframe-2dp app-card-corners mb-1"
       [ngClass]="{'app-open': menuOpen,
-                  'app-z--5': menuHidden}">
-        
+                  'app-z--5': !menuOpen}">
+
   <!-- menu header area -->
-    <div class="app-catlist-header-theme ">
-        <div class="d-flex flex-row justify-content-around align-items-center">
-          {{fTitle}}
-        </div>
-    </div>
+    <div class="app-card-top-corners">
+      <div class="app-catlist-header-theme app-card-top-corners">
+          <div class="d-flex flex-row justify-content-around align-items-center">
+            {{fTitle}}
+          </div>
+      </div>
+    </div> 
 
     <!-- list of menu items -->
     <div class="app-catlist-body-theme app-scroll-frame-left my-2">
       <div *ngIf="fItems" class="d-flex flex-column">
         <div class="app-catlist-label mb-1">{{fMessage}}</div>
+        <div *ngIf="fAllowNew">         
+          <div class="d-flex flex-row justify-content-start align-items-center app-cursor-pointer mb-1">
+            <input type="checkbox" [disabled]="!newCatOk()" 
+                  class="app-cursor-pointer app-mb--2 mr-1" [(ngModel)]="newCatSelected">
+            <input type="text" name="newCat" id="newCatID"
+              class="app-form-input app-catlist-menu-item"
+              placeholder="new category"
+              maxlength="200"
+              [(ngModel)]="newCat"
+              (change)="checkNewCat()"
+              >
+          </div>
+          <div class="app-catlist-menu-item-message" 
+              [ngClass]="{'app-visible': (fCatList.touched),
+                          'app-invisible': !(fCatList.touched)}">
+            <validation-messages [vField]="fCatList">
+              <validation-message name="itemInList">
+                Category already in list.
+              </validation-message>
+            </validation-messages>
+          </div> 
+        </div>
         <div *ngFor="let item of selectList; index as i"
              class="d-flex flex-row align-items-center">
           <label class="app-flex-1 app-cursor-pointer mb-1">
@@ -30,7 +55,7 @@
 
     <!-- footer with action buttons -->
     <div class="d-flex flex-row app-flex-1 justify-content-around align-items-center 
-                app-catlist-footer-theme">
+                app-catlist-footer-theme app-card-bottom-corners">
       <app-fab 
             fType       = "button"
             fLink       = "Cancel"

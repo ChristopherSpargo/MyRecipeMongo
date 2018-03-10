@@ -87,8 +87,9 @@
           </div>
 
           <div *ngIf="!newAccount" class="mt-1">
-            <label>
-              <input type="checkbox" class="app-input-icon-area" name="createAcc" [(ngModel)]="createAccount" 
+            <label class="app-cursor-pointer">
+              <input type="checkbox" class="app-input-icon-area app-cursor-pointer" 
+                     name="createAcc" [(ngModel)]="createAccount" 
                     (change)="clearNewAccountFields()">
               Create new account
             </label>
@@ -96,8 +97,9 @@
 
           <!-- Remember Me field -->
           <div *ngIf="!wrongPassword()">
-            <label>
-              <input type="checkbox" class="app-input-icon-area" name="memberMe" [(ngModel)]="rememberLogin">
+            <label class="app-cursor-pointer">
+              <input type="checkbox" class="app-input-icon-area app-cursor-pointer" 
+                     name="memberMe" [(ngModel)]="rememberLogin">
               Remember me
             </label>
           </div>

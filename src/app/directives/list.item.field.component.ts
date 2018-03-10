@@ -14,6 +14,7 @@ export class ListItemFieldComponent implements OnInit  {
   @Input() fRef         : string;   // unique name for Template Reference Variable (TRV) for this field
   @Input() fValue       : string;   // model for <select> field
   @Input() fList        : any[];    // array of list items for <select>
+  @Input() fEmptyListLabel : string = 'empty'; // label to show when list is empty 
   @Input() fListValue   : string = "";   // indicates how to structure <select> options
   @Input() fLabel       : string;   // label for <select>
   @Input() fIcon        : string;   // icon for <select>
@@ -52,7 +53,7 @@ export class ListItemFieldComponent implements OnInit  {
   }
   
   currentLabel = () : string => {
-    return this.fLabel + ' (' + (this.fList && this.fList.length ? this.fList.length : 'empty') + ')';
+    return this.fLabel + ' (' + (this.fList && this.fList.length ? this.fList.length : this.fEmptyListLabel) + ')';
   }
 
   showFocused = ()=> {

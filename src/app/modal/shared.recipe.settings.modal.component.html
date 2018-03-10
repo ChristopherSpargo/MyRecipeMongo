@@ -20,24 +20,27 @@
 
         <!-- Remove Recipe from Public Recipes field -->
         <div *ngIf="mode === 'Edit'" class="d-flex flex-row align-items-center mt-1">
-          <i class="material-icons app-input-icon app-active-input-icon-color">remove_circle_outline</i>
-          <label class="mb-0">
-            <input type="checkbox" name="delMat" [(ngModel)]="deleteRecipe" (change)="clearRequestStatus()">
-            Stop sharing this Recipe
+          <i class="material-icons app-input-icon"
+             [ngClass]="{'app-active-input-icon-color': deleteRecipe,
+                         'app-white': !deleteRecipe}">remove_circle_outline</i>
+          <label class="app-cursor-pointer mb-0">
+            <input type="checkbox" name="delMat" class="app-cursor-pointer"
+              [(ngModel)]="deleteRecipe" (change)="clearRequestStatus()">
+            Stop sharing this recipe
           </label>
         </div>
 
         <!-- Add Recipe to Public Recipes field -->
         <div *ngIf="mode === 'Create'" class="d-flex flex-row align-items-center mt-1">
-          <i class="material-icons app-input-icon app-active-input-icon-color">add_circle_outline</i>
+          <i class="material-icons app-input-icon app-active-input-icon-color">check_box</i>
           <label class="mb-0">
-            Sharing this Recipe with {{sharingWith()}}
+            Share with {{sharingWith()}}
           </label>
         </div>
 
         <div class="d-flex flex-row justify-content-start app-flex-1 align-items-center 
                     app-black-text-low app-bold  mt-3 app-smaller-font">
-          Optional list of authorized users by email:
+          (Optional) Restrict users by email:
         </div>
 
 
@@ -59,16 +62,17 @@
                 [fOnChange]     = "copyItemName"
                 [fOnDelete]     = "deleteSelectedItem"
                 [fList]         = "itemList"
+                fEmptyListLabel = "everyone"
                 fListValue      = "index"
                 [fEqual]        = "false"
                 fNewTest        = ""
                 fNewName        = "newIName"
                 fNewRef         = "nIName"
-                fNewLabel       = "Authorized User" 
+                fNewLabel       = "Authorized User (email)" 
                 [(fNewValue)]   = "newItemName">
             </app-list-item-field>            
           </div>
-          <div class="app-item-list-clear-btn">
+          <div *ngIf="!deleteRecipe" class="app-item-list-clear-btn">
             <i class="material-icons app-input-icon app-warn app-cursor-pointer app-icon-xsm"
                 data-toggle="tooltip" data-placement="top" title="Clear List" data-delay="200"
                 (click)="clearItemList()">close</i>            

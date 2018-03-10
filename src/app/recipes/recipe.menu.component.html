@@ -27,13 +27,15 @@
               <div *ngIf="(i % columns === 0) && applySharedFilter(i)"
                     class="d-flex flex-column app-recipes-menu-card mb-3">
                 <img [src]="getMenuImage(r)" class="app-recipe-menu-image app-cursor-pointer"
-                        (click)="setSelectedRecipe(i)">
-                <div class="d-flex flex-row align-items-center app-recipe-menu-item-header pt-1 px-1">
+                     (click)="setSelectedRecipe(i)">
+                <div class="d-flex flex-row align-items-center app-recipe-menu-item-header 
+                            app-cursor-pointer pt-1 px-1" (click)="setSelectedRecipe(i)">
                   <div class="app-recipe-menu-item-title">
                     {{r.data.title}}
                   </div>
                 </div> 
-                <div class="d-flex flex-column flex-wrap align-items-start">
+                <div class="d-flex flex-column flex-wrap align-items-start app-cursor-pointer"
+                     (click)="setSelectedRecipe(i)">
                   <div class="app-recipe-view-text px-1 py-1">
                     {{getDescription(r)}}
                   </div>
@@ -58,13 +60,15 @@
               <div *ngIf="(i % columns === 1) && applySharedFilter(i)"
                     class="d-flex flex-column app-recipes-menu-card mb-3">
                 <img [src]="getMenuImage(r)" class="app-recipe-menu-image app-cursor-pointer"
-                        (click)="setSelectedRecipe(i)">
-                <div class="d-flex flex-row align-items-center app-recipe-menu-item-header pt-1 px-1">
+                     (click)="setSelectedRecipe(i)">
+                <div class="d-flex flex-row align-items-center app-recipe-menu-item-header 
+                            app-cursor-pointer pt-1 px-1" (click)="setSelectedRecipe(i)">
                   <div class="app-recipe-menu-item-title">
                     {{r.data.title}}
                   </div>
                 </div> 
-                <div class="d-flex flex-column flex-wrap align-items-start">
+                <div class="d-flex flex-column flex-wrap align-items-start app-cursor-pointer"
+                     (click)="setSelectedRecipe(i)">
                   <div class="app-recipe-view-text px-1 py-1">
                     {{getDescription(r)}}
                   </div>
@@ -89,13 +93,15 @@
               <div *ngIf="(i % columns === 2) && applySharedFilter(i)"
                     class="d-flex flex-column app-recipes-menu-card mb-3">
                 <img [src]="getMenuImage(r)" class="app-recipe-menu-image app-cursor-pointer"
-                        (click)="setSelectedRecipe(i)">
-                <div class="d-flex flex-row align-items-center app-recipe-menu-item-header pt-1 px-1">
+                     (click)="setSelectedRecipe(i)">
+                <div class="d-flex flex-row align-items-center app-recipe-menu-item-header 
+                            app-cursor-pointer pt-1 px-1" (click)="setSelectedRecipe(i)">
                   <div class="app-recipe-menu-item-title">
                     {{r.data.title}}
                   </div>
                 </div> 
-                <div class="d-flex flex-column flex-wrap align-items-start">
+                <div class="d-flex flex-column flex-wrap align-items-start app-cursor-pointer"
+                     (click)="setSelectedRecipe(i)">
                   <div class="app-recipe-view-text px-1 py-1">
                     {{getDescription(r)}}
                   </div>

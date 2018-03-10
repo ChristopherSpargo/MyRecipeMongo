@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input } from '@angular/core';
 import { NgForm, AbstractControl, FormControl } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { CurrentRecipe } from '../app.globals';
+import { CurrentRecipe } from '../utilities/current.recipe.svc';
 import { RecipePic, RecipeData, Recipe } from '../model/recipe'
 
 
@@ -37,6 +37,7 @@ export class RecipePrintComponent implements OnInit {
   recipeReady    : boolean = false;
   showPics       : boolean = false; // true if show full-size versions of all images at end of print
   printActive    : boolean = false;
+  printerMediaQuery : any;
 
   ngOnInit() {
     this.setMessageResponders();
@@ -47,20 +48,31 @@ export class RecipePrintComponent implements OnInit {
   }
 
   setMessageResponders() : void {
+    if (window.matchMedia) {
+      this.printerMediaQuery = window.matchMedia('print');
+      this.printerMediaQuery.addListener(this.mediaPrintListener);
+    }
     document.addEventListener("extraImagesReady", this.setExtraImages);
     document.addEventListener("newViewReady", this.newViewReady);
     document.addEventListener("newRecipeSelection", this.newViewReady);
     document.addEventListener("noRecipeSelection", this.noRecipeSelection);
     document.addEventListener("printRecipe", this.printRecipe);
+    window.addEventListener("afterprint", this.printDone);
+    window.addEventListener("beforeprint", this.showPrintView);
   }
 
   // remove all the message responders set in this module
   deleteMessageResponders() : void {
+    if (window.matchMedia) {
+      this.printerMediaQuery.removeListener(this.mediaPrintListener);
+    }
     document.removeEventListener("extraImagesReady", this.setExtraImages);
     document.removeEventListener("newViewReady", this.newViewReady);
     document.removeEventListener("newRecipeSelection", this.newViewReady);
     document.removeEventListener("noRecipeSelection", this.noRecipeSelection);
     document.removeEventListener("printRecipe", this.printRecipe);
+    window.removeEventListener("afterprint", this.printDone);
+    window.removeEventListener("beforeprint", this.showPrintView);
   }
 
   //emit a custom event with the given name and detail data
@@ -68,23 +80,39 @@ export class RecipePrintComponent implements OnInit {
     this.utilSvc.emitEvent(name, data);
   }
 
+  mediaPrintListener = (val) => {
+    if (val.matches) {
+        this.showPrintView();
+    } else {
+        this.printDone();
+    }
+  }
+
   // print the current recipe
   printRecipe = () => {
-    this.printActive = true;
-    setTimeout(()=>{      // wait for display changes
-      this.printIt();
+    this.showPrintView();
+    setTimeout(()=>{      // wait for display to change to print view
+      window.print();
+      setTimeout(() => {  // this if for a weird problem in IOS 11
+        this.printDone();
+      }, 5000);
     },500)
   }
 
-  printIt = () => {
-    window.print();
-    setTimeout(()=>{
-      this.printActive = false;
-      this.emit('printEnded');
-    },3000);
+  // turn on display of this module's template and turn off VIEW module's template
+  showPrintView = () => {
+    this.printActive = true;
+    this.emit('printBegin')
   }
 
+  // turn off display of this module's template and turn on VIEW module's template
+  printDone = () => {
+    this.printActive = false;
+    this.emit('printDone')
+ }
+
   // event listener for 'newRecipeSelection' event
+  // populate the view with data from the current recipe
   newViewReady = () => {
     this.currentRecipe.viewScrollPosition = 0;
     this.setItemFields(this.currentRecipe.recipe.data);

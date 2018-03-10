@@ -2,7 +2,9 @@
 import { UIROUTER_DIRECTIVES } from '@uirouter/angular';
 import { StateService } from "@uirouter/core";
 
-import { UserInfo, SlideoutStatus, AboutStatus } from '../app.globals';
+import { AboutStatus } from '../utilities/about.status.service';
+import { SlideNavSvc } from './slideNavSvc';
+import { UserInfo } from '../utilities/user.info.service'
 import { Profile } from '../model/profile'
 import { IMAGE_DIRECTORY, FORM_HEADER_ICON, APP_VERSION } from '../constants';
 import { UtilSvc } from '../utilities/utilSvc'
@@ -13,9 +15,10 @@ import { UtilSvc } from '../utilities/utilSvc'
 export class HomeComponent implements OnInit {
   formHeaderIcon    : string  = IMAGE_DIRECTORY+FORM_HEADER_ICON;
   version           : string  = APP_VERSION;
+  searchMy         = 'SearchMy';
 
-  constructor(private sS: SlideoutStatus, private user: UserInfo, private stateService: StateService,
-      private utilSvc: UtilSvc, private aboutStatus: AboutStatus){
+  constructor( private user: UserInfo, private stateService: StateService,
+      private utilSvc: UtilSvc, private aboutStatus: AboutStatus, private slideNavSvc: SlideNavSvc){
   }
 
   ngOnInit() {
@@ -30,39 +33,42 @@ export class HomeComponent implements OnInit {
     this.utilSvc.scrollToTop();
   }
 
-    toggleAbout = () => {
-    this.aboutStatus.open = !this.aboutStatus.open;
+  // return the open status of the slideNav 
+  slideNavOpen = () : boolean => {
+    return this.slideNavSvc.isOpen();
   }
 
+  // open the Recipies slideNav submenu
+  recipesMenuOpen = () : boolean => {
+    return this.slideNavSvc.isOpenSub('Recipe');
+  }
 
+  // open the Accounts slideNav submenu
+  accountMenuOpen = () : boolean => {
+    return this.slideNavSvc.isOpenSub('Account');
+  }
+
+  // open the About slideNav submenu
+  aboutMenuOpen = () : boolean => {
+    return this.slideNavSvc.isOpenSub('About');
+  }
+
+  // close all slideNav submenus
+  closeSubmenus = () => {
+    this.slideNavSvc.toggleSub('None');
+  }
+
+  // cause the help panel to open/close
+  toggleAbout = () => {
+  this.aboutStatus.open = !this.aboutStatus.open;
+  }
+
+  // cause the slide menu to open/close
   toggleSlidenav() {
-    this.sS.slidenavOpen = !this.sS.slidenavOpen;
-  }
-
-  slidenavOpen = () => {
-    return this.sS.slidenavOpen;
+    this.slideNavSvc.toggle();
   }
   
-  aboutMenuOpen = () => {
-    return this.sS.aboutMenuOpen;
-  }
-  
-  accountMenuOpen = () => {
-    return this.sS.accountMenuOpen;
-  }
-  
-  logsMenuOpen = () => {
-    return this.sS.logsMenuOpen;
-  }
-
-  publicLogsMenuOpen = () => {
-    return this.sS.publicLogsMenuOpen;
-  }
-
-  listsMenuOpen = () => {
-    return this.sS.listsMenuOpen;
-  }
-  
+  // return the open status of the about PANEL
   aboutOpen = () => {
     return this.aboutStatus.open;
   }
@@ -81,8 +87,7 @@ export class HomeComponent implements OnInit {
   logout(ev : any) : void {
     this.utilSvc.getConfirmation('Signing Out', 'Are you sure you want to Sign Out?', 'Sign Out')
      .then((leave) => {
-       this.sS.aboutMenuOpen = false;
-       this.sS.accountMenuOpen = false;
+       this.slideNavSvc.toggleSub('None');
        this.stateService.go('login');
      })
      .catch((stay) => {
@@ -92,12 +97,14 @@ export class HomeComponent implements OnInit {
      });
   }
 
+  // make sure the slide menu is open
   openSlidenav() : void {
-      this.sS.slidenavOpen = true;
+      this.slideNavSvc.open();
   }
 
+  // make sure the slide menu is closed
   closeSlidenav() : void {
-      this.sS.slidenavOpen = false;
+      this.slideNavSvc.close();
   }
   
   // Open the about (help) panel. Also, make sure the slidedown menu is closed.
@@ -107,63 +114,28 @@ export class HomeComponent implements OnInit {
     this.aboutStatus.open = true;
   }
 
-  toggleLogsMenu() : void {
-    this.sS.aboutMenuOpen = false;
-    this.sS.publicLogsMenuOpen = false;
-    this.sS.listsMenuOpen = false;
-    this.sS.accountMenuOpen = false;
-    setTimeout( () => {
-      this.sS.logsMenuOpen = !this.sS.logsMenuOpen;
-    }, 100);
+  // change the open status of the Recipes submenu of the slide menu
+  toggleRecipesMenu() : void {
+    this.slideNavSvc.toggleSub('Recipe');
   }
 
-  togglePublicLogsMenu() : void {
-    this.sS.aboutMenuOpen = false;
-    this.sS.logsMenuOpen = false;
-    this.sS.listsMenuOpen = false;
-    this.sS.accountMenuOpen = false;
-    setTimeout( () => {
-      this.sS.publicLogsMenuOpen = !this.sS.publicLogsMenuOpen;
-    }, 100);
-  }
-
-  toggleListsMenu() : void {
-    this.sS.aboutMenuOpen = false;
-    this.sS.logsMenuOpen = false;
-    this.sS.publicLogsMenuOpen = false;
-    this.sS.accountMenuOpen = false;
-    setTimeout( () => {
-      this.sS.listsMenuOpen = !this.sS.listsMenuOpen;
-    }, 100);
-  }
-
+  // change the open status of the Account submenu of the slide menu
   toggleAccountMenu() : void {
-    this.sS.aboutMenuOpen = false;
-    this.sS.listsMenuOpen = false;
-    this.sS.logsMenuOpen = false;
-    this.sS.publicLogsMenuOpen = false;
-    setTimeout( () => {
-      this.sS.accountMenuOpen = !this.sS.accountMenuOpen;
-    }, 100);
+    this.slideNavSvc.toggleSub('Account');
   }
 
+  // change the open status of the About submenu of the slide menu
   toggleAboutMenu() : void {
-    this.sS.accountMenuOpen = false;
-    this.sS.listsMenuOpen = false;
-    this.sS.logsMenuOpen = false;
-    this.sS.publicLogsMenuOpen = false;
-    setTimeout( () => {
-      this.sS.aboutMenuOpen = !this.sS.aboutMenuOpen;
-    }, 100);
+    this.slideNavSvc.toggleSub('About');
   }
 
   // switch to the specified state.  Delay if menu open to wait for close animation
   menuItemSelected (newState : string, fSelect? : string) : void {
-    var delay = this.sS.slidenavOpen ? 500 : 0;
+    var delay = this.slideNavSvc.isOpen() ? 500 : 0;
     this.closeSlidenav();
     setTimeout( () => {
       if(fSelect){
-        this.stateService.go(newState, {task: fSelect});
+        this.stateService.go(newState, {'StateChoice': fSelect});
       }
       else {
         this.stateService.go(newState);

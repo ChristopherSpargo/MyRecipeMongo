@@ -18,7 +18,8 @@
             [readonly]="fReadonly"
             [(ngModel)]="fValue" class="app-form-input d-flex" #fRef="ngModel"
             [ngClass]="{'app-transparent-text': !hasValue() && !focused && (fType ==='date'),
-                        'app-bg-white': fDisabled && hasValue()}"
+                        'app-bg-white': fDisabled && hasValue(),
+                        'app-cursor-pointer': !fDisabled}"
             [registerForm]="fForm" [registerModel]="fRef"
             (focus)="showFocused()" (blur)="showNotFocused()" (change)="valueChange($event)">
     </div>

@@ -1,15 +1,13 @@
 // SERVICE to provide various functions needed for data storage/retreival
 import { Injectable } from '@angular/core';
-import { UserInfo } from '../app.globals';
 import { UtilSvc } from '../utilities/utilSvc'
 import { FireBaseSvc } from '../utilities/fireBaseSvc'
 import { Profile, RESTRICTION_WRITE } from './profile';
+import { UserInfo } from '../utilities/user.info.service';
 
-interface ParamObj {
-  TableName: string;
-  [propName: string]: any;
-}
 
+//******************************************************************************
+//  UserSvc provides functions associated with user accounts and profiles
 
 @Injectable()
 export class UserSvc {
@@ -17,10 +15,6 @@ export class UserSvc {
     constructor(private userInfo: UserInfo, private fireBaseSvc: FireBaseSvc,
        private utilSvc: UtilSvc) {
     }
-
-  //******************************************************************************
-  //        functions associated with user accounts and profiles
-
 
       // update the given user profile, return a promise
       // returns: promise

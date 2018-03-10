@@ -11,16 +11,20 @@
                   'app-z-3': !fAllowNew || !(fEqual ? (fValue == fNewTest) : (fValue != fNewTest))}">
     <div class="app-icon-input-field-container {{fExtraCSS}}">
       <label class="app-icon-input-field-label-sm" 
-            [class.has-value]="hasValue()" 
-            [class.has-focus]="focused" 
-            [class.app-show-required]="fRequired && !hasValue()">
+            [ngClass]="{'app-disabled-opacity': fDisabled,
+                        'has-value': hasValue(),
+                        'has-focus': focused,
+                        'app-show-required': fRequired && !hasValue()}">
             {{currentLabel()}}</label>
       <div class="d-flex flex-row">
         <i class="material-icons app-input-icon {{fColor}}">{{fIcon}}</i>
         <select name="{{fName}}" ngModel
                 [required]="fRequired"
                 [disabled]="fDisabled"
-                [(ngModel)]="fValue" class="app-form-input d-flex" #fRef="ngModel"
+                [(ngModel)]="fValue" 
+                class="app-form-input d-flex"
+                [ngClass]="{'app-cursor-pointer': !fDisabled}" 
+                #fRef="ngModel"
                 [registerForm]="fForm" [registerModel]="fRef"
                 (focus)="showFocused()" (blur)="showNotFocused()" (change)="valueChange()">
             <option disabled class="app-no-display"></option>
@@ -51,8 +55,10 @@
             </ng-container>
         </select>
       </div>
-      <div class="app-field-messages" [style.visibility]="(fRef.touched || fCheckAll) ? 'visible' : 'hidden'">
-        <validation-messages [vField]="fRef" [vMultiple]="fErrorMulti">
+      <div class="app-field-messages"
+          [ngClass]="{'app-visible': (fRef.touched || fCheckAll),
+                      'app-invisible': !(fRef.touched || fCheckAll)}">
+<validation-messages [vField]="fRef" [vMultiple]="fErrorMulti">
           <validation-message name="required">{{fLabel}} selection is required.</validation-message>
         </validation-messages>
       </div>

@@ -3,11 +3,13 @@ import { NgForm } from "@angular/forms";
 import {UIROUTER_DIRECTIVES} from '@uirouter/angular';
 import { UtilSvc } from '../utilities/utilSvc';
 import { CookieSvc } from '../utilities/cookieSvc';
-import { UserInfo, FormMsgList, AboutStatus } from '../app.globals';
+import { FormMsgList } from '../directives/form.msg.list';
 import { Profile } from '../model/profile'
 import { UserSvc } from '../model/userSvc'
 import { RecipeService, CATEGORY_TABLE_NAME } from '../model/recipeSvc'
 import { CrossSvc } from '../app.bank'
+import { UserInfo } from '../utilities/user.info.service';
+import { AboutStatus } from '../utilities/about.status.service';
 
 @Component({
   templateUrl: 'login.component.html'

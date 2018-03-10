@@ -1,7 +1,8 @@
 ﻿import { Component } from '@angular/core';
 import { UIROUTER_DIRECTIVES } from '@uirouter/angular';
 import { IMAGE_DIRECTORY, FORM_HEADER_ICON } from '../constants';
-import { AboutStatus, UserInfo } from '../app.globals';
+import { AboutStatus } from '../utilities/about.status.service';
+import { UserInfo } from '../utilities/user.info.service'
 
 export const HelpContextTitles = {
       UsingMyRecipeMongo  : ['local_dining','Using MyRecipeMongo'],

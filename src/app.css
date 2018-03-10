@@ -53,6 +53,9 @@ $headerDefaultBgColor: $primaryColor;
 $headerDefaultColor: $textOnPrimary;
 $toolbarDefaultBgColor: $primaryColor;
 $toolbarDefaultColor: $textOnPrimary;
+$xsFontSize: 16px;
+$smFontSize: 18px;
+$lgFontSize: 20px;
 
 html {
   position: relative;
@@ -65,13 +68,13 @@ body {
   overflow-x: hidden;  
   margin: 0;
   padding: 0;
-  font-size: 16px;}  
+  font-size: $xsFontSize;}  
   @media ($sm-screen) {
     body {
-      font-size: 18px;}}
+      font-size: $smFontSize;}}
   @media ($lg-screen) {
     body {
-      font-size: 20px;}}
+      font-size: $lgFontSize;}}
 .app-container {
   width: 100%;
   max-width: 100%;
@@ -470,6 +473,7 @@ border-top: 1px solid gray;}
   margin-top: 0;
   margin-bottom: 0;}
 .app-main-short-toolbar {
+  position: relative;
   z-index: 75;
   min-height: 60px;}
 /*backdrop provides 'click outside' to close feature*/
@@ -591,7 +595,7 @@ border-top: 1px solid gray;}
     color: rgba(0,0,0,.87) !important;}
   .app-form-theme-select-menu {
     background-color: gray!important;
-    font-size: .7em;
+    font-size: .8em;
     color: white!important;}
   .app-form-theme-select-menu-lg {
     background-color: gray!important;
@@ -716,13 +720,13 @@ border-top: 1px solid gray;}
       color: red;
       margin-left: 37px;
       font-size: .6em;}
-      .app-no-icon-message {
-        margin-left: 0;}
       @media ($lg-screen) {
         .app-field-messages {
-          margin-left: 41px;}
-        .app-no-icon-message {
-          margin-left: 0;}}
+          margin-left: 41px;}}
+    .app-no-icon-message {
+      color: red;
+      font-size: .6em;
+      margin-left: 0;}
 
 .app-icon-offset-width {
   margin-left: 30px;
@@ -827,9 +831,12 @@ $appFormCloseIconSizeLg: 38px !important;
   z-index: -20;}
   .app-print-container.app-open {
     z-index: 2000;}
-    @media ($lg-screen) {
+    @media ($sm-screen) {
       .app-print-container {
-        left: 20%;}}
+        left: 10%;}}
+    @media ($md-screen) {
+      .app-print-container {
+        left: 15%;}}
   .app-central-container, .app-central-container-sm {
   width: 100%;
   min-height: 100%;
@@ -876,10 +883,17 @@ $appFormCloseIconSizeLg: 38px !important;
   background-color: $secondaryColor;
   color: $headerDefaultColor;}
   .app-about-body-theme {
+    font-size: $xsFontSize !important;
     background-color: white;
     line-height: 1.15em;
     padding: 0 8px 16px 8px;
     color: rgba(0,0,0,.87);}
+    @media ($sm-screen){
+      .app-about-body-theme {
+        font-size: $smFontSize !important;}}
+        @media ($lg-screen){
+          .app-about-body-theme {
+            font-size: $smFontSize !important;}}
 .app-about-title {
   margin-bottom: 0px;
   margin-top: 0px;
@@ -1122,7 +1136,7 @@ $appFormCloseIconSizeLg: 38px !important;
   width: 100%;
   max-height: 2000px;}
 .app-recipes-menu {
-  width: 98%;
+  width: 99%;
   min-height: 100%;
   list-style: none;
   padding: 0 !important;
@@ -1245,6 +1259,9 @@ overflow: hidden;}
     line-height: 1.15em;
     padding: 0 8px 0;
     color: rgba(0,0,0,.87);}
+  .app-catlist-menu-item {
+    cursor: pointer;
+    font-family: inherit;}
   .app-catlist-footer-theme {
     padding: 8px 0 6px 0;
     line-height: 1em;
@@ -1255,6 +1272,10 @@ overflow: hidden;}
         padding: 12px 0 10px 0;}}
   .app-catlist-label {
   font-weight: 500;}
+  .app-catlist-menu-item-message {
+    color: red;
+    font-size: .6em;
+    margin-left: 16px;}
 .app-recipe-image-controls {
   max-width: 100%;}
 .app-picture-note {
@@ -1330,6 +1351,10 @@ border: 1px solid $blackTextDivider;}
   color: $disabledTextColor !important;}
 .app-disabled-text {
   color: $disabledTextColor !important;}
+.app-disabled-opacity {
+  opacity: .38;}
+.app-faint-opacity {
+  opacity: .09;}
 .app-transparent-text {
   color: transparent !important;}
 .app-faint-text {
@@ -1480,6 +1505,17 @@ color: #fef7e6;}
 .app-toast-msg {
   font-style: italic;}
 /*modifications for ngb-bootstrap tabs*/
+.app-tabset-background {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  height: 62px;
+  background-color: white;}
+  @media ($lg-screen){
+    .app-tabset-background {
+      top: 58px;}}
 .nav-tabs {
   border: 0 !important;
   background-color: $secondaryColor;
@@ -1521,6 +1557,7 @@ ngb-tabset > ul{
   background-color: white;
   position: sticky;
   top: 0;
+  opacity: .9;
   z-index: 1000; }
 .tab-content {
   box-shadow: 0 1px 0px 0 rgba(0,0,0,.2),

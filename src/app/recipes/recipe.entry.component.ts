@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input } from '@angular/core';
 import { NgForm, AbstractControl, FormControl } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe, CatListObj, FormMsgList } from '../app.globals';
+import { CurrentRecipe } from '../utilities/current.recipe.svc';
+import { FormMsgList } from '../directives/form.msg.list';
+import { CatListObj } from '../directives/cat.list.obj'
 import { RecipeService, ListTable, ListTableItem, CATEGORY_TABLE_NAME,
          RecipeFilterData } from '../model/recipeSvc';
+import { UserInfo } from '../utilities/user.info.service';
 import { Subscription, Observable } from 'rxjs';
 import { RecipePic, RecipeData, Recipe } from '../model/recipe'
 import { APP_DATA_VERSION } from '../constants';
@@ -252,7 +255,7 @@ export class RecipeEntryComponent implements OnInit {
     // now scroll the screen to the top so the position of the category menu will be on screen, then
     // emit the message to cause the checkbox.menu.component to open the menu
     this.utilSvc.scrollToTop();
-    this.emit('openEntryCategoriesMenu');
+      this.emit('openEntryCategoriesMenu');
   }
 
   // return the list of category items from the CurrentRecipe service 
@@ -263,6 +266,31 @@ export class RecipeEntryComponent implements OnInit {
   // return the Category name for the given id
   getCategoryName = (id : number) : string => {
     return this.currentRecipe.categoryListName(id);
+  }
+
+  // update the categories list by adding the given category
+  // return the id of the resulting new entry
+  updateCategoriesList = (cat: string) : Promise<number> => {
+    let newId = this.currentRecipe.categoryList.nextId;
+    let msg = "Category '" + cat + "'";
+
+    return new Promise<number>((resolve, reject) => {
+      this.utilSvc.displayWorkingMessage(true, 'Updating Categories List');
+      this.recipeSvc.updateList(CATEGORY_TABLE_NAME, {id: 999, name: cat}, 'Add', this.userInfo.authData.uid)   // send the update
+      .then((list) => {
+        this.currentRecipe.categoryList = list;
+        this.currentRecipe.categoryList.items = 
+                list.items.sort((a,b) : number => {return a.name < b.name ? -1 : 1;});;
+        this.utilSvc.setUserMessage('listItemAdded', msg);
+        this.utilSvc.displayWorkingMessage(false);
+        resolve(newId);
+      })
+      .catch((error) => {
+        this.utilSvc.setUserMessage("errorUpdatingList", 'Categories');
+        this.utilSvc.displayWorkingMessage(false);
+        reject(0);
+      });
+    })
   }
 
   // process file selection event and create a URL for the preview image

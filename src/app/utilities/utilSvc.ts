@@ -3,7 +3,8 @@
 import { Injectable } from '@angular/core';
 import { StateService } from "@uirouter/angular";
 import { ToasterService, Toast, BodyOutputType } from 'angular2-toaster';
-import { AboutStatus, UserInfo } from '../app.globals';
+import { AboutStatus } from '../utilities/about.status.service';
+import { UserInfo } from '../utilities/user.info.service';
 import { ModalComponent } from '../modal/modal.component';
 
 @Injectable()

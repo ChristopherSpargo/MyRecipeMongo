@@ -1,5 +1,5 @@
 import { Component, AfterContentInit, ContentChildren, QueryList, Input, OnDestroy } from '@angular/core';
-import { FormMsgList } from '../app.globals'
+import { FormMsgList } from '../directives/form.msg.list';
 import { Subscription } from 'rxjs';
 
 @Component({

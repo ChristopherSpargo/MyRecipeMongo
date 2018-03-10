@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, CurrentRecipe } from '../app.globals';
-import { SHARED_USER_ID } from '../constants';
+import { CurrentRecipe } from '../utilities/current.recipe.svc';
+import { UserInfo, SHARED_USER_ID } from '../utilities/user.info.service';
 import { RecipeService, CATEGORY_TABLE_NAME, 
          ListTable, ListTableItem, RecipeFilterData } from '../model/recipeSvc';
 import { Recipe, RecipeData, RecipePic } from '../model/recipe';

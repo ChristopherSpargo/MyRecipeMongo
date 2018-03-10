@@ -1,19 +1,19 @@
     <!-- Template used for stat section display. 
          Used with <app-recipe-section> COMPONENT -->
   <div class="d-flex flex-column app-category-label mb-1"
-         [class.app-open]="fOpenFlag">
+         [ngClass]="{'app-open': fOpenFlag}">
     <div class="d-flex flex-row align-items-center">
       <button class="btn d-flex flex-row align-items-center 
-                     justify-content-between app-recipe-section-button" type="button"
+                     justify-content-between app-recipe-section-button app-cursor-pointer" type="button"
               (click)="toggleOpenFlag()"
-              [class.app-open]="fOpenFlag">
+              [ngClass]="{'app-open': fOpenFlag}">
         {{fLabel}}
-          <i class="material-icons app-recipe-section-control" [class.app-open]="fOpenFlag">
+          <i class="material-icons app-recipe-section-control" [ngClass]="{'app-open': fOpenFlag}">
              {{fOpenFlag ? 'remove' : 'add'}}</i>
       </button>
     </div >
     <div class="d-flex flex-column app-category-container {{fExtraCSS}}"
-         [class.app-open]="fOpenFlag">
+          [ngClass]="{'app-open': fOpenFlag}">
       <ng-content></ng-content>
     </div>
   </div>

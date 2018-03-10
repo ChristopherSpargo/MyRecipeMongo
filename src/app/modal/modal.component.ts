@@ -51,7 +51,7 @@ export class ModalComponent {
     modalRef.componentInstance.recipeTitle  = recipeTitle;
     modalRef.componentInstance.cancelText   = cancelText || "Cancel";
     modalRef.componentInstance.okText       = okText || "Save";
-    modalRef.componentInstance.deleteText   = deleteText || "Remove Shared Copy";
+    modalRef.componentInstance.deleteText   = deleteText || "Stop Sharing";
     modalRef.componentInstance.toggleAbout  = toggleAbout;
     setTimeout( ()=> {
       modalRef.componentInstance.openModal  = true;

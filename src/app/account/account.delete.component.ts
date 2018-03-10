@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, FormMsgList } from '../app.globals';
+import { FormMsgList } from '../directives/form.msg.list';
 import { UserSvc } from '../model/userSvc'
 import { CookieSvc } from '../utilities/cookieSvc';
 import { RecipeService } from '../model/recipeSvc'
+import { UserInfo } from '../utilities/user.info.service'
 
     // COMPONENT for DELETE ACCOUNT feature
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input } from '@angular/core';
 import { NgForm, AbstractControl, FormControl } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
-import { CurrentRecipe } from '../app.globals';
+import { CurrentRecipe } from '../utilities/current.recipe.svc';
 import { RecipePic, RecipeData, Recipe } from '../model/recipe'
 
 

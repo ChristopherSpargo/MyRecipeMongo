@@ -1,5 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
-import { AboutStatus } from '../app.globals';
+import { AboutStatus } from '../utilities/about.status.service';
 
 @Component({
   selector: '<app-help-button>',

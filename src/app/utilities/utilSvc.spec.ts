@@ -8,7 +8,8 @@ import { StateService } from "@uirouter/angular";
 import { UIRouterModule } from "@uirouter/angular";
 import { uiRouterConfigFn } from "../router.config";
 import { ToasterModule, ToasterService } from 'angular2-toaster';
-import { AboutStatus, UserInfo } from '../app.globals';
+import { AboutStatus } from '../utilities/about.status.service';
+import { UserInfo } from '../utilities/user.info.service';
 import { ModalComponent } from '../modal/modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from '../app.component';
@@ -62,7 +63,7 @@ describe('Utilites Service', () => {
     const el = de.nativeElement;
     fixture.detectChanges();
     service.displayThisUserMessage('signInSuccess');
-    expect(user.messageOpen).toBeTruthy();
+    expect(user.openToastId).toBeTruthy();
     fixture.detectChanges();
   });
 

@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { StateService } from "@uirouter/angular";
 import { UtilSvc } from '../utilities/utilSvc';
-import { UserInfo, FormMsgList } from '../app.globals';
+import { FormMsgList } from '../directives/form.msg.list';
 import { RecipeService, CATEGORY_TABLE_NAME, 
          ListTableItem, ListTable, RecipeFilterData } from '../model/recipeSvc'
 import { RecipeData } from '../model/recipe';
+import { UserInfo } from '../utilities/user.info.service'
 
     // COMPONENT for MANAGE CATEGORIES feature
 

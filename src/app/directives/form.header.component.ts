@@ -1,7 +1,7 @@
 ﻿import { Component, Input } from '@angular/core';
 import { UtilSvc } from '../utilities/utilSvc';
 import { IMAGE_DIRECTORY, FORM_HEADER_ICON } from '../constants';
-import { AboutStatus } from '../app.globals';
+import { AboutStatus } from '../utilities/about.status.service';
 
 @Component({
   selector: '<app-form-header>',

@@ -1,7 +1,7 @@
 <div class="app-icon-textarea-container {{fExtraCSS}}"
          [ngClass]="{'has-focus': containerOpen,
                      'has-value': hasValue()}">
-    <label class="app-icon-input-field-label-sm" 
+    <label class="app-icon-input-field-label-sm app-cursor-pointer" 
           [ngClass]="{'app-no-icon-label': !fIcon,
                       'has-value': hasValue(),
                       'has-focus': true}"
@@ -9,7 +9,7 @@
           <div class="d-flex flex-row justify-content-around align-items-center">
             <div [ngClass]="{'app-show-required': fRequired && !hasValue()}">{{fLabel}}</div>
             <i *ngIf="hasValue()" 
-              class="material-icons ml-2">
+              class="material-icons app-cursor-pointer ml-2">
               {{!containerOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</i>
           </div>
     </label>
@@ -23,14 +23,17 @@
       [readonly]="fReadonly"
       [(ngModel)]="fValue" #fRef="ngModel"
       class="app-form-input app-scrollable {{fTextSize}} d-flex" 
-      [ngClass]="{'app-faint-text': !containerOpen}"
+      [ngClass]="{'app-faint-text': !containerOpen,
+                  'app-cursor-pointer': !fDisabled}"
       [registerForm]="fForm" [registerModel]="fRef"
       (focus)="showFocused()" (blur)="showNotFocused()" (input)="valueChange($event)"></textarea>
   </div>
 </div>
 <div *ngIf="(fErrors !== undefined) && fErrors.length" 
-      class="app-field-messages" [style.visibility]="(fRef.touched || fCheckAll) ? 'visible' : 'hidden'"
-      [ngClass]="{'app-no-icon-message': !fIcon}">
+      class="app-field-messages"
+      [ngClass]="{'app-no-icon-message': !fIcon,
+                  'app-visible': (fRef.touched || fCheckAll),
+                  'app-invisible': !(fRef.touched || fCheckAll)}">
   <validation-messages [vField]="fRef" [vMultiple]="fErrorMulti">
     <validation-message *ngFor="let item of aErrors; index as i"
       name="{{item}}">{{aMsgs[i]}}</validation-message>
