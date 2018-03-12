@@ -8,9 +8,11 @@
                d-flex flex-row justify-content-around align-items-center ">
 
             <!-- Display the Logo Text -->
-    <div class="app-logo-text-container app-cursor-pointer" (click)="toggleAbout()"
+    <div class="d-flex flex-column justify-content-center align-items-center
+                app-logo-text-container app-cursor-pointer" (click)="toggleAbout()"
         data-toggle="tooltip" data-placement="top" title="Help" data-delay="200">
-      MyRecipeMongo
+      <div class="app-logo-text1">MyRecipe</div>
+      <div class="app-logo-text2">Mongo</div>
     </div>
                 <!-- Now some feature buttons -->
     <button type="button" class="btn app-bar-feature-button "  
@@ -22,6 +24,11 @@
             data-toggle="tooltip" data-placement="top" title="Add Recipe" data-delay="200"
                 (click)="menuItemSelected('recipeAccess.recipeEntry')">
       <i class="material-icons app-bar-feature-icon" aria-label="add recipe">edit</i>
+    </button>
+    <button type="button" class="btn app-bar-feature-button "  
+            data-toggle="tooltip" data-placement="top" title="Categories" data-delay="200"
+                (click)="menuItemSelected('manageCategories')">
+      <i class="material-icons app-bar-feature-icon" aria-label="add recipe">assessment</i>
     </button>
                 <!-- Show different icon for Sign In .vs. Sign Out -->
     <button *ngIf="!loggedIn()" type="button" class="btn app-bar-feature-button "  

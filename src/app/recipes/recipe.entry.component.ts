@@ -298,6 +298,11 @@ export class RecipeEntryComponent implements OnInit {
     let fRef : any = document.getElementById(fId);
     this.selectedPics = fRef.files;  //get the list of files from the form input element
     if(this.selectedPics.length){
+      if(this.selectedPics.length > 1){
+        this.utilSvc.displayWorkingMessage(true,"Processing Images");
+      } else{
+        this.utilSvc.displayWorkingMessage(true,"Processing Image");
+      }
       for(let i=0; i<this.selectedPics.length; i++){
         let reader = new FileReader();
         let pic : PicObj = <PicObj>{};
@@ -310,9 +315,15 @@ export class RecipeEntryComponent implements OnInit {
           this.compressPic(pic)              // attempt compression and update URL if successful
           .then((pic)=>{
             this.rPictures.push(pic);
+            if(i === this.selectedPics.length - 1){
+              this.utilSvc.displayWorkingMessage(false);
+            }
           })
           .catch((error) => {               // error compressing picture?
             this.utilSvc.displayThisUserMessage("errorCompressingPicture", pic.file.name);          
+            if(i === this.selectedPics.length - 1){
+              this.utilSvc.displayWorkingMessage(false);
+            }
           })
         }
         reader.readAsDataURL(pic.file);

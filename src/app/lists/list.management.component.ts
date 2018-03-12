@@ -39,7 +39,7 @@ export class ListManagementComponent implements OnInit {
   ngOnInit() {
   // make the user log in to manage lists
     if (!this.user.authData) {
-      this.utilSvc.returnToHomeMsg("signInToAccessLists"); // let user know they need to log in
+      this.utilSvc.returnToHomeMsg("signInToAccessCategories"); // let user know they need to log in
     } 
     else {
       this.tableName      = CATEGORY_TABLE_NAME;

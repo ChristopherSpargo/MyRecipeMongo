@@ -73,7 +73,7 @@
             </app-icon-textarea> 
 
               <!-- Category selection field -->
-            <div class="d-flex flex-row justify-content-end align-items-center pr-1 pt-3">
+            <div class="d-flex flex-row justify-content-end align-items-center pr-1 pt-4">
               <label class="app-icon-input-field-label-sm app-recipe-pics-field-label pl-1"
                     [ngClass]="{'app-show-required': !rCategories.haveCats()}">
                 Categories:
@@ -170,7 +170,7 @@
               [(fValue)]    = "rNotes" 
               fMaxlength    = "10000"
               fRows         = "15"
-              fExtraCSS     = "mt-2"
+              fExtraCSS     = "mt-2 mb-3"
               fTextSize     = "app-recipe-edit-text"
               [fFocusFn]    = "clearRequestStatus">
             </app-icon-textarea>  
@@ -224,7 +224,7 @@
                   <div class="app-picture-note mb-2 px-1">
                     <input type="text" name="{{'picNote'+i}}" id="{{'picNoteID'+i}}"
                             class="app-form-input  app-cursor-pointer app-picture-note-input"
-                            placeholder="{{p.picSize}}"
+                            placeholder="Add caption here ({{p.picSize}})"
                             maxlength="200"
                             [(ngModel)]="p.noteText"
                     >

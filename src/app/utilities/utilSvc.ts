@@ -228,8 +228,8 @@ export class UtilSvc {
               msgText = "Please sign in for account access.";
               msgDuration = 2500;
               break;
-            case 'signInToAccessLists':
-              msgText = "Please sign in to manage lists.";
+            case 'signInToAccessCategories':
+              msgText = "Please sign in to manage categories.";
               msgDuration = 2500;
               break;
 

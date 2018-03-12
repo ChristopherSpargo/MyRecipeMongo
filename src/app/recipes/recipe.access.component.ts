@@ -407,8 +407,10 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
         this.currentRecipe.editScrollPosition = this.utilSvc.pageYOffset();
         break;
     }
+
     // now some code to manage the BACK button path (navPath)
     if(!this.backButtonHit && // skip all this if we're processing a BACK button use
+        // only start a navPath from SEARCH or EDIT tabs
        (this.navPath.length || evt.activeId === SEARCH_TAB_ID || evt.activeId === EDIT_TAB_ID)){
       
       // first, check if the target tab is in the BACK button path. That would mean the user used
@@ -425,8 +427,10 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
         window.history.pushState({tab: evt.activeId},'',paths[evt.nextId])
       }
     } else{
+      document.getElementById(evt.activeId).blur(); // remove :focus/:hover so underline goes away (CSS)
       this.backButtonHit = false;
     }
+
     switch(evt.nextId){
       case MENU_TAB_ID:
         this.currentRecipe.selectedTab = MENU_TAB;

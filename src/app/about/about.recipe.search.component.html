@@ -24,9 +24,16 @@
     &nbsp;&nbsp;Here you can specify a list of words or phrases to search for in the Title and Ingredients
     fields of the recipes. Enter words or phrases separated by commas.<br/> 
     &nbsp;&nbsp;For example:<br/>
-    <i>coco,baking powder,Crisco</i><br/>
-    will select recipes whos Title or Ingredients fields contain
-    the <b>words</b> <i>coco</i> or <i>Crisco</i> or the <b>phrase</b> <i>baking powder</i>.
+    <i>coco,cinnamon,baking powder,-Crisco</i><br/>
+    will select recipes whose Title or Ingredients fields contain:<br/>
+    &nbsp;&nbsp;at least one of the <b>words</b> <i>'coco'</i> or <i>'cinnamon'</i><br/>
+    AND<br/>
+    &nbsp;&nbsp;the <b>phrase</b> <i>'baking powder'</i><br/>
+    AND <b>NOT</b><br/>
+    &nbsp;&nbsp;the word <i>'Crisco'</i>.<br/>
+    So, if a keyword list includes a phrase, only recipies with that phrase can match. And, if the list
+    contains a negated (-) word, only recipes without that word can match. Also, a keyword list cannot
+    contain only negated words.
 
     <app-about-heading fIcon="check_circle_outline" fButton="Search"></app-about-heading>
     &nbsp;&nbsp;Press this button to submit your search request. 

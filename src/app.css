@@ -472,6 +472,10 @@ border-top: 1px solid gray;}
   padding-right: 3%;
   margin-top: 0;
   margin-bottom: 0;}
+.app-logo-text1 {
+  line-height: 1em;}
+.app-logo-text2 {
+  line-height: 1em;}
 .app-main-short-toolbar {
   position: relative;
   z-index: 75;
@@ -1111,7 +1115,7 @@ $appFormCloseIconSizeLg: 38px !important;
   transition: max-height .3s, opacity .5s, padding-bottom .5s ease-out;}
   .app-category-container.app-open {
     opacity: 1;
-    max-height: 5000px;}
+    max-height: 10000px;}
 .app-recipe-category-button {
   border: 2px solid transparent;
   line-height: 20px;
@@ -1534,6 +1538,9 @@ color: #fef7e6;}
   color: white;
   background-color: $secondaryColor;
   transition: border .5s ease-in;}
+.nav-tabs .nav-link:not(.active):hover {
+  border-color: transparent;
+}
 .nav-tabs .nav-item {
   margin: .5em .25em .5em .25em;}
 .app-tab-container {
@@ -1571,6 +1578,8 @@ b, strong {
   font-weight: bold;}
 .btn {
   font-size: 14px;}
+:focus {
+  outline: none;}
 .app-icon-xsm {
   font-size: 20px;}
   @media ($lg-screen) {
