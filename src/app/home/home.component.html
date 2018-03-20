@@ -64,9 +64,9 @@
                               <!-- Main SideDown Menu -->
 
   <div id="slideDownMenu"
-       class="hidden-md-up app-slide-menu app-slide-down" 
+       class="hidden-md-up app-slide-menu app-slide-down app-whiteframe-2dp app-bg-white" 
        [class.app-open]="slideNavOpen()">
-    <div class="d-flex flex-column justify-content-start align-items-start app-whiteframe-2dp app-frame app-scrollable">
+    <div class="d-flex flex-column justify-content-start align-items-start app-scrollable">
         <ul class="d-flex flex-column app-slide-menu-ul app-form-theme">
           <li id="myRecipesMenu">
             <button type="button" class="btn app-slide-menu-listitem" (click)="toggleRecipesMenu()">
@@ -82,7 +82,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('recipeAccess.recipeSearchMy')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">folder</i>
                       Search My Recipes
                     </div>
                   </button>
@@ -91,7 +91,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing" 
                           (click)="menuItemSelected('recipeAccess.recipeSearchShared')">
                     <div class="d-flex flex-row align-items-center">
-                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">search</i>
+                      <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">folder_shared</i>
                       Search Shared Recipes
                     </div>
                   </button>
@@ -112,7 +112,7 @@
             <button type="button" class="btn app-slide-menu-listitem" 
                                     (click)="closeSubmenus(); menuItemSelected('manageCategories')">
               <div class="d-flex flex-row align-items-center">
-                <i class="material-icons app-menu-icon-color app-menu-item-icon ">description</i>
+                <i class="material-icons app-menu-icon-color app-menu-item-icon ">assessment</i>
                 Categories
               </div>
             </button>
@@ -198,7 +198,7 @@
                   <button type="button" class="btn app-slide-menu-listitem app-subitem-spacing app-disabled">
                     <div class="d-flex flex-row align-items-center">
                       <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">person</i>
-                        User: {{loggedIn() ? userEmail() : 'Not signed in'}}
+                        {{loggedIn() ? userEmail() : 'Not signed in'}}
                     </div>
                   </button>
                 </li>
@@ -207,7 +207,7 @@
                                               app-slide-menu-listitem app-subitem-spacing app-disabled">
                     <div class="d-flex flex-row align-items-center">
                       <i class="material-icons app-menu-icon-color app-menu-item-icon-sm">build</i>
-                      MyRecipeMongo Version: {{version}}
+                      Version: {{version}}
                     </div>
                   </button>
                 </li>
@@ -254,60 +254,90 @@
     <ul id="mainMenu" class="nav app-white app-inherit-z">
                 <!-- Dropdown menu for recipe features -->
       <li id="myRecipesMenu" ngbDropdown class="nav-item dropdown mx-2">
-        <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" 
-           href="#" role="button" aria-haspopup="true" aria-expanded="false">Recipes</a>
+          <a ngbDropdownToggle 
+            class="nav-link dropdown-toggle app-toolbar-text d-flex flex-row align-items-center" 
+            data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons app-main-menu-icon mr-1">restaurant</i>Recipes</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
-          <a role="button" class="dropdown-item app-dropdown-text" 
-          uiSref="recipeAccess.recipeSearchMy">Search My Recipes</a>
-          <a role="button" class="dropdown-item app-dropdown-text" 
-          uiSref="recipeAccess.recipeSearchShared">Search Shared Recipes</a>
-          <a role="button" class="dropdown-item app-dropdown-text" 
-          uiSref="recipeAccess.recipeEntry">Add a Recipie</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="recipeAccess.recipeSearchMy">
+            <i class="material-icons app-main-dropdown-icon mr-2">folder</i>Search My Recipes</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="recipeAccess.recipeSearchShared">
+            <i class="material-icons app-main-dropdown-icon mr-2">folder_shared</i>Search Shared Recipes</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="recipeAccess.recipeEntry">
+            <i class="material-icons app-main-dropdown-icon mr-2">edit</i>Add a Recipie</a>
         </div>
       </li>
                 <!-- Category management feature -->
       <li id="categoriesBtn" class="nav-item mx-2">
-        <a role="button" class="nav-link app-toolbar-text" uiSref="manageCategories">Categories</a>
+        <a role="button" class="nav-link app-toolbar-text d-flex flex-row align-items-center" 
+          uiSref="manageCategories">
+          <i class="material-icons app-main-menu-icon mr-1">assessment</i>Categories</a>
       </li>
                 <!-- Dropdown menu for account management features -->
       <li id="accountMenu" ngbDropdown class="nav-item dropdown mx-2">
-        <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" href="#" 
-           role="button" aria-haspopup="true" aria-expanded="false">Account</a>
+        <a ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text d-flex flex-row align-items-center" 
+          data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <i class="material-icons app-main-menu-icon mr-1">folder_open</i>Account</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="accountProfile">Edit Profile</a>
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="accountEmail">Change Email</a>
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="accountPassword">Change Password</a>
-          <a role="button" class="dropdown-item app-dropdown-text" uiSref="accountDelete">Delete Account</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="accountProfile">
+            <i class="material-icons app-main-dropdown-icon mr-2">person</i>Edit Profile</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="accountEmail">
+            <i class="material-icons app-main-dropdown-icon mr-2">mail_outline</i>Change Email</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="accountPassword">
+            <i class="material-icons app-main-dropdown-icon mr-2">lock</i>Change Password</a>
+          <a role="button" class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            uiSref="accountDelete">
+            <i class="material-icons app-main-dropdown-icon mr-2">delete_forever</i>Delete Account</a>
         </div>
       </li>
                 <!-- Dropdown menu for about features -->
       <li ngbDropdown class="nav-item dropdown mx-2">
-        <a  id="aboutMenuBtn" ngbDropdownToggle class="nav-link dropdown-toggle app-toolbar-text" data-toggle="dropdown" 
-           href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a>
+        <a id="aboutMenuBtn" ngbDropdownToggle 
+           class="nav-link dropdown-toggle app-toolbar-text d-flex flex-row align-items-center" 
+           data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+           <i class="material-icons app-main-menu-icon mr-1">info_outline</i>About</a>
         <div class="dropdown-menu app-toolbar-submenu-theme">
-          <a id="aboutMatchLogBtn" role="button" class="dropdown-item app-dropdown-text" (click)="showAbout('UsingMyRecipeMongo')">Using MyRecipeMongo</a>
-          <a id="aboutContactBtn" role="button" class="dropdown-item app-dropdown-text" (click)="showAbout('ContactUs')">Contacting Us</a>
-          <a class="dropdown-item app-dropdown-disabled-text">
-            User:{{loggedIn() ? ' ' + userEmail() : ' Not signed in'}}</a>
-          <a class="dropdown-item app-dropdown-disabled-text">MyRecipeMongo Version: {{' ' + version}}</a>
+          <a id="aboutMatchLogBtn" role="button" 
+            class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            (click)="showAbout('UsingMyRecipeMongo')">
+            <i class="material-icons app-main-dropdown-icon mr-2">restaurant</i>Using MyRecipeMongo</a>
+          <a id="aboutContactBtn" role="button" 
+            class="dropdown-item app-dropdown-text d-flex flex-row align-items-center" 
+            (click)="showAbout('ContactUs')">
+            <i class="material-icons app-main-dropdown-icon mr-2">contact_mail</i>Contacting Us</a>
+          <a class="dropdown-item app-dropdown-disabled-text d-flex flex-row align-items-center">
+              <i class="material-icons app-main-dropdown-icon mr-2">{{loggedIn() ? 'person' : 'person_outline'}}</i>
+              {{loggedIn() ? ' ' + userEmail() : ' Not signed in'}}</a>
+          <a class="dropdown-item app-dropdown-disabled-text d-flex flex-row align-items-center">
+              <i class="material-icons app-main-dropdown-icon mr-2">build</i>Version: {{' ' + version}}</a>
         </div>
       </li>
                 <!-- Button for Sign In/Sign Out function -->
       <li id="signInBtn" *ngIf="!loggedIn()" class="nav-item mx-2">
-        <a role="button" class="nav-link app-toolbar-text" (click)="closeSlidenav()" uiSref="login">Sign In</a>
+        <a role="button" class="nav-link app-toolbar-text d-flex flex-row align-items-center" 
+        (click)="closeSlidenav()" uiSref="login">
+        <i class="material-icons app-main-menu-icon mr-1">person_outline</i>Sign In</a>
       </li>
       <li id="signOutBtn" *ngIf="loggedIn()" class="nav-item mx-2">
-        <a role="button" class="nav-link app-toolbar-text" (click)="closeSlidenav(); logout($event)">Sign Out</a>
+        <a role="button" class="nav-link app-toolbar-text d-flex flex-row align-items-center" 
+        (click)="closeSlidenav(); logout($event)">
+        <i class="material-icons app-main-menu-icon mr-1">person</i>Sign Out</a>
       </li>
                 <!-- Icon for signed in/out status -->
-      <li id="authStatus" class="ml-2 d-flex flex-row align-items-center">
+      <!-- <li id="authStatus" class="ml-2 d-flex flex-row align-items-center">
         <i *ngIf="!loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
             data-toggle="tooltip" data-placement="top" title="Sign In" data-delay="200"
             (click)="closeSlidenav()" uiSref="login">person_outline</i>
         <i *ngIf="loggedIn()" class="material-icons app-bar-feature-icon app-cursor-pointer"
             data-toggle="tooltip" data-placement="top" title="Sign Out" data-delay="200"
             (click)="closeSlidenav(); logout($event)">person</i>
-      </li>
+      </li> -->
     </ul>  
     <div class="mr-4 d-flex flex-column align-items-center">
       <app-help-button

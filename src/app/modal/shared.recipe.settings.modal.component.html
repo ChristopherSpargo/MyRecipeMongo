@@ -45,39 +45,31 @@
 
 
         <!-- User Email Field -->
-        <div class="d-flex flex-row justify-content-start align-items-center">
-          <div class="app-width-90">
-            <app-list-item-field 
-                [fForm]         = "listForm"
-                [fCheckAll]     = "checkAll"
-                fName           = "itemName"
-                fRef            = "iName"
-                [(fValue)]      = "selectedItem"
-                fLabel          = "Authorized Users" 
-                fIcon           = "mail_outline" 
-                fColor          = "app-active-input-icon-color"
-                [fRequired]     = "false"
-                [fDisabled]     = "deleteRecipe"
-                [fOnFocus]      = "clearRequestStatus"
-                [fOnChange]     = "copyItemName"
-                [fOnDelete]     = "deleteSelectedItem"
-                [fList]         = "itemList"
-                fEmptyListLabel = "everyone"
-                fListValue      = "index"
-                [fEqual]        = "false"
-                fNewTest        = ""
-                fNewName        = "newIName"
-                fNewRef         = "nIName"
-                fNewLabel       = "Authorized User (email)" 
-                [(fNewValue)]   = "newItemName">
-            </app-list-item-field>            
-          </div>
-          <div *ngIf="!deleteRecipe" class="app-item-list-clear-btn">
-            <i class="material-icons app-input-icon app-warn app-cursor-pointer app-icon-xsm"
-                data-toggle="tooltip" data-placement="top" title="Clear List" data-delay="200"
-                (click)="clearItemList()">close</i>            
-          </div>
-        </div>
+        <app-list-item-field 
+            [fForm]         = "listForm"
+            [fCheckAll]     = "checkAll"
+            fName           = "itemName"
+            fRef            = "iName"
+            [(fValue)]      = "selectedItem"
+            fLabel          = "Authorized Users" 
+            fIcon           = "mail_outline" 
+            fColor          = "app-active-input-icon-color"
+            [fRequired]     = "false"
+            [fDisabled]     = "deleteRecipe"
+            [fOnFocus]      = "clearRequestStatus"
+            [fOnChange]     = "copyItemName"
+            [fOnDelete]     = "deleteSelectedItem"
+            [fList]         = "itemList"
+            [fClearListFn]  = "clearItemList"
+            fEmptyListLabel = "everyone"
+            fListValue      = "index"
+            [fEqual]        = "false"
+            fNewTest        = ""
+            fNewName        = "newIName"
+            fNewRef         = "nIName"
+            fNewLabel       = "Authorized User's Email" 
+            [(fNewValue)]   = "newItemName">
+        </app-list-item-field>            
 
         <!-- Messages Area -->
         <app-form-messages [fMessageOpen] = "haveStatusMessages()">

@@ -10,6 +10,11 @@ export class CatListObj {
   touched: boolean = false;
   invalid: boolean = false;
 
+  // return how manu categories are in the list
+  numCats = () : number => {
+    return this.cats.length;
+  }
+  
   // return whether any categories have been assigned to this recipe
   haveCats = () : boolean => {
     return this.cats.length !== 0;

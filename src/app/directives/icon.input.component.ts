@@ -20,10 +20,12 @@ export class IconInputComponent implements OnInit {
   @Input() fType        : string;   // input type (password, email,..)
   @Input() fAccept      : string;   // accept value for file input type
   @Input() fLabel       : string;   // label for input
+  @Input() fFocusedLabel : string = ''; // label for field when focused or has a value
   @Input() fIcon        : string = "";   // icon for input
   @Input() fColor       : string;   // color for icon
   @Input() fInputCSS    : string;   // extra css for the input element
-  @Input() fValue       : any;   // model for this field
+  @Input() fValue       : any;      // model for this field
+  @Input() fClearFn     : Function; // function to use to clear the field, causes clear button on field
   @Input() fErrors      : string;   // array of error key names
   @Input() fErrorMsgs   : string;   // array of messages for the error keys
   @Input() fErrorMulti  : string;   // 'true' if allow multiple error messages

@@ -39,16 +39,9 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
   menuMessage      : string = "";
   headerTitle      : string;
   headerIcon       : string = 'search';
+  printMsg         : string = '';  // indicates to header component that print button should be present
   currTabId        : string = "";
   tabNames         : string[] = [SEARCH_TAB_ID, MENU_TAB_ID, VIEW_TAB_ID, EDIT_TAB_ID];
-  appBarItems      : any[] = [];
-  viewAppBarItems= [      // Bar Item displayed during VIEW state, kicks off a print operation
-    { icon    : "print",
-      action  : "printRecipe",
-      label   : "print recipe",
-      tip     : "Print Recipe"
-    }
-  ];
   printingRecipe   : boolean = false; // true if PRINT view of recipe is being displayed (for printing)
   dataSet          : string = 'Personal'; // selection passed to SEARCH module to provide for
                                           // 'Search Shared Recipes' menu item
@@ -56,6 +49,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
   navPath          : string[] = [];   // stack of tabIds for processing the BACK button during recipe access
   adjNavPath       : boolean = false; // flag to keep from processing the calls to history.back() below
   backButtonHit    : boolean = false; // flag to keep from adding to navPath on BACK button use
+  pageIsScrolled   : boolean = false; // true if page has been scrolled vertically
  
 
   constructor(private userInfo : UserInfo, private utilSvc : UtilSvc, private recipeSvc : RecipeService,
@@ -138,6 +132,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     document.addEventListener("printDone", this.printEnd);
     window.addEventListener("resize", this.checkScreenSize);
     window.addEventListener("popstate", this.handlePopState)
+    window.addEventListener("scroll", this.handleScroll)
   }
 
   //remove all the message responders set in this module
@@ -156,11 +151,17 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
     document.removeEventListener("printDone", this.printEnd);
     window.removeEventListener("resize", this.checkScreenSize);
     window.removeEventListener("popstate", this.handlePopState)
+    window.removeEventListener("scroll", this.handleScroll)
   }
 
   //emit a custom event with the given name and detail data
   public emit = (name: string, data? : any)  => {
     this.utilSvc.emitEvent(name, data);
+  }
+
+  // return whether page has been scrolled vertically
+  handleScroll = () => {
+    this.pageIsScrolled = this.utilSvc.pageYOffset() !== 0;
   }
 
   // primarily here to handle the BACK button.
@@ -292,7 +293,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       // this.currentRecipe.recipe = undefined;
       // this.emit('noRecipeSelection');
       this.utilSvc.setCurrentHelpContext("RecipeSearch");
-      this.appBarItems = [];
+      this.printMsg = '';
       this.headerTitle = this.viewShared ? "Search Shared Recipes" : "Search Personal Recipes";
       this.headerIcon = 'search';
   }
@@ -302,7 +303,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeMenuTab();
       this.closeSearchTab();
       this.utilSvc.setCurrentHelpContext("EnterRecipes");
-      this.appBarItems = [];
+      this.printMsg = '';
       this.headerTitle = this.currentRecipe.recipe ? 'Update Recipe' : 'Add Recipe';
       this.headerIcon = 'edit';
   }
@@ -312,11 +313,9 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeViewTab();
       this.closeSearchTab();
       this.closeEditTab();
-      // this.currentRecipe.recipe = undefined;
-      // this.emit('noRecipeSelection');
-      this.appBarItems = [];
+      this.printMsg = '';
       this.headerTitle = this.viewShared ? "Shared Recipes" : "Personal Recipes";
-      this.headerIcon = 'menu';
+      this.headerIcon = 'restaurant';
       this.utilSvc.setCurrentHelpContext("RecipesMenu");
     }
   }
@@ -326,7 +325,7 @@ export class RecipeAccessComponent implements OnInit, OnDestroy {
       this.closeSearchTab();
       this.closeMenuTab();
       this.closeEditTab();
-      this.appBarItems = this.viewAppBarItems;
+      this.printMsg = 'printRecipe';
       this.headerTitle = this.viewShared ? "View Shared Recipe" : "View Personal Recipe";
       this.utilSvc.setCurrentHelpContext("ViewRecipe");
       this.headerIcon = 'local_library';

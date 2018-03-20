@@ -53,7 +53,7 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.utilSvc.emitEvent(name, data);
   }
 
-  public submitFilter(form : NgForm) : void {
+  public submitRequest(form : NgForm) : void {
     var request = <RecipeFilterData>{};
     this.checkAll = true;
     this.clearRequestStatus();
@@ -73,6 +73,8 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     request.projection = {extraImages: 0};
     
     this.currentRecipe.recipeList = undefined;
+    this.currentRecipe.recipe = undefined;
+    this.utilSvc.emitEvent('noRecipeSelection')
 
     this.utilSvc.emitEvent("searchUpdate");
     this.recipeViewOpen = false;
@@ -123,7 +125,7 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
   }
 
   // return the list of category items from the CurrentRecipe service 
-    categoryListItems = () => {
+  categoryListItems = () => {
     return this.currentRecipe.categoryListItems();
   }
 
@@ -139,7 +141,18 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.emit('openSearchCategoriesMenu');
   }
 
- 
+  // format a label for the categories field
+  catFieldLabel = () => {
+    switch(this.catList.numCats()){
+      case 0:
+        return 'Disregard categories.'
+      case 1:
+        return 'Recipe has this category:'
+      default:
+        return 'Recipe has these categories:'
+    }
+  }
+
   // check the filter form responses for problems
   private checkForProblems(form? : NgForm) : boolean {
     if(form){
@@ -150,6 +163,23 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     }
   }
 
+  // return a boolean to denote the presence of the selected item
+  dataPresent = (item: string) : boolean => {
+    switch(item){
+      case 'Categories':
+        return this.catList.haveCats();
+      case 'Keywords':
+        return (this.keywords !== '');
+      default:
+        return false;
+    }
+  }
+
+  // clear the keywords field
+  clearKeywords = () => {
+    this.keywords = '';
+  }
+  
   // move to the next tab in the tab set
   public nextTab = () => {
     this.utilSvc.emitEvent("nextTab");

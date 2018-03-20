@@ -5,7 +5,7 @@
   [ngClass]="{'app-open': editTabOpen}"
   >
 
-    <!-- define a component to add recipe categoreis -->
+    <!-- define a component to add recipe categories -->
     <app-checkbox-menu
             fTitle       = "Recipe Categories"
             fMessage     = "Select all that apply:"
@@ -20,11 +20,11 @@
     <!-- Instructional messages -->
     <div *ngIf="createNew" class="d-flex flex-row justify-content-center app-flex-1 
                                   app-black-text-low app-bold align-items-center mb-2 app-small-font">
-      Creating a new recipe document.
+      Creating a new recipe.
     </div>
     <div *ngIf="!createNew" class="d-flex flex-row justify-content-center app-flex-1 
                                     app-darkgrey align-items-center mb-2 app-small-font">
-      Updating an existing recipe document.
+      Updating an existing recipe.
     </div>
 
     <!-- Start of Form -->
@@ -43,7 +43,8 @@
               fRef          = "rT" 
               fName         = "rTitle" 
               fType         = "text" 
-              fLabel        = "Title:"  
+              fLabel        = "What do you call this recipe?"
+              fFocusedLabel = "Title:"
               fIcon         = "title"
               [fRequired]   = "true"
               fColor        = "app-active-input-icon-color" 
@@ -63,7 +64,8 @@
               [(fCheckAll)] = "checkAll"
               fRef          = "rD" 
               fName         = "rDesc" 
-              fLabel        = "Description:"  
+              fLabel        = "How would you describe it?"
+              fFocusedLabel = "Description:"
               fIcon         = "description"
               fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rDescription" 
@@ -74,9 +76,9 @@
 
               <!-- Category selection field -->
             <div class="d-flex flex-row justify-content-end align-items-center pr-1 pt-4">
-              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label pl-1"
-                    [ngClass]="{'app-show-required': !rCategories.haveCats()}">
-                Categories:
+              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label app-width-100 pl-1"
+                    [ngClass]="{'app-show-required': !dataPresent('Categories')}">
+                {{!dataPresent('Categories') ? 'Assign one or more categories.' : 'Categories:'}}
               </label>
             </div> 
             <div class="app-icon-input-field-container pt-3">
@@ -93,6 +95,7 @@
                   <!-- display a button at the end of the list to activate the selection menu -->
                   <app-fab
                     fType       = "button"
+                    fTip        = "Add Categories to Recipe"
                     [fOpen]     = "true"
                     fButtonCSS  = "ml-2 d-flex app-fab-button-sm app-bg-white app-accent1 app-fab-raised"
                     [fDelay]    = "200"
@@ -130,7 +133,8 @@
               fRef          = "rIng" 
               fName         = "rIngr" 
               fList         = "bullets"
-              fLabel        = "Ingredients:"  
+              fLabel        = "What's in it?"  
+              fFocusedLabel = "Ingredients:"
               fIcon         = "list"
               fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rIngredients" 
@@ -146,7 +150,8 @@
               [(fCheckAll)] = "checkAll"
               fRef          = "rIns" 
               fName         = "rInst" 
-              fLabel        = "Instructions:"  
+              fLabel        = "How do you make it?"  
+              fFocusedLabel = "Directions:"
               fList         = "numbers"
               fIcon         = "assignment"
               fColor        = "app-active-input-icon-color" 
@@ -164,7 +169,8 @@
               [(fCheckAll)] = "checkAll"
               fRef          = "rN" 
               fName         = "rNotes" 
-              fLabel        = "Recipe Notes:"  
+              fLabel        = "Anything else?"  
+              fFocusedLabel = "Notes:"
               fIcon         = "edit"
               fColor        = "app-active-input-icon-color" 
               [(fValue)]    = "rNotes" 
@@ -186,7 +192,7 @@
             <div class="d-flex flex-row justify-content-between align-items-center pr-1 mt-1">
               <i class="material-icons app-input-icon app-active-input-icon-color">photo</i>
               <label class="app-icon-input-field-label-sm app-recipe-pics-field-label">
-                Recipe Pictures:
+                {{!dataPresent('AnyPics') ? 'Got any pictures?' : 'Pictures:'}}
               </label>
               <div class="app-smaller-font"
                     data-toggle="tooltip" data-placement="top" title="Add Pictures" data-delay="200">
@@ -211,13 +217,13 @@
                               app-recipe-image-controls app-bg-gwhite px-1">
                     <i *ngIf="i === 0" class="material-icons app-category-delete-icon
                                             app-black-text-medium app-cursor-default" 
-                        data-toggle="tooltip" data-placement="top" title="Main Picture" data-delay="200"
+                        data-toggle="tooltip" data-placement="top" title="This is the Main Picture" data-delay="200"
                     >check</i>
                     <i *ngIf="i !== 0" class="material-icons app-category-delete-icon app-primary" 
-                        data-toggle="tooltip" data-placement="top" title="Make Main Picture" data-delay="200"
+                        data-toggle="tooltip" data-placement="top" title="Make this the Main Picture" data-delay="200"
                       (click)="makeMainImage(i)">arrow_upward</i>
                     <i class="material-icons app-category-delete-icon app-warn" 
-                        data-toggle="tooltip" data-placement="top" title="Delete Picture" data-delay="200"
+                        data-toggle="tooltip" data-placement="top" title="Delete this Picture" data-delay="200"
                       (click)="removePicture(i)">close</i>
                   </div>
                   <img [src]="p.picURL" class="app-recipe-image" name="{{'pic'+i}}">

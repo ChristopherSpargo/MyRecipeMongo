@@ -13,7 +13,7 @@
     <!-- Instructional messages -->
     <div class="d-flex flex-row justify-content-center app-flex-1 
                                   app-black-text-low app-bold align-items-center mb-2 app-small-font">
-      Use the fields below to define a search.
+      Use the fields below to narrow your search.
     </div>
 
     <div class="app-frame d-flex flex-column align-items-stretch pt-0">
@@ -39,15 +39,15 @@
         <!-- Form for search filtering options -->
 
         <form #searchForm = "ngForm" role="form" novalidate class
-              (ngSubmit)="submitFilter(searchForm)">
+              (ngSubmit)="submitRequest(searchForm)">
           <div class="d-flex flex-column app-width-98 mx-auto px-2">
 
             <!-- categories Field -->
             <div class="d-flex flex-row justify-content-end align-items-center 
                         app-list-item-field-container pr-1 pt-3">
-              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label">
-                Categories:
-              </label>
+              <label class="app-icon-input-field-label-sm app-recipe-pics-field-label app-width-100">
+                  {{catFieldLabel()}}
+                </label>
             </div> 
             <div class="app-icon-input-field-container pt-3">
               <div class="d-flex flex-row align-items-center">
@@ -62,29 +62,31 @@
                       (click)="catList.removeCat(c)">close</i>
                   </div> 
                   <!-- display a button at the end of the list to activate the selection menu -->
-            <app-fab
+                  <app-fab
                     fType       = "button"
+                    [fFab]      = "true"
+                    fTip        = "Select Categories for Search"
                     [fOpen]     = "true"
                     fButtonCSS  = "ml-2 d-flex app-fab-button-sm app-bg-white app-accent1 app-fab-raised"
                     [fDelay]    = "200"
-                    fAria       = "add"
+                    fAria       = "select"
                     fIcon       = "add_circle"
                     fIconCSS    = "app-fab-icon-btn-sm"
                     [fOnClick]  = "openCatList"
                     fIconColor  = "app-primary">
-            </app-fab>
+                  </app-fab>
                 </div>
               </div>
             </div>
 
             <!-- Keywords Field -->
-
             <app-icon-input
               [fForm]       = "searchForm" 
               fRef          = "rK" 
               fName         = "rKeywords" 
               fType         = "text" 
-              fLabel        = "Keywords:"  
+              fLabel        = "Disregard recipe text"
+              fFocusedLabel = "Title or Ingredients contain:"  
               fIcon         = "vpn_key"
               fColor        = "app-active-input-icon-color" 
               fPattern      = "^[ /\-'%$#.,()!?\w]*$"
@@ -92,6 +94,7 @@
               fErrors       = "pattern"
               fErrorMsgs    = "Invalid keyword character or list format."
               [(fValue)]    = "keywords" 
+              [fClearFn]    = "clearKeywords"
               [fFocusFn]    = "clearRequestStatus">
             </app-icon-input>
 

@@ -27,6 +27,7 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
   newCat        : string    = "";
   newCatNew     : boolean   = false;
   newCatSelected: boolean   = false;
+  selectionsAdded: boolean  = false;
 
   constructor() {
   };
@@ -59,12 +60,14 @@ export class CheckboxMenuComponent implements OnInit, OnDestroy  {
     this.clearItemInListError();
     this.menuOpen = false;
     setTimeout(() => { // wait for fade-out before changing z-index
+      this.selectionsAdded = false;
       this.menuHidden = true;
-    },500);
+    },700);
   }
 
   // add the selected items to the category selections
   addSelections = () => {
+    this.selectionsAdded = true;
     let added = false;
     if(this.newCatOk()){
       <Promise<number>>this.fUpdateFn(this.newCat) // update categories list and return id for new category

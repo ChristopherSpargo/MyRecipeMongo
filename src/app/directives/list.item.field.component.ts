@@ -13,7 +13,9 @@ export class ListItemFieldComponent implements OnInit  {
   @Input() fName        : string;   // unique name for <select> field
   @Input() fRef         : string;   // unique name for Template Reference Variable (TRV) for this field
   @Input() fValue       : string;   // model for <select> field
+  @Input() fClearFn     : Function; // function to use to clear the field, causes clear button on field
   @Input() fList        : any[];    // array of list items for <select>
+  @Input() fClearListFn : Function; // function to use to clear the list, causes clear button on field
   @Input() fEmptyListLabel : string = 'empty'; // label to show when list is empty 
   @Input() fListValue   : string = "";   // indicates how to structure <select> options
   @Input() fLabel       : string;   // label for <select>
@@ -68,6 +70,11 @@ export class ListItemFieldComponent implements OnInit  {
   // return true if the fValue field has a non-empty value
   hasValue = () : boolean => {
     return (this.fValue !== undefined && this.fValue !== '');
+  }
+
+  // return true if the fValue field has a non-empty value
+  hasList = () : boolean => {
+    return (this.fList !== undefined && this.fList.length !== 0);
   }
 
   valueChange = ()=> {

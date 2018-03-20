@@ -28,7 +28,8 @@
             fName         = "uEmail" 
             [fRequired]   = "true" 
             fType         = "email" 
-            fLabel        = "Email Address"  
+            fLabel        = "What's your Email Address?"  
+            fFocusedLabel = "Email Address:"
             fIcon         = "mail_outline"
             fColor        = "app-accent1" 
             [(fValue)]    = "userEmail" 
@@ -45,7 +46,8 @@
             fName         ="uPassword" 
             [fRequired]   ="true" 
             fType         ="password" 
-            fLabel        ="Password" 
+            fLabel        ="What's your Password?" 
+            fFocusedLabel ="Password:"
             fIcon         ="lock_open"
             fColor        ="app-accent1" 
             [(fValue)]    ="userPassword" 
@@ -70,7 +72,8 @@
               fName       ="cPassword" 
               [fRequired] ="showNewAccountFields()" 
               fType       ="password" 
-              fLabel      ="Confirm Password" 
+              fLabel      ="Type your Password again (sorry)" 
+              fFocusedLabel ="Password Confirmation:"
               fColor      ="app-accent1" 
               [(fValue)]  ="passwordConfirm" 
               fErrors     ="required|pattern|minlength" 
@@ -91,7 +94,7 @@
               <input type="checkbox" class="app-input-icon-area app-cursor-pointer" 
                      name="createAcc" [(ngModel)]="createAccount" 
                     (change)="clearNewAccountFields()">
-              Create new account
+              I want to create new account
             </label>
           </div>
 
@@ -100,7 +103,7 @@
             <label class="app-cursor-pointer">
               <input type="checkbox" class="app-input-icon-area app-cursor-pointer" 
                      name="memberMe" [(ngModel)]="rememberLogin">
-              Remember me
+              Remember my Sign-In stuff
             </label>
           </div>
 

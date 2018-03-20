@@ -44,12 +44,18 @@ export class AccountProfileComponent implements OnInit {
 
   // clear the list of items
   clearItemList = () => {
-    this.itemList = [];
     this.clearRequestStatus();
-    this.requestStatus.addMsg('itemListCleared');
+    if(this.itemList.length){
+      this.itemList = [];
+      this.requestStatus.addMsg('itemListCleared');
+    }
   }
 
-
+  // return true if itemList is not empty
+  itemsInList = () : boolean => {
+    return this.itemList.length !== 0;
+  }
+  
   // send profile update request to Data service
   submitUpdate = (form : NgForm) : void => {
     this.checkAll = true;

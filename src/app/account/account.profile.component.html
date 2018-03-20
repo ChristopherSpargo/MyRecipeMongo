@@ -26,42 +26,34 @@
 
           <div class="d-flex flex-row justify-content-start app-flex-1 align-items-center 
                       app-black-text-low app-bold  mt-3 app-smaller-font">
-            Users with access to my Shared Recipes:
+            People with access to my Shared Recipes:
           </div>
 
           <!-- Default Shared Recipe Users field -->
-          <div class="d-flex flex-row justify-content-start align-items-center">
-            <div class="app-width-90">
-              <app-list-item-field  
-                [fForm]         = "profileForm"
-                [fCheckAll]     = "checkAll"
-                fName           = "itemName"
-                fRef            = "iName"
-                [(fValue)]      = "selectedItem"
-                fLabel          = "Authorized Users" 
-                fIcon           = "mail_outline" 
-                fColor          = "app-accent1"
-                [fRequired]     = "false"
-                [fOnFocus]      = "clearRequestStatus"
-                [fOnChange]     = "copyItemName"
-                [fOnDelete]     = "deleteSelectedItem"
-                [fList]         = "itemList"
-                fEmptyListLabel = "everyone"
-                fListValue      = "index"
-                [fEqual]        = "false"
-                fNewTest        = ""
-                fNewName        = "newIName"
-                fNewRef         = "nIName"
-                fNewLabel       = "Authorized User (email)" 
-                [(fNewValue)]   = "newItemName">
-              </app-list-item-field>
-            </div>
-          <div class="app-item-list-clear-btn">
-          <i class="material-icons app-input-icon app-warn app-cursor-pointer app-icon-xsm"
-              data-toggle="tooltip" data-placement="top" title="Clear List" data-delay="200"
-              (click)="clearItemList()">close</i>            
-        </div>
-      </div>
+          <app-list-item-field  
+            [fForm]         = "profileForm"
+            [fCheckAll]     = "checkAll"
+            fName           = "itemName"
+            fRef            = "iName"
+            [(fValue)]      = "selectedItem"
+            fLabel          = "Authorized Users" 
+            fIcon           = "mail_outline" 
+            fColor          = "app-accent1"
+            [fRequired]     = "false"
+            [fOnFocus]      = "clearRequestStatus"
+            [fOnChange]     = "copyItemName"
+            [fOnDelete]     = "deleteSelectedItem"
+            [fList]         = "itemList"
+            [fClearListFn]   = "clearItemList"
+            fEmptyListLabel = "everyone"
+            fListValue      = "index"
+            [fEqual]        = "false"
+            fNewTest        = ""
+            fNewName        = "newIName"
+            fNewRef         = "nIName"
+            fNewLabel       = "Authorized User's Email" 
+            [(fNewValue)]   = "newItemName">
+          </app-list-item-field>
 
            <!-- Status Message Area -->
           <app-form-messages  [fMessageOpen]  ="haveStatusMessages()">

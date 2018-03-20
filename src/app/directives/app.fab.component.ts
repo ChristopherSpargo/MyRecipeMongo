@@ -8,6 +8,8 @@ export class AppFabComponent  {
   clicked : boolean = false;
 
   @Input() fType        : string = 'submit';        // Type for button
+  @Input() fFab         : boolean = false;          // true if Fab type button
+  @Input() fTip         : string = ''               // text for tooltip if any
   @Input() fLabel       : string = '';              // creates a small fab with a label
   @Input() fLabelCSS    : string = '';              // CSS to apply to label
   @Input() fAlignment   : string = 'align-items-center'; //alignment of label with icon (when present)
@@ -25,18 +27,27 @@ export class AppFabComponent  {
   @Input() fDisabled    : boolean = false;          // true if button is disabled
   @Input() fVertical    : boolean = false;          // true if label is above or below icon
 
+  processingClick = false;
+
   constructor() {
   };
 
+
   fabClicked = ()=> {
-    this.clicked = true;
-    setTimeout( () => {
-      this.clicked = false;
-    }, 300);
-    if(this.fOnClick) { 
+    if(!this.processingClick){
+      this.processingClick = true;
+      this.clicked = true;
       setTimeout( () => {
-        this.fOnClick(this.fParam);
-      },this.fDelay);
+        this.clicked = false;
+      }, 300);
+      if(this.fOnClick) { 
+        setTimeout( () => {
+          this.processingClick = false;
+          this.fOnClick(this.fParam);
+        },this.fDelay);
+      } else{
+        this.processingClick = false;
+      }
     }
   }
 }

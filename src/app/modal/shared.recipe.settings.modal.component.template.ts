@@ -42,11 +42,18 @@ export class SharedRecipeSettingsModalComponentTemplate {
 
   // clear the list of items
   clearItemList = () => {
-    this.itemList = [];
     this.clearRequestStatus();
-    this.requestStatus.addMsg('itemListCleared');
+    if(this.itemList.length){
+      this.itemList = [];
+      this.requestStatus.addMsg('itemListCleared');
+    }
   }
 
+  // return true if itemList is not empty
+  itemsInList = () : boolean => {
+    return this.itemList.length !== 0;
+  }
+  
   // prepare and send request to database service
   submitRequest(form : NgForm) : void {
     var msg   : string, 

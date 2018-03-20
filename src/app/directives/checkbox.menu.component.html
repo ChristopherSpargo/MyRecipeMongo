@@ -6,7 +6,7 @@
   <div class="d-flex flex-column app-catList-container app-fade-in
               app-whiteframe-2dp app-card-corners mb-1"
       [ngClass]="{'app-open': menuOpen,
-                  'app-z--5': !menuOpen}">
+                  'app-z--5': menuHidden}">
 
   <!-- menu header area -->
     <div class="app-card-top-corners">
@@ -67,6 +67,7 @@
       <app-fab 
             fType       = "button"
             fLink       = "Ok"
+            [fDisabled] = "selectionsAdded"
             [fOnClick]  = "addSelections"
             fButtonCSS  = "app-white"
             fLabelCSS   = "app-bigger-font"

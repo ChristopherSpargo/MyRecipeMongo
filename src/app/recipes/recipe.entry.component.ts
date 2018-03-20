@@ -150,7 +150,7 @@ export class RecipeEntryComponent implements OnInit {
     if(this.rSharedItemId !== ""){rData.sharedItem_id = this.rSharedItemId;}
     if(this.rSubmittedBy !== ""){rData.submittedBy = this.rSubmittedBy;}
     if(this.rRestrictedTo.length){
-      rData.restrictedTo = this.rRestrictedTo.map((e) : string => {return e;});
+      rData.restrictedTo = this.rRestrictedTo.slice();
     }
     if(this.rPictures.length){    // convert images for storage
       rData.mainImage = this.convertPic(this.rPictures[0]);
@@ -365,11 +365,6 @@ export class RecipeEntryComponent implements OnInit {
     })
   }
 
-  // free up the ObjectURL created for the preview image
-  revokeURL = (url: string) => {
-    window.URL.revokeObjectURL(url);
-  }
-
   // remove the given picture from the pictures for this recipe
   removePicture = (i: number) => {
 
@@ -422,7 +417,7 @@ export class RecipeEntryComponent implements OnInit {
       }
       this.rRestrictedTo        = [];
       if(item.restrictedTo){ 
-        this.rRestrictedTo = item.restrictedTo.map((e) : string => {return e;}); // copy restrictions
+        this.rRestrictedTo = item.restrictedTo.slice(); // copy restrictions
       }
       this.rSharedItemId        = item.sharedItem_id || '';
       this.rSubmittedBy         = item.submittedBy || '';
@@ -480,6 +475,26 @@ export class RecipeEntryComponent implements OnInit {
     temp = this.rPictures[0];
     this.rPictures[0] = this.rPictures[i];
     this.rPictures[i] = temp;
+  }
+
+  // return a boolean to denote the presence of the selected item
+  dataPresent = (item: string) : boolean => {
+    switch(item){
+      case 'Categories':
+        return this.rCategories.haveCats();
+      case 'Ingredients':
+        return (this.rIngredients !== undefined && this.rIngredients.length !== 0);
+      case 'Instructions':
+        return (this.rInstructions !== undefined && this.rInstructions.length !== 0);
+      case 'RecipeNotes':
+        return (this.rNotes !== undefined && this.rNotes.length !== 0);
+      case 'AnyPics':
+        return (this.rPictures.length > 0);
+      case 'MorePics':
+        return (this.rPictures.length > 1);
+      default:
+        return false;
+    }
   }
 
   // clear status messages object

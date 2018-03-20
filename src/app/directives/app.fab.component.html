@@ -2,20 +2,26 @@
          Used with <app-fab> COMPONENT -->
       
       <!-- fab without label -->
-      <button  *ngIf="fLabel === '' && fLink === ''" 
-              type="{{fType}}"  
-              class="btn app-fab-button {{fButtonCSS}}" 
-              [class.app-fab-click]="clicked" [attr.aria-label]="fAria"
-              [class.app-open]="fOpen"
-              [disabled]="fDisabled"
-              (click)="fabClicked()">
-        <div class="d-flex flex-row justify-content-center align-items-center">
-          <i class="material-icons app-fab-icon {{fIconCSS}} {{fIconColor}}">{{fIcon}}</i> 
-        </div>       
-      </button>
+      <div *ngIf="fFab || (fLabel === '' && fLink === '')"
+          class="d-flex justify-content-center"
+          [ngClass]="{'flex-row': !fVertical, 'flex-column': fVertical}">
+        <button 
+                type="{{fType}}"  
+                class="btn app-fab-button {{fButtonCSS}}" 
+                [class.app-fab-click]="clicked" [attr.aria-label]="fAria"
+                [class.app-open]="fOpen"
+                [disabled]="fDisabled"
+                data-toggle="{{fTip ? 'tooltip' : ''" data-placement="top" title="{{fTip}}" data-delay="200"
+                (click)="fabClicked()">
+          <div class="d-flex flex-row justify-content-center align-items-center">
+            <i class="material-icons app-fab-icon {{fIconCSS}} {{fIconColor}}">{{fIcon}}</i> 
+          </div>       
+        </button>
+        <div *ngIf="fLabel !== ''" class="{{fLabelCSS}}">{{fLabel}}</div>
+      </div>
 
       <!-- fab with label -->
-      <button *ngIf="fLabel !== '' && fLink === ''" type="{{fType}}"  
+      <button *ngIf="!fFab && (fLabel !== '' && fLink === '')" type="{{fType}}"  
               class="btn btn-sm app-link-btn app-action-btn app-link-active {{fButtonCSS}}" 
               [class.app-fab-click]="clicked" [attr.aria-label]="fAria"
               [class.app-open]="fOpen"

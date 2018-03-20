@@ -2,20 +2,20 @@
          Used with <app-form-header> COMPONENT -->
 <div class="app-noscroll-frame-center"> 
   <div class="{{headerTheme}}">
-    <div class=" d-flex flex-column app-form-header-padding ">
-      <div class="d-flex flex-row">
-        <div class="d-flex flex-row justify-content-start align-items-center">
+    <div class=" d-flex flex-row app-form-header-padding ">
+      <div class="d-flex flex-row justify-content-start align-items-center">
+        <div class="d-flex flex-row justify-content-start align-items-center app-scroll-form-header-icon">
           <button type="button" class="btn d-flex flex-row align-items-center app-form-image-button " aria-label="help"
-            data-toggle="tooltip" data-placement="top" title="Help" data-delay="200"
-                     (click)="toggleAbout()"> 
-            <i class="material-icons app-fab-icon-smm {{headerTextColor}}">{{headerIcon}}</i>
+            data-toggle="tooltip" data-placement="top" title="Help" data-delay="200"> 
+            <i class="material-icons app-fab-icon-smm app-header-title-icon {{headerTextColor}}"
+               [ngClass]="{'app-visible': !showHelp}" (click)="toggleAbout()">{{headerIcon}}</i>
+            <div class="app-scroll-form-help-icon" [ngClass]="{'app-visible': showHelp}">
+              <app-help-button fPosition="Relative"></app-help-button>
+            </div>
           </button>
         </div>
-        <div *ngIf="headerType === 'simple'"
-              class="d-flex flex-row justify-content-start align-items-center app-flex-1 ml-4">
-          <div class="d-flex app-form-title ">{{headerTitle}}</div>
-        </div>
-        <div *ngIf="headerType !== 'simple'" class="d-flex flex-row justify-content-between align-items-center app-flex-1">
+        <div class="d-flex flex-row justify-content-between align-items-center 
+                      app-flex-1 app-scroll-form-header-title">
           <div class="d-flex app-form-title ">{{headerTitle}}</div>
           <ng-container *ngIf="appBarItems"> 
             <button *ngFor="let item of appBarItems" 
@@ -26,17 +26,32 @@
             </button>
           </ng-container>
         </div>
-         <div *ngIf="headerClose && (headerType != 'simple')" 
-                class="d-flex flex-row justify-content-end align-items-end ml-auto mr-1">
+      </div>
+      <div *ngIf="headerClose && (headerType != 'simple')" 
+            class="d-flex flex-row justify-content-end align-items-end app-flex-1 mr-1">
+        <div class="d-flex flex-row justify-content-center align-items-center app-scroll-form-header-end-ctrls">
+          <app-fab *ngIf="printMsg"
+            fType       = "button"
+            [fFab]      = "true"
+            fTip        = "Print this Recipe"
+            [fOpen]     = "true"
+            fButtonCSS  = "d-flex app-print-fab app-bg-transparent app-link-btn"
+            [fDelay]    = "200"
+            fAria       = "print"
+            fIcon       = "print"
+            fIconCSS    = "app-print-fab-icon"
+            [fOnClick]  = "printFunc"
+            fIconColor  = "app-white">
+          </app-fab>
           <app-fab 
                 fType       = "button"
                 [fLink]     = "closeLabel"
                 [fOnClick]  = "headerClose"
-                fButtonCSS  = "{{closeButtonTheme}} pb-0"
+                fButtonCSS  = "{{closeButtonTheme}} app-scroll-form-header-exit-btn"
                 [fAria]     = "closeText">
           </app-fab> 
-        </div> 
-      </div>
+        </div>
+      </div> 
     </div>
   </div>
 </div>

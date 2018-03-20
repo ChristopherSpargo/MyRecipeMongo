@@ -40,6 +40,7 @@ export class IconTextareaComponent implements OnInit {
   @Input() fReadonly    : boolean = false;  // if the field is readonly
   @Input() fList        : string = '';  // if the field should be formatted as a list (with bullets)
   @Input() fLabel       : string;   // label for input
+  @Input() fFocusedLabel : string = ''; // label for field when focused or has a value
   @Input() fIcon        : string = "";   // icon for input
   @Input() fColor       : string;   // color for icon
   @Input() fValue       : string;   // model for this field

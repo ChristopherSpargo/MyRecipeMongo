@@ -7,10 +7,10 @@ import { UserInfo } from '../utilities/user.info.service'
 export const HelpContextTitles = {
       UsingMyRecipeMongo  : ['local_dining','Using MyRecipeMongo'],
       RecipeSearch        : ['search','Searching for Recipes'],
-      RecipesMenu         : ['search','Recipe Search Results Menu'],
-      ViewRecipe          : ['search','Viewing Recipes'],
+      RecipesMenu         : ['restaurant','Recipe Search Results Menu'],
+      ViewRecipe          : ['local_library','Viewing Recipes'],
       EnterRecipes        : ['edit','Entering Recipe Information'],
-      ManageCategories    : ['vpn_key','Managing Recipe Categories'],
+      ManageCategories    : ['assessment','Managing Recipe Categories'],
       MakeRecipeShared    : ['add_circle_outline','Adding a Shared Recipe'],
       ManageSharedSettings: ['settings_applications','Managing Shared Settings'],
       ProfileUpdate       : ['folder_open','Updating Your Profile'],

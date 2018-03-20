@@ -138,7 +138,6 @@ body {
   min-height: 24px;
   margin-bottom: 5px;}
 .app-fab-raised {
-  opacity: .8;
   box-shadow: 0 6px 6px 0 rgba(0,0,0,.26);}
 .app-fab-button.app-fab-raised.app-fab-click, .app-fab-button-sq.app-fab-raised.app-fab-click {
   animation: app-click .3s;}
@@ -208,6 +207,12 @@ body {
     color: $whiteTextMedium;}
   .app-help-btn-label {
     color: $whiteTextMedium;}
+
+/* when this is used in the form header we want white */
+  .app-scroll-form-help-icon .app-help-btn-icon,
+  .app-scroll-form-help-icon .app-help-btn-label {
+    color: white;}
+
 .app-help-btn-absolute {
   transform: scale(.8);
   position: absolute;
@@ -230,7 +235,7 @@ body {
 .app-menu-item-icon-sm {
   height: 18px;
   width: 18px;
-  font-size: 24px;
+  font-size: 22px;
   margin: 0 .5em .25em 0;}
   
 /*this needs to be applied to things with -webkit-box-shadow due to ios8 bug */      
@@ -278,6 +283,16 @@ body {
   width: 18px;
   font-size: 24px;
   margin: 0 .5em .25em 0;}
+.app-main-menu-icon {
+  color: $whiteTextMedium;
+  height: .9rem;
+  width: 1rem;
+  font-size: 17px;}
+.app-main-dropdown-icon {
+  color: $whiteTextMedium;
+  height: .9rem;
+  width: 1rem;
+  font-size: 16px;}
 .app-card-corners {
   border-radius: 3px 3px 3px 3px !important;}
 .app-card-bottom-corners {
@@ -406,9 +421,17 @@ border-top: 1px solid gray;}
   font-size: 125%;}
  .app-slide-right {
   z-index: 3;
+  left: 0px;
   transition: transform .3s ease-in-out;
   transform: translateX(-105%);}
   .app-slide-right.app-open {
+    transform: translateX(0%);}
+.app-slide-left {
+  z-index: 3;
+  right: 0px;
+  transition: transform .3s ease-in-out;
+  transform: translateX(105%);}
+  .app-slide-left.app-open {
     transform: translateX(0%);}
 .app-expand-open {
   transition: transform .4s ease-in-out;
@@ -431,6 +454,7 @@ border-top: 1px solid gray;}
   .app-fade-in.app-open {
     opacity: 1;}
 .app-slide-down {
+  right: 0px;
   transition: transform .5s ease-in-out;
   transform: translateY(-250%);}
   .app-slide-down.app-open {
@@ -455,7 +479,6 @@ border-top: 1px solid gray;}
     .app-dropdown-disabled-text:hover {
       background-color: transparent !important;}
   .app-toolbar-submenu-theme {
-    padding-top: 0;
     border: 0;
     background-color: $toolbarDefaultBgColor;
     color: $toolbarDefaultColor !important;} 
@@ -513,8 +536,6 @@ border-top: 1px solid gray;}
   position: absolute;
   z-index: 60;
   top: 60px;
-  left: 0px;
-  right: 0px;
   max-height: calc(100% - 60px);}
 .app-slide-menu-ul {
   width: 100%;
@@ -525,7 +546,7 @@ border-top: 1px solid gray;}
   display: block;
   text-transform: none;
   text-align: left;
-  padding: 0 0 0 16px;
+  padding: 0 8px 0 16px;
   border-radius: 0px;
   color: inherit;
   font-size: 1.1em !important;
@@ -538,7 +559,7 @@ border-top: 1px solid gray;}
 .app-slide-menu-listitem:hover {
   background-color: rgb(211,211,211);}
 .app-subitem-spacing {
-  padding-left: 52px;
+  padding-left: 35px;
   margin-top: 0;
   margin-bottom: 0;
   line-height: 46px;
@@ -557,6 +578,59 @@ border-top: 1px solid gray;}
 
 /*****************************************/
 /* STYLES MOSTLY RELATED TO: FORMS/CARDS */
+.app-scroll-form-header-icon {
+  position: fixed;
+  background-color: transparent;
+  z-index: 1100;}
+.app-header-title-icon {
+  transition: transform .3s ease-out, opacity .3s ease-out;
+  transform: rotate(-90deg);
+  position: relative;
+  top: -5px;
+  opacity: 0;}
+.app-scroll-form-help-icon {
+  position: relative;
+  left: -41px;
+  top: -7px;
+  transition: transform .3s ease-out, opacity .3s ease-out;
+  transform: rotate(90deg);
+  opacity: 0;}
+.app-header-title-icon.app-visible, .app-scroll-form-help-icon.app-visible {
+  transform: rotate(0deg);
+  opacity: 1;}
+.app-scroll-form-header-end-ctrls {
+  position: fixed;
+  background-color: transparent;
+  z-index: 1100;}
+.app-scroll-form-header-exit-btn {
+  font-size: 12px !important;
+  padding-bottom: 0;
+  margin-bottom: -10px;}
+.app-print-fab {
+  min-width: 24px;
+  min-height: 24px;}
+  .app-print-fab:focus {
+    box-shadow: none;}
+  .app-print-fab-icon {
+      font-size: 28px;}
+.app-scroll-form-header-title {
+  margin-left: 44px;} 
+  @media ($md-screen) {
+    .app-scroll-form-header-title {
+      margin-left: 54px;}
+    .app-print-fab {
+      min-width: 30px;
+      min-height: 30px;}
+      .app-print-fab-icon {
+        font-size: 34px;}
+    .app-scroll-form-header-exit-btn {
+      font-size: 14px !important;}}
+.app-tabset-padding > ngb-tabset > ul {
+  padding-left: 40px;
+  padding-right: 40px;}
+.app-tabset-padding.app-view-open > ngb-tabset > ul {
+  padding-left: 36px;
+  padding-right: 69px;}
 .app-form-input-divider-tall {
   border-top: 1px solid;
   margin-top: 4px;
@@ -632,11 +706,18 @@ border-top: 1px solid gray;}
   min-width: 100%;
   left: 0;
   top: 0;}
-.app-item-list-clear-btn {
+.app-input-clear-btn {
+  top: 6px;
+  left: 3px;
+  position: relative;}
+.app-icon-input-clear-btn {
+  position: relative;
+  top: 12px;}
+.app-list-item-clear-btn {
   position: relative;
   top: -20px;}
 .app-z--5 {
-  z-index: -5!important;}
+z-index: -5!important;}
 .app-z--1 {
   z-index: -1;}
 .app-z-3 {
@@ -653,13 +734,13 @@ border-top: 1px solid gray;}
       flex: 1 1 100%;
       flex-direction: column !important;
       color: rgba(0,0,0,.87) !important;
-      padding: 1em 0 0 0;
-      max-height: 44px;
+      padding-top: calc(1.3em - 2px);
+      max-height: 50px;
       transition: max-height .4s, color .4s ease-in-out;
       position: relative;}
       @media ($lg-screen) {
         .app-icon-textarea-container{
-          max-height: 55px;}}
+          max-height: 62px;}}
     .app-icon-textarea-container.has-focus {
       max-height: 500px;}
     .app-icon-input-field-container {
@@ -689,6 +770,8 @@ border-top: 1px solid gray;}
     .app-icon-input-field-label.has-value, .app-icon-input-field-label-sm.has-value,
     .app-icon-input-field-label.has-focus, .app-icon-input-field-label-sm.has-focus {
         transform: translate3d(-7.5%,-1.3em,0) scale(.85);}
+    .app-textarea-field-label.has-value, .app-textarea-field-label.has-focus {
+      transform: translate3d(-7.5%,-1.6em,0) scale(.85);}
     .app-show-required::after {
       content: "*";
       color: rgba(255,0,0,.8);
@@ -745,7 +828,7 @@ border-top: 1px solid gray;}
 .app-form-header-padding {
   padding: 4px 0px;}
 .app-form-image-button {
-  margin: 0px 0px 0px 10px;
+  margin: 0 0 0 8px;
   padding: 0px;
   cursor: pointer;
   background-color: transparent;
@@ -758,6 +841,7 @@ border-top: 1px solid gray;}
     height: 38px !important;}
     @media ($lg-screen) {
       .app-form-image-button {
+        margin: 0 0 0 10px;
         max-height: 48px !important;
         max-width: 48px !important;
         min-width: 48px !important;
@@ -1211,7 +1295,7 @@ overflow: hidden;}
       font-size: 24px;}}
 .app-recipe-view-text {
   color: darkslateblue;
-  line-height: 1.5em;
+  line-height: 1.3em;
   font-style: italic;
   font-size: .7em;}
 .app-recipe-view-main-image {
@@ -1219,15 +1303,17 @@ overflow: hidden;}
   margin: -.25rem .5rem 0 -.25rem; 
   max-width: 55%;}
 .app-recipe-view-categories {
-  font-style: normal;}
+  font-style: normal;
+  font-weight: 500;}
 .app-recipe-view-ingredients-header {
   font-style: normal;
-  font-size: 1.25em;}
+  font-size: 1em;}
 .app-recipe-view-ingredients {
+  line-height: 1.15em;
   font-style: normal;}
 .app-recipe-view-notes-header {
   font-style: normal;
-  font-size: 1.25em;}
+  font-size: 1em;}
 .app-recipe-view-recipe-notes {
   font-size: .65em;}
 .app-recipe-view-pics-header {
@@ -1511,7 +1597,7 @@ color: #fef7e6;}
 /*modifications for ngb-bootstrap tabs*/
 .app-tabset-background {
   position: absolute;
-  top: 50px;
+  top: 42px;
   left: 0;
   width: 100%;
   z-index: -1;
@@ -1519,9 +1605,10 @@ color: #fef7e6;}
   background-color: white;}
   @media ($lg-screen){
     .app-tabset-background {
-      top: 58px;}}
+      top: 56px;}}
 .nav-tabs {
   border: 0 !important;
+  transition: padding .2s ease-out;
   background-color: $secondaryColor;
 }
  .nav-link {
@@ -1542,7 +1629,7 @@ color: #fef7e6;}
   border-color: transparent;
 }
 .nav-tabs .nav-item {
-  margin: .5em .25em .5em .25em;}
+  margin: .4em 0;}
 .app-tab-container {
   position: relative;
   margin-left: auto;
@@ -1578,6 +1665,8 @@ b, strong {
   font-weight: bold;}
 .btn {
   font-size: 14px;}
+.app-font-size-inherit {
+  font-size: inherit;}
 :focus {
   outline: none;}
 .app-icon-xsm {

@@ -16,7 +16,7 @@
                         'has-focus': focused,
                         'app-show-required': fRequired && !hasValue()}">
             {{currentLabel()}}</label>
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row justify-content-start align-items-center">
         <i class="material-icons app-input-icon {{fColor}}">{{fIcon}}</i>
         <select name="{{fName}}" ngModel
                 [required]="fRequired"
@@ -54,7 +54,14 @@
               </option>
             </ng-container>
         </select>
-      </div>
+        <div *ngIf="fClearListFn" class="app-input-clear-btn">
+            <i class="material-icons app-input-icon app-icon-xsm"
+                [ngClass]="{'app-warn app-cursor-pointer': hasList(),
+                            'app-disabled-text': !hasList()}"
+     data-toggle="tooltip" data-placement="top" title="Clear List" data-delay="200"
+                (click)="fClearListFn()">close</i>            
+          </div>
+          </div>
       <div class="app-field-messages"
           [ngClass]="{'app-visible': (fRef.touched || fCheckAll),
                       'app-invisible': !(fRef.touched || fCheckAll)}">
@@ -85,6 +92,7 @@
           fIcon         = "{{fValue == '999' ? 'add_circle_outline' : 'edit'}}"
           fColor        = "{{fColor}}" 
           [(fValue)]    = "fNewValue" 
+          [fClearFn]    = "fClearFn"
           fErrors       = "required|pattern"
           fErrorMsgs    = "New {{fNewLabel}} is required.|Invalid character or format for {{fNewLabel}}."
           fExtraCSS     = "mb-2"

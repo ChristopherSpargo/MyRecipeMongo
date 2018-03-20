@@ -1,13 +1,14 @@
 <div class="app-icon-textarea-container {{fExtraCSS}}"
          [ngClass]="{'has-focus': containerOpen,
                      'has-value': hasValue()}">
-    <label class="app-icon-input-field-label-sm app-cursor-pointer" 
+    <label class="app-icon-input-field-label-sm app-textarea-field-label app-width-100 app-cursor-pointer" 
           [ngClass]="{'app-no-icon-label': !fIcon,
                       'has-value': hasValue(),
-                      'has-focus': true}"
+                      'has-focus': focused}"
           (click)="toggleContainer()">
-          <div class="d-flex flex-row justify-content-around align-items-center">
-            <div [ngClass]="{'app-show-required': fRequired && !hasValue()}">{{fLabel}}</div>
+          <div class="d-flex flex-row justify-content-start align-items-center">
+            <div [ngClass]="{'app-show-required': fRequired && !hasValue()}">
+              {{(hasValue() || focused) && fFocusedLabel ? fFocusedLabel : fLabel}}</div>
             <i *ngIf="hasValue()" 
               class="material-icons app-cursor-pointer ml-2">
               {{!containerOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</i>

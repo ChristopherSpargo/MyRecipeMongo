@@ -90,10 +90,10 @@ export class Recipe {
     this.data.sharedItem_id =  rData.sharedItem_id;
     if(rData.submittedBy){ this.data.submittedBy = rData.submittedBy;}
     if(rData.restrictedTo){ 
-      this.data.restrictedTo = rData.restrictedTo.map((r) : string =>{return r;}); // copy authorized emails
+      this.data.restrictedTo = rData.restrictedTo.slice(); // copy authorized emails
     }
     if(rData.categories){
-      this.data.categories = rData.categories.map((c) : number =>{return c;}) // copy categories
+      this.data.categories = rData.categories.slice() // copy categories
     }
     if(rData.mainImage){
       this.data.mainImage     = Recipe.imageToAscii(rData.mainImage);
@@ -113,7 +113,7 @@ export class Recipe {
       lastUpdate:     this.data.lastUpdate,
       title:          this.data.title,
       description:    this.data.description,
-      categories:     this.data.categories.map((c) : number => {return c;}), // 'copy' categories array
+      categories:     this.data.categories.slice(), // 'copy' categories array
       ingredients:    this.data.ingredients,
       instructions:   this.data.instructions,
       recipeNotes:    this.data.recipeNotes,
@@ -131,7 +131,7 @@ export class Recipe {
       }
     }
     if(this.data.restrictedTo){  // Authorized Users List?
-      rData.restrictedTo = this.data.restrictedTo.map((r) : string =>{return r;});
+      rData.restrictedTo = this.data.restrictedTo.slice();
     }
     return rData;
   };
