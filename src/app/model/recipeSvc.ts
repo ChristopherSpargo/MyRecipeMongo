@@ -409,7 +409,7 @@ export class RecipeService {
         filter.projection = {extraImages: 1};
         this.getRecipes(filter)
         .then((data : RecipeData[]) => {
-          r.extraImages = data[0].extraImages.map(Recipe.imageToAscii);
+          r.extraImages = data[0].extraImages.slice();
           resolve(r)
         })
         .catch((errorReadingExtraImages) => {

@@ -82,6 +82,7 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.recipeSvc.getRecipes(request)
     .then((list : any) => {
       this.currentRecipe.recipeList = [];
+      //convert all returned recipes to internal format (ascii images)
       for(let i=0; i<list.length; i++){
         this.currentRecipe.recipeList.push(Recipe.build(list[i]));
       }

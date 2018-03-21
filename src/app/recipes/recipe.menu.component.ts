@@ -113,9 +113,9 @@ export class RecipeMenuComponent implements OnInit, OnDestroy {
     this.currentRecipe.selectedIndex = index;
     this.currentRecipe.recipe = this.menuRecipeList()[index];
     this.recipeSvc.readExtraImages(this.currentRecipe.recipe.data)
-    .then((data) => {
+    .then((data : RecipeData) => {
       if(data){     // images actually read?
-        this.currentRecipe.recipe.data = data;
+        this.currentRecipe.recipe.data.extraImages = data.extraImages.map(Recipe.imageToAscii);
         this.emit('extraImagesReady');
       }
     })

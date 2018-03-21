@@ -581,7 +581,11 @@ border-top: 1px solid gray;}
 .app-scroll-form-header-icon {
   position: fixed;
   background-color: transparent;
+  top: 2px;
   z-index: 1100;}
+  @media ($md-screen) {
+    .app-scroll-form-header-icon {
+      top: 10px;}}
 .app-header-title-icon {
   transition: transform .3s ease-out, opacity .3s ease-out;
   transform: rotate(-90deg);
@@ -903,6 +907,7 @@ $appFormCloseIconSizeLg: 38px !important;
       font-size: 1.25em;}}
 .app-noscroll-frame-center {  
   width: 100%;
+  position: relative;
   overflow: hidden;}
 .app-scroll-frame-center {
   width: 100%;
@@ -1320,6 +1325,7 @@ overflow: hidden;}
   font-style: normal;
   font-size: 1em;}
 .app-recipe-view-picture-note {
+  padding-top: 2px;
   font-style: normal;
   font-size: .65em;}
 .app-icon-input-field-label-sm.app-recipe-pics-field-label {
@@ -1370,6 +1376,7 @@ overflow: hidden;}
   max-width: 100%;}
 .app-picture-note {
   width: 100%;
+  padding-top: 2px;
   font-size: 60%;}
 .app-picture-note-input {
   border-width: 0;}
