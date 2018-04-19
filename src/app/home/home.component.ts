@@ -38,17 +38,17 @@ export class HomeComponent implements OnInit {
     return this.slideNavSvc.isOpen();
   }
 
-  // open the Recipies slideNav submenu
+  // return the open status of the Recipies slideNav submenu
   recipesMenuOpen = () : boolean => {
     return this.slideNavSvc.isOpenSub('Recipe');
   }
 
-  // open the Accounts slideNav submenu
+  // return the open status of the Accounts slideNav submenu
   accountMenuOpen = () : boolean => {
     return this.slideNavSvc.isOpenSub('Account');
   }
 
-  // open the About slideNav submenu
+  // return the open status of the About slideNav submenu
   aboutMenuOpen = () : boolean => {
     return this.slideNavSvc.isOpenSub('About');
   }

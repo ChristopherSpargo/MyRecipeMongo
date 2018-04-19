@@ -3,7 +3,6 @@ import { NgForm } from "@angular/forms";
 import { UtilSvc } from '../utilities/utilSvc';
 import { FormMsgList } from '../directives/form.msg.list';
 import { UserSvc } from '../model/userSvc'
-import { RecipeService, ListTableItem } from '../model/recipeSvc';
 import { UserInfo } from '../utilities/user.info.service';
 
     // COMPONENT for PROFILE UPDATE feature
@@ -13,8 +12,7 @@ import { UserInfo } from '../utilities/user.info.service';
 })
 export class AccountProfileComponent implements OnInit {
 
-  constructor(private userInfo: UserInfo, private utilSvc: UtilSvc, private userSvc: UserSvc,
-              private recipeSvc: RecipeService){
+  constructor(private userInfo: UserInfo, private utilSvc: UtilSvc, private userSvc: UserSvc){
   };
     // COMPONENT for PROFILE UPDATE feature
 

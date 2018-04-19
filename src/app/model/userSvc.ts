@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { UtilSvc } from '../utilities/utilSvc'
 import { FireBaseSvc } from '../utilities/fireBaseSvc'
-import { Profile, RESTRICTION_WRITE } from './profile';
+import { RESTRICTION_WRITE } from './profile';
 import { UserInfo } from '../utilities/user.info.service';
 
 

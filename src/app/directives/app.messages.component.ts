@@ -38,7 +38,7 @@ export class AppMessagesComponent implements AfterContentInit, OnDestroy {
     if(this.messageComponents !== undefined && this.mList.messageChange){
       this.messageChangeSub = this.mList.messageChange.subscribe( () => {
         const mKeys = Object.keys(this.mList.msgs);  // get the keys of messages to show
-        let showMore = this.mMax;               // only show mMax messages
+        let showMore = this.mMax;                    // only show mMax messages
         this.messageComponents.forEach(component => {
           if( !component.nameInList(mKeys) || !showMore ){
             component.show = false;             // name of this component not in given key list or mMax shown

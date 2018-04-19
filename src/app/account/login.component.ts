@@ -168,7 +168,6 @@ export class LoginComponent implements OnInit {
         this.utilSvc.displayWorkingMessage(false);
         this.requestStatus.passwordResetSent = true;
         this.requestStatus.enterTempPassword = true;
-        this.haveStatusMessages = true;
       })
       .catch((error) => {
         switch (error) {  //decide which message to give
@@ -179,7 +178,6 @@ export class LoginComponent implements OnInit {
         }
         this.utilSvc.displayWorkingMessage(false);
         this.requestStatus.passwordResetFail = true;
-        this.haveStatusMessages = true;
       })
     });
   }

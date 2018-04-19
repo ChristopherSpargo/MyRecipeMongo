@@ -58,7 +58,6 @@ export class RecipeSearchComponent implements OnInit, OnDestroy {
     this.checkAll = true;
     this.clearRequestStatus();
     if(this.checkForProblems(form)){return;}
-    if(this.checkForProblems(form)){return;}
     this.utilSvc.displayWorkingMessage(true, 'Searching');
 
     request.collectionOwnerId = this.viewShared ? SHARED_USER_ID : this.userInfo.authData.uid;

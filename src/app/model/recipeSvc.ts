@@ -206,9 +206,6 @@ export class RecipeService {
     // return: promise
     updateList(tableName: string, item: ListTableItem, action: string, uid: string){
 
-      var pending = [];
-      var tableType : string;
-
       action = action || "Add";
 
       if(action === "Remove"){ // check for item present in any recipes
@@ -219,52 +216,45 @@ export class RecipeService {
         switch(tableName){
           case CATEGORY_TABLE_NAME:
             filter.categories = [item.id];
-            tableType = 'Category';
             break;
         }
       }
       return new Promise<any>((resolve, reject) => {
-        Promise.all(pending)
-        .then((success) => {
-          this.getList(tableName, uid)
-          .then((pList : ListTable) => {
-            let tItems = pList.items;
-            for(var i=0; i<tItems.length; i++){
-              if(tItems[i].id == item.id){
-                break;
-              }
+        this.getList(tableName, uid)
+        .then((pList : ListTable) => {
+          let tItems = pList.items;
+          for(var i=0; i<tItems.length; i++){
+            if(tItems[i].id == item.id){
+              break;
             }
-            if(i<tItems.length){
-              if(action === "Update"){
-                tItems[i] = item;          // Update item
-              }
-              else {
-                tItems.splice(i,1);        // Remove item
-              }
+          }
+          if(i<tItems.length){
+            if(action === "Update"){
+              tItems[i] = item;          // Update item
             }
-            else{
-              item.id = pList.nextId++;    // assign next id value
-              tItems.push(item);           // Add item
+            else {
+              tItems.splice(i,1);        // Remove item
             }
-            this.saveList(pList, tableName)
+          }
+          else{
+            item.id = pList.nextId++;    // assign next id value
+            tItems.push(item);           // Add item
+          }
+          this.saveList(pList, tableName)
+          .then((list) => {
+            resolve(list);})
+          .catch((error) => {
+            reject(error);})
+        })
+        .catch((error) => { //no Table found
+          if(/INF/.test(error) && action == "Add"){
+            this.saveList({userId: uid, nextId: 2, items: [item]}, tableName)
             .then((list) => {
               resolve(list);})
             .catch((error) => {
-              reject(error);})
-          })
-          .catch((error) => { //no Table found
-            if(/INF/.test(error) && action == "Add"){
-              this.saveList({userId: uid, nextId: 2, items: [item]}, tableName)
-              .then((list) => {
-                resolve(list);})
-              .catch((error) => {
-                reject(error);})}
-            else {
-              reject(error);}
-          });
-        })
-        .catch((error) => {
-          reject(error);
+              reject(error);})}
+          else {
+            reject(error);}
         });
       })
     }

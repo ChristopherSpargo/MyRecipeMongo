@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-    // COMPONENT to provide category containers to the stats display
+    // COMPONENT to provide section containers to other components
     // Example: 
     // <app-recipe-section asc-label="Serving" asc-open-flag="dC.serveStatsOpen">
 

@@ -3,10 +3,11 @@
     <div id="actions" class="d-flex flex-row justify-content-center align-items-center app-bg-primary 
                     app-pos-relative pb-2">
       <app-help-button *ngIf="fHelpBtn"></app-help-button>
-      <app-fab *ngIf="!fDeleteCheck || (fOnDelete !== undefined)" fAria="fAddCheck ? fALabel : fSLabel" 
+      <app-fab *ngIf="!fDeleteCheck || (fOnDelete !== undefined)" 
+              fAria="{{fAddCheck ? fALabel : fSLabel}}" 
               [fDisabled]="fDisabled"
-              [fLabel]="fLabels ? (fAddCheck ? fALable : fSLabel) : ''" 
-              fButtonCSS="app-fab-sm-sq fDeleteCheck ? 'mr-4' : ''"
+              fLabel="{{fLabels ? (fAddCheck ? fALabel : fSLabel) : ''}}" 
+              fButtonCSS="app-fab-sm-sq {{fDeleteCheck ? 'mr-4' : ''}}"
               fIconColor="app-white" fLabelCSS="app-white"
               fIcon="{{fAddCheck ? 'add_circle_outline' : 'check_circle_outline'}}">
       </app-fab>
